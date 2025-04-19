@@ -1,13 +1,13 @@
-package com.example.demo;
+package com.daw;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AplicacionGuardiasProfesoresApplication {
+public class AplicationLauncher {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AplicacionGuardiasProfesoresApplication.class, args);
+		SpringApplication.run(AplicationLauncher.class, args);
 	}
 
 }
