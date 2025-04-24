@@ -13,29 +13,30 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "ausencia")
+@Table(name = "ausenciasprofesor")
 public class Ausencia {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "ID")
 	private Long id;
 	
-	@Column(name = "fechaAusencia", nullable = false)
+	@Column(name = "FechaAusencia", nullable = false)
 	private LocalDate fechaAusencia;
 	
-	@Column(name = "comentario", nullable = true)
+	@Column(name = "Comentario", nullable = false, columnDefinition = "LONGTEXT")
 	private String comentario;
 	
 	@Lob
-	@Column(name = "tarea", nullable = true, columnDefinition = "LONGTEXT")
+	@Column(name = "Tarea", nullable = true, columnDefinition = "LONGTEXT")
 	private String tarea;
 	
 	@Lob
-	@Column(name = "fichero", nullable = true, columnDefinition = "BLOB")
+	@Column(name = "Fichero", nullable = true, columnDefinition = "BLOB")
 	private byte[] fichero;
 	
 	
-	
+	//Se puede indicar la longitud (length) para ser coherentes con la BD (ejemplo VARCHAR(50), etc)
+	//Usamos Lombok?? (@Getter, @Setter....)
 
 }

@@ -17,25 +17,30 @@ public class Profesor {
 	@Column(name= "DNIProfesor", nullable = false)
 	private String dniProfesor;
 	
-	@Column(name = "cursoAcademico", nullable = false)
-	private Integer cursoAcademico;
+	//Investigar PK compuestas en Spring
+	@Column(name = "CursoAcademico", nullable = false)
+	private String cursoAcademico;
 	
-	@Column(name = "nombre", nullable = false)
+	@Column(name = "NombreProfesor", nullable = false)
 	private String nombre;
 	
-	@Column(name = "usuario", nullable = false)
+	@Column(name = "Usuario", nullable = false)
 	private String usuario;
 	
-	@Column(name = "clave", nullable = false)
+	@Column(name = "ClaveProfesor", nullable = false)
 	private String clave;
 	
-	@Column(name = "alias", unique = true)
+	@Column(name = "Alias", unique = false)
 	private String alias;
 	
-	@Column(name = "departamento", nullable = true)
+	@Column(name = "NombreDepartamento", nullable = false)
 	private String departamento;
 	
-	@Column(name = "email", nullable = true)
+	@Column(name = "email", nullable = false)
 	private String email;
 
 }
+
+
+//Se puede indicar la longitud (length) para ser coherentes con la BD (ejemplo VARCHAR(50), etc)
+//Usamos Lombok?? (@Getter, @Setter....)
