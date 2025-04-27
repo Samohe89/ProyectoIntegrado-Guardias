@@ -9,13 +9,10 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "roles")
-public class Rol {
+public class Roles {
 
 	@Id
-	@Column(name = "Rol", nullable = false)
+	@Column(name = "Rol", nullable = false, length = 50)
 	private String rol;
 }
 
-
-//Se puede indicar la longitud (length) para ser coherentes con la BD (ejemplo VARCHAR(50), etc)
-//Usamos Lombok?? (@Getter, @Setter....)

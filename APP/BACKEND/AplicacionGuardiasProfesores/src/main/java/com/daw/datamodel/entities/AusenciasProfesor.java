@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "ausenciasprofesor")
-public class Ausencia {
+public class AusenciasProfesor {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,8 +35,4 @@ public class Ausencia {
 	@Column(name = "Fichero", nullable = true, columnDefinition = "BLOB")
 	private byte[] fichero;
 	
-	
-	//Se puede indicar la longitud (length) para ser coherentes con la BD (ejemplo VARCHAR(50), etc)
-	//Usamos Lombok?? (@Getter, @Setter....)
-
 }

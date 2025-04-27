@@ -10,25 +10,21 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "guardiasprofesor")
-public class Guardia {
+@Table(name = "guardiasProfesor")
+public class GuardiasProfesor {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "IdGuardia")
-	private Long id;
+	private Long idGuardia;
 	
-	@Column(name = "Grupo", nullable = false)
+	@Column(name = "Grupo", nullable = false, length = 20)
 	private String grupo;
 	
-	@Column(name = "Tramo", nullable = false)
+	@Column(name = "Tramo", nullable = false, length = 1)
 	private Integer tramo;
 	
-	@Column(name = "Duracion", nullable = false)
+	@Column(name = "Duracion", nullable = false, length = 10)
 	private Integer duracion;
 	
-	
-	//Se puede indicar la longitud (length) para ser coherentes con la BD (ejemplo VARCHAR(50), etc)
-	//Usamos Lombok?? (@Getter, @Setter....)
-
 }

@@ -3,8 +3,8 @@ package com.daw.datamodel.entities;
 
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -13,34 +13,26 @@ import lombok.Data;
 @Table(name= "profesor")
 public class Profesor {
 	
-	@Id
-	@Column(name= "DNIProfesor", nullable = false)
-	private String dniProfesor;
+	@EmbeddedId
+	private DniProfesorCursoAcademicoId id;
 	
-	//Investigar PK compuestas en Spring
-	@Column(name = "CursoAcademico", nullable = false)
-	private String cursoAcademico;
+	@Column(name = "NombreProfesor", nullable = false, length = 100)
+	private String nombreProfesor;
 	
-	@Column(name = "NombreProfesor", nullable = false)
-	private String nombre;
-	
-	@Column(name = "Usuario", nullable = false)
+	@Column(name = "Usuario", nullable = false, length = 15)
 	private String usuario;
 	
-	@Column(name = "ClaveProfesor", nullable = false)
-	private String clave;
+	@Column(name = "ClaveProfesor", nullable = false, length = 25)
+	private String claveProfesor;
 	
 	@Column(name = "Alias", unique = false)
 	private String alias;
 	
-	@Column(name = "NombreDepartamento", nullable = false)
-	private String departamento;
+	@Column(name = "NombreDepartamento", nullable = false, length = 50)
+	private String nombreDepartamento;
 	
-	@Column(name = "email", nullable = false)
+	@Column(name = "email", nullable = false, length = 100)
 	private String email;
 
 }
 
-
-//Se puede indicar la longitud (length) para ser coherentes con la BD (ejemplo VARCHAR(50), etc)
-//Usamos Lombok?? (@Getter, @Setter....)
