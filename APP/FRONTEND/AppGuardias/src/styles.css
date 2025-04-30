@@ -9,6 +9,13 @@ h1 {
   font-weight: 600;
 }
 
+h2 {
+  color: white;
+  max-height: 18px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
 .main-container {
   margin: 0 auto;
   padding-top: 80px;
