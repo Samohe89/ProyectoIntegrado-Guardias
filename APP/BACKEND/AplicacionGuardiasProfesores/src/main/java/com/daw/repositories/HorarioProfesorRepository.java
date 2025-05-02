@@ -6,6 +6,6 @@ import com.daw.datamodel.entities.HorariosProfesor;
 
 
 
-public interface HorarioProfesorRepository extends JpaRepository<HorariosProfesor, Long>{
+public interface HorarioProfesorRepository extends JpaRepository<HorariosProfesor, Integer>{
 
 }
