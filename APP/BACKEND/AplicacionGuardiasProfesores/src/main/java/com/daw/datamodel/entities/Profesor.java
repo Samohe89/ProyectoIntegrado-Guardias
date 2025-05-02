@@ -2,9 +2,14 @@ package com.daw.datamodel.entities;
 
 
 
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -33,6 +38,21 @@ public class Profesor {
 	
 	@Column(name = "email", nullable = false, length = 100)
 	private String email;
+	
+	@OneToMany(mappedBy = "profesor")
+	@JsonIgnore
+	private Set<GuardiasProfesor> guardiasProfesores;
+	
+	@OneToMany(mappedBy = "profesor")
+	@JsonIgnore
+	private Set<AusenciasProfesor> ausenciasProfesores;
+	
+	@OneToMany(mappedBy = "profesor")
+	@JsonIgnore
+	private Set<HorariosProfesor> horariosProfesores;
 
+	@OneToMany(mappedBy = "profesor")
+	@JsonIgnore
+	private Set<ProfesorRoles> profesorRoles;
 }
 

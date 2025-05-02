@@ -1,13 +1,22 @@
 package com.daw.datamodel.entities;
 
 import java.time.LocalDate;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -15,24 +24,41 @@ import lombok.Data;
 @Entity
 @Table(name = "ausenciasprofesor")
 public class AusenciasProfesor {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Long id;
-	
+
 	@Column(name = "FechaAusencia", nullable = false)
 	private LocalDate fechaAusencia;
-	
+
 	@Column(name = "Comentario", nullable = false, columnDefinition = "LONGTEXT")
 	private String comentario;
-	
+
 	@Lob
 	@Column(name = "Tarea", nullable = true, columnDefinition = "LONGTEXT")
 	private String tarea;
-	
+
 	@Lob
 	@Column(name = "Fichero", nullable = true, columnDefinition = "BLOB")
 	private byte[] fichero;
-	
+
+	@OneToMany(mappedBy = "ausenciasProfesor")
+	@JsonIgnore
+	private Set<GuardiasProfesor> guardiasProfesores;
+
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+		@JoinColumns({ @JoinColumn(name = "ProfesorAusente", referencedColumnName = "dniProfesor", nullable = false,
+		foreignKey = @ForeignKey(name="ProfesorGuardia")),
+		@JoinColumn(name = "CursoAcademico", referencedColumnName = "cursoAcademico", nullable = false,
+		foreignKey = @ForeignKey(name="CursoAcademico")) 
+	})
+	private Profesor profesor;
+
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name = "numRegistro", referencedColumnName = "numRegistro", nullable = false,
+	foreignKey = @ForeignKey(name="NumRegistro"))
+	private HorariosProfesor horariosProfesor;
+
 }
