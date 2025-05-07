@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "roles")
-public class Roles {
+public class Rol {
 
 	@Id
 	@Column(name = "Rol", nullable = false, length = 50)
@@ -22,6 +22,6 @@ public class Roles {
 	
 	@OneToMany(mappedBy = "roles")
 	@JsonIgnore
-	private Set<ProfesorRoles> profesorRoles;
+	private Set<ProfesorRol> profesorRoles;
 }
 

@@ -23,7 +23,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "ausenciasprofesor")
-public class AusenciasProfesor {
+public class Ausencia {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,19 +46,19 @@ public class AusenciasProfesor {
 
 	@OneToMany(mappedBy = "ausenciasProfesor")
 	@JsonIgnore
-	private Set<GuardiasProfesor> guardiasProfesores;
+	private Set<Guardia> guardiasProfesores;
 
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 		@JoinColumns({ @JoinColumn(name = "ProfesorAusente", referencedColumnName = "dniProfesor", nullable = false,
-		foreignKey = @ForeignKey(name="ProfesorGuardia")),
+		foreignKey = @ForeignKey(name="FK_ProfesorAusente")),
 		@JoinColumn(name = "CursoAcademico", referencedColumnName = "cursoAcademico", nullable = false,
-		foreignKey = @ForeignKey(name="CursoAcademico")) 
+		foreignKey = @ForeignKey(name="FK_CursoAcademico")) 
 	})
 	private Profesor profesor;
 
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "numRegistro", referencedColumnName = "numRegistro", nullable = false,
-	foreignKey = @ForeignKey(name="NumRegistro"))
-	private HorariosProfesor horariosProfesor;
+	foreignKey = @ForeignKey(name="FK_NumRegistro"))
+	private Horario horariosProfesor;
 
 }

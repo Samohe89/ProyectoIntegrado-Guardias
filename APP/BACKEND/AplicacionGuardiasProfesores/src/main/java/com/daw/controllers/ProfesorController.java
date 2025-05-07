@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.daw.datamodel.entities.DniProfesorCursoAcademicoId;
 import com.daw.datamodel.entities.Profesor;
+import com.daw.datamodel.entities.ProfesorId;
 import com.daw.services.ProfesorService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 public class ProfesorController {
 
     private final ProfesorService service;
+    
+
 
     @GetMapping
     public List<Profesor> getAll() {
@@ -32,7 +34,7 @@ public class ProfesorController {
 
     @GetMapping("/{dni}/{curso}")
     public ResponseEntity<Profesor> getById(@PathVariable String dni, @PathVariable String curso) {
-        DniProfesorCursoAcademicoId id = new DniProfesorCursoAcademicoId();
+    	ProfesorId id = new ProfesorId();
         id.setDniProfesor(dni);
         id.setCursoAcademico(curso);
 
@@ -50,7 +52,7 @@ public class ProfesorController {
     public ResponseEntity<Profesor> update(@PathVariable String dni,
                                            @PathVariable String curso,
                                            @RequestBody Profesor updated) {
-        DniProfesorCursoAcademicoId id = new DniProfesorCursoAcademicoId();
+    	ProfesorId id = new ProfesorId();
         id.setDniProfesor(dni);
         id.setCursoAcademico(curso);
 
@@ -62,7 +64,7 @@ public class ProfesorController {
 
     @DeleteMapping("/{dni}/{curso}")
     public ResponseEntity<Object> delete(@PathVariable String dni, @PathVariable String curso) {
-        DniProfesorCursoAcademicoId id = new DniProfesorCursoAcademicoId();
+    	ProfesorId id = new ProfesorId();
         id.setDniProfesor(dni);
         id.setCursoAcademico(curso);
 
@@ -71,5 +73,6 @@ public class ProfesorController {
             return ResponseEntity.noContent().build();
         }).orElse(ResponseEntity.notFound().build());
     }
+
 }
 

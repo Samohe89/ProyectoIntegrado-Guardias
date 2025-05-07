@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Embeddable
-public class DniProfesorCursoAcademicoId {
+public class ProfesorId {
 	
 	@Column(name= "DNIProfesor", nullable = false, length = 10)
 	private String dniProfesor;

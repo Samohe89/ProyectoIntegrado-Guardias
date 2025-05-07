@@ -5,26 +5,26 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.daw.datamodel.entities.HorariosProfesor;
-import com.daw.repositories.HorarioProfesorRepository;
+import com.daw.datamodel.entities.Horario;
+import com.daw.repositories.HorarioRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class HorariosProfesorService {
+public class HorarioService {
 
-    private final HorarioProfesorRepository repository;
+    private final HorarioRepository repository;
 
-    public List<HorariosProfesor> findAll() {
+    public List<Horario> findAll() {
         return repository.findAll();
     }
 
-    public Optional<HorariosProfesor> findById(Integer id) {
+    public Optional<Horario> findById(Integer id) {
         return repository.findById(id);
     }
 
-    public HorariosProfesor save(HorariosProfesor horario) {
+    public Horario save(Horario horario) {
         return repository.save(horario);
     }
 

@@ -5,26 +5,26 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.daw.datamodel.entities.GuardiasProfesor;
-import com.daw.repositories.GuardiasProfesorRepository;
+import com.daw.datamodel.entities.Guardia;
+import com.daw.repositories.GuardiaRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class GuardiasProfesorService {
+public class GuardiaService {
 
-    private final GuardiasProfesorRepository repository;
+    private final GuardiaRepository repository;
 
-    public List<GuardiasProfesor> findAll() {
+    public List<Guardia> findAll() {
         return repository.findAll();
     }
 
-    public Optional<GuardiasProfesor> findById(Long id) {
+    public Optional<Guardia> findById(Long id) {
         return repository.findById(id);
     }
 
-    public GuardiasProfesor save(GuardiasProfesor guardia) {
+    public Guardia save(Guardia guardia) {
         return repository.save(guardia);
     }
 

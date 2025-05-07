@@ -2,10 +2,10 @@ package com.daw.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.daw.datamodel.entities.HorariosProfesor;
+import com.daw.datamodel.entities.Horario;
 
 
 
-public interface HorarioProfesorRepository extends JpaRepository<HorariosProfesor, Integer>{
+public interface HorarioRepository extends JpaRepository<Horario, Integer>{
 
 }

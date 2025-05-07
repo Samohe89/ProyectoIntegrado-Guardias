@@ -5,37 +5,37 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.daw.datamodel.entities.GuardiasProfesor;
-import com.daw.services.GuardiasProfesorService;
+import com.daw.datamodel.entities.Guardia;
+import com.daw.services.GuardiaService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/guardias")
 @RequiredArgsConstructor
-public class GuardiasProfesorController {
+public class GuardiaController {
 
-    private final GuardiasProfesorService service;
+    private final GuardiaService service;
 
     @GetMapping
-    public List<GuardiasProfesor> buscarTodasGuardias() {
+    public List<Guardia> buscarTodasGuardias() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GuardiasProfesor> buscarGuardiasPorId(@PathVariable Long id) {
+    public ResponseEntity<Guardia> buscarGuardiasPorId(@PathVariable Long id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public GuardiasProfesor createGuardia(@RequestBody GuardiasProfesor guardia) {
+    public Guardia createGuardia(@RequestBody Guardia guardia) {
         return service.save(guardia);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GuardiasProfesor> updateGuardia(@PathVariable Long id, @RequestBody GuardiasProfesor updatedGuardia) {
+    public ResponseEntity<Guardia> updateGuardia(@PathVariable Long id, @RequestBody Guardia updatedGuardia) {
         return service.findById(id)
                 .map(existing -> {
                     updatedGuardia.setIdGuardia(id);

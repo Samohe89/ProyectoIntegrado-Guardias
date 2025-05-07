@@ -5,37 +5,37 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.daw.datamodel.entities.HorariosProfesor;
-import com.daw.services.HorariosProfesorService;
+import com.daw.datamodel.entities.Horario;
+import com.daw.services.HorarioService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/horarios")
 @RequiredArgsConstructor
-public class HorariosProfesorController {
+public class HorarioController {
 
-    private final HorariosProfesorService service;
+    private final HorarioService service;
 
     @GetMapping
-    public List<HorariosProfesor> getAllHorarios() {
+    public List<Horario> getAllHorarios() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<HorariosProfesor> getHorarioById(@PathVariable Integer id) {
+    public ResponseEntity<Horario> getHorarioById(@PathVariable Integer id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public HorariosProfesor createHorario(@RequestBody HorariosProfesor horario) {
+    public Horario createHorario(@RequestBody Horario horario) {
         return service.save(horario);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HorariosProfesor> updateHorario(@PathVariable Integer id, @RequestBody HorariosProfesor updatedHorario) {
+    public ResponseEntity<Horario> updateHorario(@PathVariable Integer id, @RequestBody Horario updatedHorario) {
         return service.findById(id)
                 .map(existing -> {
                     updatedHorario.setNumRegistro(id.intValue());

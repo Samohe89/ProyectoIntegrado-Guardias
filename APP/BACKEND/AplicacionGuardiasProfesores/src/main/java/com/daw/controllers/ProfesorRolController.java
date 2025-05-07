@@ -5,16 +5,17 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.daw.datamodel.entities.ProfesorRoles;
-import com.daw.services.ProfesorRolesService;
+import com.daw.datamodel.entities.ProfesorRol;
+import com.daw.services.ProfesorRolService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/profesor-roles")
-@RequiredArgsConstructor
-public class ProfesorRolesController {
+//@RequiredArgsConstructor
+public class ProfesorRolController {
 
+	/*
     private final ProfesorRolesService service;
 
     @GetMapping
@@ -52,4 +53,8 @@ public class ProfesorRolesController {
         }
         return ResponseEntity.notFound().build();
     }
+
+
+	*/
+	
 }

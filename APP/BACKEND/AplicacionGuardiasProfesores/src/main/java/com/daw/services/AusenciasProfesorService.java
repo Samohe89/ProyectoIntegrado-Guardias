@@ -5,26 +5,26 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.daw.datamodel.entities.AusenciasProfesor;
-import com.daw.repositories.AusenciasProfesorRepository;
+import com.daw.datamodel.entities.Ausencia;
+import com.daw.repositories.AusenciaRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class AusenciasProfesorService {
+public class AusenciaService {
 	
-	private final AusenciasProfesorRepository repository;
+	private final AusenciaRepository repository;
 
-    public List<AusenciasProfesor> findAll() {
+    public List<Ausencia> findAll() {
         return repository.findAll();
     }
 
-    public Optional<AusenciasProfesor> findById(Long id) {
+    public Optional<Ausencia> findById(Long id) {
         return repository.findById(id);
     }
 
-    public AusenciasProfesor save(AusenciasProfesor ausencia) {
+    public Ausencia save(Ausencia ausencia) {
         return repository.save(ausencia);
     }
 

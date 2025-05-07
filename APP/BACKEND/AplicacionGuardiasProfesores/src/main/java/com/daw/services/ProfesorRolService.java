@@ -5,26 +5,26 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.daw.datamodel.entities.ProfesorRoles;
-import com.daw.repositories.ProfesorRolesRepository;
+import com.daw.datamodel.entities.ProfesorRol;
+import com.daw.repositories.ProfesorRolRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ProfesorRolesService {
+public class ProfesorRolService {
 
-    private final ProfesorRolesRepository repository;
+    private final ProfesorRolRepository repository;
 
-    public List<ProfesorRoles> findAll() {
+    public List<ProfesorRol> findAll() {
         return repository.findAll();
     }
 
-    public Optional<ProfesorRoles> findById(Long id) {
+    public Optional<ProfesorRol> findById(Long id) {
         return repository.findById(id);
     }
 
-    public ProfesorRoles save(ProfesorRoles profesorRol) {
+    public ProfesorRol save(ProfesorRol profesorRol) {
         return repository.save(profesorRol);
     }
 

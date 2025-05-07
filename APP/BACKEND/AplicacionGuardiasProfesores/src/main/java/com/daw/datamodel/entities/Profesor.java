@@ -19,7 +19,7 @@ import lombok.Data;
 public class Profesor {
 	
 	@EmbeddedId
-	private DniProfesorCursoAcademicoId id;
+	private ProfesorId id;
 	
 	@Column(name = "NombreProfesor", nullable = false, length = 100)
 	private String nombreProfesor;
@@ -41,18 +41,18 @@ public class Profesor {
 	
 	@OneToMany(mappedBy = "profesor")
 	@JsonIgnore
-	private Set<GuardiasProfesor> guardiasProfesores;
+	private Set<Guardia> guardiasProfesores;
 	
 	@OneToMany(mappedBy = "profesor")
 	@JsonIgnore
-	private Set<AusenciasProfesor> ausenciasProfesores;
+	private Set<Ausencia> ausenciasProfesores;
 	
 	@OneToMany(mappedBy = "profesor")
 	@JsonIgnore
-	private Set<HorariosProfesor> horariosProfesores;
+	private Set<Horario> horariosProfesores;
 
 	@OneToMany(mappedBy = "profesor")
 	@JsonIgnore
-	private Set<ProfesorRoles> profesorRoles;
+	private Set<ProfesorRol> profesorRoles;
 }
 

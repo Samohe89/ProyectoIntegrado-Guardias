@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.daw.datamodel.entities.DniProfesorCursoAcademicoId;
 import com.daw.datamodel.entities.Profesor;
+import com.daw.datamodel.entities.ProfesorId;
 import com.daw.repositories.ProfesorRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class ProfesorService {
 		return repository.findAll();
 	}
 
-	public Optional<Profesor> findById(DniProfesorCursoAcademicoId id) {
+	public Optional<Profesor> findById(ProfesorId id) {
 		return repository.findById(id);
 	}
 
@@ -29,7 +29,7 @@ public class ProfesorService {
 		return repository.save(profesor);
 	}
 
-	public void deleteById(DniProfesorCursoAcademicoId id) {
+	public void deleteById(ProfesorId id) {
 		repository.deleteById(id);
 	}
 }

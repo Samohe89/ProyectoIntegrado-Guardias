@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "guardiasprofesor")
-public class GuardiasProfesor {
+public class Guardia {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,7 @@ public class GuardiasProfesor {
 	
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "IdAusencia", referencedColumnName = "id", nullable = false,
-	foreignKey = @ForeignKey(name="IdAusencia"))
-	private AusenciasProfesor ausenciasProfesor;
+	foreignKey = @ForeignKey(name="FK_IdAusencia"))
+	private Ausencia ausenciasProfesor;
 	
 }

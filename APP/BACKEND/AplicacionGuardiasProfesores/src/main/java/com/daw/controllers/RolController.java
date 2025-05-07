@@ -5,37 +5,37 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.daw.datamodel.entities.Roles;
-import com.daw.services.RolesService;
+import com.daw.datamodel.entities.Rol;
+import com.daw.services.RolService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/roles")
 @RequiredArgsConstructor
-public class RolesController {
+public class RolController {
 
-    private final RolesService service;
+    private final RolService service;
 
     @GetMapping
-    public List<Roles> getAll() {
+    public List<Rol> getAll() {
         return service.findAll();
     }
 
     @GetMapping("/{rol}")
-    public ResponseEntity<Roles> getById(@PathVariable String rol) {
+    public ResponseEntity<Rol> getById(@PathVariable String rol) {
         return service.findById(rol)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Roles create(@RequestBody Roles rol) {
+    public Rol create(@RequestBody Rol rol) {
         return service.save(rol);
     }
 
     @PutMapping("/{rol}")
-    public ResponseEntity<Roles> update(@PathVariable String rol, @RequestBody Roles updatedRol) {
+    public ResponseEntity<Rol> update(@PathVariable String rol, @RequestBody Rol updatedRol) {
         return service.findById(rol)
                 .map(existing -> {
                     updatedRol.setRol(rol);
