@@ -1,7 +1,118 @@
 .fondo-login {
-  background-image: url("/images/login-bg.jpg"); 
-  background-size: cover; 
-  background-repeat: no-repeat; 
-  background-position: center; 
+  background-image: url("/images/login-bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   min-height: 100vh;
 }
+
+.card-login {
+  margin: 30px;
+  padding: 100px 50px 50px 50px;
+  width: 480px;
+  border-radius: 20px;
+  background-color: rgba(196, 196, 196, 0.85);
+}
+
+@media (max-width: 575px) {
+  .card-login {
+    padding: 100px 30px 30px 30px;
+  }
+}
+
+.form-control {
+  background-color: #16604E; 
+  color: white; 
+  border-radius: 10px; 
+}
+
+.form-control::placeholder {
+  color: white;
+}
+
+.form-select {
+  background-color: #16604E; 
+  color: white; 
+  border-radius: 10px; 
+}
+
+.form-select::placeholder {
+  color: white;
+}
+
+.input-group {
+  margin-bottom: 35px;
+  height: 45px;
+}
+
+
+.input-group-text {
+  padding: 0 8px 0 8px;
+  background-color: #16604E; 
+  color: white; 
+}
+
+
+.icono-login {
+  width: 150px;
+  height: 150px;
+  border: solid 1px white;
+  border-radius: 50%;
+  background-color: rgba(119, 118, 118, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  overflow: hidden;
+}
+
+i.icono-login {
+  padding-top: 40px;
+  font-size: 150px;
+  color: rgba(157, 155, 155, 0.7);
+  text-shadow: 
+    -1px -1px 0 white,
+     1px -1px 0 white,
+    -1px  1px 0 white,
+     1px  1px 0 white;
+}
+
+span > i {
+  font-size: 28px;
+}
+
+
+span > i.bi-eye {
+  padding: 0 4px 0 4px;
+  font-size: 20px;
+}
+
+select.selectPersonalizado {
+  background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%23ffffff%22%20class%3D%22bi%20bi-chevron-expand%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M3.646%209.146a.5.5%200%200%201%20.708%200L8%2012.793l3.646-3.647a.5.5%200%200%201%20.708.708l-4%204a.5.5%200%200%201-.708%200l-4-4a.5.5%200%200%201%200-.708m0-2.292a.5.5%200%200%200%20.708%200L8%203.207l3.646%203.647a.5.5%200%200%200%20.708-.708l-4-4a.5.5%200%200%200-.708%200l-4%204a.5.5%200%200%200%200%20.708%22/%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-position: calc(100% - 0.5rem) center;
+  background-size: 25px;
+  padding-right: 1px;
+  text-align: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+option {
+  text-align: center;
+}
+
+
+.btn-login {
+  background-color: white;
+  color: black;
+}
+
+.invalid-feedback {
+  color: red;
+  font-weight: 600;
+}
+
+
+
