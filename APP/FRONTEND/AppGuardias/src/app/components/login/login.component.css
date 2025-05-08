@@ -1,0 +1,7 @@
+.fondo-login {
+  background-image: url("/images/login-bg.jpg"); 
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  background-position: center; 
+  min-height: 100vh;
+}

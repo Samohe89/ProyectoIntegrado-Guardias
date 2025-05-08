@@ -1,0 +1,75 @@
+<div class="container d-flex justify-content-center align-items-center fondo-login vh-100">
+    <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
+      <h4 class="text-center mb-3">Iniciar sesión</h4>
+  
+      <form [formGroup]="formularioLogin" (ngSubmit)="onSubmit()">
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo electrónico</label>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            formControlName="email"
+            [ngClass]="{'is-invalid': submit && formularioLogin.get('email')?.invalid}"
+          />
+          <div class="invalid-feedback" *ngIf="submit && formularioLogin.get('email')?.errors?.['required']">
+            El correo es obligatorio.
+          </div>
+          <div class="invalid-feedback" *ngIf="submit && formularioLogin.get('email')?.errors?.['email']">
+            El formato del correo no es válido.
+          </div>
+        </div>
+  
+        <!-- Contraseña -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            formControlName="password"
+            [ngClass]="{'is-invalid': submit && formularioLogin.get('password')?.invalid}"
+          />
+          <div class="invalid-feedback" *ngIf="submit && formularioLogin.get('password')?.errors?.['required']">
+            La contraseña es obligatoria.
+          </div>
+        </div>
+  
+        <!-- Perfil -->
+        <div class="mb-3">
+          <label for="rol" class="form-label">Perfil</label>
+          <select
+            id="rol"
+            class="form-control"
+            formControlName="rol"
+            [ngClass]="{'is-invalid': submit && formularioLogin.get('rol')?.invalid}"
+          >
+            <option value="">Seleccione el perfil</option>
+            <option value="profesor">Profesor</option>
+            <option value="directivo">Directivo</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="submit && formularioLogin.get('rol')?.errors?.['required']">
+            El perfil es obligatorio.
+          </div>
+        </div>
+  
+        <!-- Académico -->
+        <div class="mb-3">
+          <label for="cursoAcademico" class="form-label">Curso Académico</label>
+          <select
+            id="cursoAcademico"
+            class="form-control"
+            formControlName="cursoAcademico"
+          >
+            <option value="2024">2024</option>
+          </select>
+        </div>
+  
+        <!-- Enviar -->
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">Entrar</button>
+        </div>
+      </form>
+    </div>
+  </div>

@@ -1,3 +1,7 @@
+<ng-container *ngIf="!usuarioLogueado">
+    <app-login (loginOk)="onLogin($event)"></app-login>
+</ng-container>
+
 <ng-container *ngIf="usuarioLogueado">
     <ng-container [ngSwitch]="rol">
         <app-menu-profesor *ngSwitchCase="'profesor'"></app-menu-profesor>
