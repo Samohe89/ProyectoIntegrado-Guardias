@@ -25,7 +25,6 @@
 
 input {
   height: 45px;
-  border-radius: 5px;
 }
 
 .input-group .fechaAusencia{
@@ -33,6 +32,14 @@ input {
 }
 
 #fechaAusencia {
+  border-radius: 5px;
+}
+
+#tramoRegistro {
+  border-radius: 5px;
+}
+
+#motivo {
   border-radius: 5px;
 }
 
@@ -59,33 +66,20 @@ input {
 }
 
 .datePersonalizado {
+  height: 45px;
   background-color: white;
   color: gray;
   border: none;
-  border-radius: 0.375rem; /* redondea todo el input */
-  padding-left: 3rem;
 
-  /* Cuadro verde a la derecha + icono SVG blanco encima */
-  background-image:
-    linear-gradient(to right, #3C7E66 3rem, transparent 3rem);
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2216%22%20height=%2216%22%20fill=%22white%22%20class=%22bi%20bi-calendar-fill%22%20viewBox=%220%200%2016%2016%22%3E%3Cpath%20d=%22M3.5%200a.5.5%200%200%201%20.5.5V1h8V.5a.5.5%200%200%201%201%200V1h1a2%202%200%200%201%202%202v11a2%202%200%200%201-2%202H2a2%202%200%200%201-2-2V5h16V4H0V3a2%202%200%200%201%202-2h1V.5a.5.5%200%200%201%20.5-.5%22/%3E%3C/svg%3E"),
+  linear-gradient(to left, #3C7E66 2.5rem, transparent 2.5rem);
   background-repeat: no-repeat;
-  background-position: right center;
-  background-size: 2.5rem 100%;
-  position: relative;
-}
+  background-position: right 0.5rem center, right center;
+  background-size: 25px 25px, 2.5rem 100%;
 
-.datePersonalizado::after {
-  content: "";
-  position: absolute;
-  right: 0.45rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 25px;
-  height: 25px;
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2216%22%20height=%2216%22%20fill=%22white%22%20class=%22bi%20bi-calendar-fill%22%20viewBox=%220%200%2016%2016%22%3E%3Cpath%20d=%22M3.5%200a.5.5%200%200%201%20.5.5V1h8V.5a.5.5%200%200%201%201%200V1h1a2%202%200%200%201%202%202v11a2%202%200%200%201-2%202H2a2%202%200%200%201-2-2V5h16V4H0V3a2%202%200%200%201%202-2h1V.5a.5.5%200%200%201%20.5-.5%22/%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 /* Oculta el icono nativo del calendario */
@@ -98,9 +92,21 @@ input {
   cursor: pointer;
 }
 
-/* Oculta placeholder */
-.datePersonalizado::placeholder {
-  color: transparent;
+.selectRegPersonalizado {
+  height: 45px;
+  background-color: white;
+  color: gray;
+  border: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708'/%3E%3C/svg%3E"),
+  linear-gradient(to left, #3C7E66 2.5rem, transparent 2.5rem);
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center, right center;
+  background-size: 25px 25px, 2.5rem 100%;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 .button-group {
