@@ -1,0 +1,114 @@
+.view-container-form {
+  background-color: #edf1ef;
+  border-radius: 10px;
+  padding-bottom: 50px;
+  width: 425px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+}
+
+.view-title-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px 10px 0 0;
+  height: 50px;
+  background-color: #16604e;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+input {
+  height: 45px;
+  border-radius: 5px;
+}
+
+.input-group .fechaAusencia{
+  padding-top: 35px;
+}
+
+#fechaAusencia {
+  border-radius: 5px;
+}
+
+.input-group label {
+  display: block;
+  font-weight: bold;
+  font-size: 14px;
+  padding-top: 25px;
+  padding-bottom: 7px;
+}
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 8px;
+}
+
+.input-group-text{
+  background-color: #16604E;
+}
+
+.datePersonalizado {
+  background-color: white;
+  color: gray;
+  border: none;
+  border-radius: 0.375rem; /* redondea todo el input */
+  padding-left: 3rem;
+
+  /* Cuadro verde a la derecha + icono SVG blanco encima */
+  background-image:
+    linear-gradient(to right, #3C7E66 3rem, transparent 3rem);
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 2.5rem 100%;
+  position: relative;
+}
+
+.datePersonalizado::after {
+  content: "";
+  position: absolute;
+  right: 0.45rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 25px;
+  height: 25px;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2216%22%20height=%2216%22%20fill=%22white%22%20class=%22bi%20bi-calendar-fill%22%20viewBox=%220%200%2016%2016%22%3E%3Cpath%20d=%22M3.5%200a.5.5%200%200%201%20.5.5V1h8V.5a.5.5%200%200%201%201%200V1h1a2%202%200%200%201%202%202v11a2%202%200%200%201-2%202H2a2%202%200%200%201-2-2V5h16V4H0V3a2%202%200%200%201%202-2h1V.5a.5.5%200%200%201%20.5-.5%22/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Oculta el icono nativo del calendario */
+.datePersonalizado::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* Oculta placeholder */
+.datePersonalizado::placeholder {
+  color: transparent;
+}
+
+.button-group {
+  display: flex;
+  justify-content:right;
+  margin-top: 35px;
+}
+
+.btn-red {
+  margin-left: 10px;
+}
