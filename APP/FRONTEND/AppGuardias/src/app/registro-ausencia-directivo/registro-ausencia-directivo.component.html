@@ -1,0 +1,48 @@
+<div class="main-container">
+  <div class="view-container-form">
+    <div class="view-title-form">
+      <h1>Registrar ausencia</h1>
+    </div>
+
+      <form class="form-container">
+        <!--Día de ausencia-->
+        <div class="input-group">
+          <label class="fechaAusencia" for="fechaAusencia">Dia de ausencia</label>
+          <input type="date" class="form-date datePersonalizado" name="fechaAusencia" id="fechaAusencia" required>
+        </div>
+        <!--Tramo horario-->
+        <div class="input-group">
+          <label for="tramo">Seleccione tramo horario</label>
+          <select name="tramoRegistro" id="tramoRegistro" class="selectRegPersonalizado" required>
+            <option disabled selected>Seleccione tramo(s)</option>
+            <option value="diaCompleto">Día completo</option>
+            <option value="primeraHora">Primera Hora</option>
+            <option value="segundaHora">Segunda hora</option>
+            <option value="terceraHora">Tercera hora</option>
+            <option value="cuartaHora">Cuarta hora</option>
+            <option value="quitaHora">Quinta hora</option>
+            <option value="sextaHora">Sexta hora</option>
+          </select>
+        </div>
+        <!--Motivo-->
+        <div class="input-group">
+          <label for="motivo">Motivo</label>
+          <textarea id="motivo" rows="6"></textarea>
+        </div>
+        <!--Botones-->
+        <div class="button-group">
+          <button type="submit" class="btn btn-green">
+            <i class="bi bi-check-circle-fill"></i>
+            Confirmar
+          </button>
+          <button type="reset" class="btn btn-red">
+            <i class="bi bi-x-circle-fill"></i>
+            Limpiar
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+
