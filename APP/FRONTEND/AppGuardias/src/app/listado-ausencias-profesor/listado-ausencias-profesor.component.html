@@ -1,1 +1,46 @@
-<p>listado-ausencias-profesor works!</p>
+<ng-container>
+  <div class="main-container">
+    <div class="view-container shadow mx-3 mx-xxl-0">
+      <div class="view-title">
+        <h1>Mis Ausencias</h1>
+      </div>
+      <div class="tabla-container">
+        <h3 class="titulo-tabla">Mis Ausencias</h3>
+        <table class="tabla-ausencias">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Grupo</th>
+              <th>Hora</th>
+              <th>Asignatura</th>
+              <th>Detalles</th>
+              <th>Eliminar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ausencia of ausencias">
+              <td>{{ ausencia.fechaAusencia }}</td>
+              <td>{{ ausencia.horariosProfesor.grupo }}</td>
+              <td>{{ ausencia.horariosProfesor.hora }}</td>
+              <td>{{ ausencia.horariosProfesor.asignatura }}</td>
+              <td>
+                <button class="btn-detalles">➕</button>
+              </td>
+              <td>
+                <button class="btn-eliminar">🗑️</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="paginacion">
+          <button>&lt;</button>
+          <button class="pagina-activa">1</button>
+          <button>2</button>
+          <button>3</button>
+          <button>&gt;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

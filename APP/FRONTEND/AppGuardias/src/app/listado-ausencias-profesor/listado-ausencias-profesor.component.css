@@ -1,0 +1,97 @@
+/* Contenedor general */
+.tabla-container {
+  margin: 0 auto;
+  padding: 30px;
+  background-color: #edf1ef;
+  border-radius: 10px;
+  max-width: 1200px;
+  box-sizing: border-box;
+}
+
+/* Título de la tabla */
+.titulo-tabla {
+  background-color: #16604e;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 12px;
+  text-align: center;
+  border-radius: 10px 10px 0 0;
+  margin-bottom: 20px;
+}
+
+/* Tabla */
+.tabla-ausencias {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+}
+
+/* Encabezado */
+.tabla-ausencias thead {
+  background-color: #cde3da;
+}
+
+.tabla-ausencias th,
+.tabla-ausencias td {
+  padding: 12px 15px;
+  text-align: center;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* Botones */
+.btn-detalles {
+  background-color: #3c7e66;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-detalles:hover {
+  border: 2px solid #3c7e66;
+  color: #3c7e66;
+  background-color: white;
+}
+
+.btn-eliminar {
+  background-color: #d74e58;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-eliminar:hover {
+  border: 2px solid #3c7e66;
+  color: #3c7e66;
+  background-color: white;
+}
+
+/* Paginación */
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.paginacion button {
+  background-color: #3c7e66;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 6px 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.paginacion .pagina-activa {
+  background-color: #16604e;
+}
