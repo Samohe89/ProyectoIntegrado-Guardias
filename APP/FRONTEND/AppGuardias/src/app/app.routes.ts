@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
-import { RegistroAusenciaProfesorComponent } from './registro-ausencia-profesor/registro-ausencia-profesor.component';
+import { RegistroAusenciaDirectivoComponent } from './components/registro-ausencia-directivo/registro-ausencia-directivo.component';
 
 export const routes: Routes = [
   {
     path: 'registro-ausencia-profesor',
-    component: RegistroAusenciaProfesorComponent
+    component: RegistroAusenciaDirectivoComponent
   },
+
 ];

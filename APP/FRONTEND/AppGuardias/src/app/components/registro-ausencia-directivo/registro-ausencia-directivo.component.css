@@ -27,7 +27,7 @@ input {
   height: 45px;
 }
 
-.input-group .fechaAusencia{
+.input-group .registroProfesor{
   padding-top: 35px;
 }
 
@@ -117,4 +117,9 @@ input {
 
 .btn-red {
   margin-left: 10px;
+}
+
+.error-message {
+  color: red;
+  font-size: smaller;
 }

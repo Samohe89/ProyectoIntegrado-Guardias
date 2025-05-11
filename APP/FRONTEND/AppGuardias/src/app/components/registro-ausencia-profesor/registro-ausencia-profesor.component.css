@@ -118,3 +118,8 @@ input {
 .btn-red {
   margin-left: 10px;
 }
+
+.error-message {
+  color: red;
+  font-size: smaller;
+}
