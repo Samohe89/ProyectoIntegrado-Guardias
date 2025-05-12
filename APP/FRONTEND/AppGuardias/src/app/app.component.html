@@ -1,5 +1,6 @@
 <ng-container *ngIf="!usuarioLogueado">
-    <app-login (loginOk)="onLogin($event)"></app-login>
+    <app-login></app-login>
+    <!-- <app-login (loginOk)="onLogin($event)"></app-login> -->
 </ng-container>
 
 <ng-container *ngIf="usuarioLogueado">

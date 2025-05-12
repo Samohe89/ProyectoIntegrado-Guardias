@@ -6,4 +6,6 @@ import com.daw.datamodel.entities.ProfesorRol;
 
 public interface ProfesorRolRepository extends JpaRepository<ProfesorRol, Long> {
 
+	ProfesorRol findByProfesorIdDniProfesorAndIdCursoAcademicoAndIdRol(String dniProfesor, String cursoAcademico, String rol);
+	
 }

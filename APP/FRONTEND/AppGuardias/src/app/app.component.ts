@@ -19,12 +19,12 @@ export class AppComponent {
   usuarioLogueado: boolean = false;
 
   rol: String = "";
-  cursoacademico: String = "";
+  cursoAcademico: String = "";
 
   onLogin(data: { rol: String, cursoAcademico: String}) {
     this.usuarioLogueado = true;
     this.rol = data.rol;
-    this.cursoacademico = data.cursoAcademico;
+    this.cursoAcademico = data.cursoAcademico;
   }
 
   

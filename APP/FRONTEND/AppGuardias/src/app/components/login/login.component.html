@@ -1,55 +1,50 @@
 <div class="d-flex justify-content-center align-items-center fondo-login vh-100">
-  <div class="card shadow card-login">
+  <div id="ventanaLogin" class="card shadow card-login" >
 
-    <div class="icono-login position-absolute top-0 start-50 translate-middle">
+    <div id="iconoLogin" class="icono-login position-absolute top-0 start-50 translate-middle" >
       <i class="bi bi-person-fill icono-login"></i>
-      
     </div>
 
-    <form [formGroup]="formularioLogin" (ngSubmit)="onSubmit()">
+    <form #formulario="ngForm" id="formularioLogin" (ngSubmit)="onSubmit(formulario)" autocomplete="off" novalidate >
       <!-- Usuario -->
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'input-invalido': submit && password.invalid}">
         <span class="input-group-text"><i class="bi bi-person"></i></span>
-        <input type="text" id="usuarioInput" class="form-control" formControlName="usuario" placeholder="Usuario"
-          [ngClass]="{'is-invalid': submit && formularioLogin.get('usuario')?.invalid}" />
-        <div class="invalid-feedback" *ngIf="submit && formularioLogin.get('usuario')?.errors?.['required']">
-          Debe introducir el nombre de usuario
-        </div>
+        <input #username="ngModel" type="text" id="inputUsuario" class="form-control" name="username" placeholder="Usuario"
+          [(ngModel)]="datosUsuario.username" required />
+      </div>
+      <div class="texto-invalido" *ngIf="submit && username.invalid">
+        Debe introducir el nombre de usuario
       </div>
 
       <!-- Contraseña -->
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'input-invalido': submit && password.invalid}">
         <span class="input-group-text"><i class="bi bi-key"></i></span>
-        <input type="{{ inputType }}" id="passwordInput" class="form-control" formControlName="password" placeholder="Contraseña"
-        [ngClass]="{'is-invalid': submit && formularioLogin.get('password')?.invalid}" />
-          <span 
-          class="input-group-text" 
-          (mousedown)="mostrarPassword()" 
-          (mouseup)="ocultarPassword()" 
-          (mouseleave)="ocultarPassword()">
-          <i class="bi bi-eye visualizar"></i>
+        <input #password="ngModel" type="{{ inputType }}" id="inputPasword" class="form-control" name="password" placeholder="Contraseña"
+        [(ngModel)]="datosUsuario.password" autocomplete="new-password" required/>
+        <span class="input-group-text icono-visualizar" (mousedown)="mostrarPassword()" (mouseup)="ocultarPassword()" (mouseleave)="ocultarPassword()">
+          <i class="bi bi-eye"></i>
         </span>
-        <div class="invalid-feedback" *ngIf="submit && formularioLogin.get('usuario')?.errors?.['required']">
-          Debe introducir una contraseña
-        </div>
+      </div>
+      <div class="texto-invalido" *ngIf="submit && password.invalid">
+        Debe introducir una contraseña
       </div>
 
       <!-- Perfil -->
       <div class="input-group">
-        <select id="rolInput" class="form-select selectPersonalizado" formControlName="rol"
-          [ngClass]="{'is-invalid': submit && formularioLogin.get('rol')?.invalid}">
+        <select #rol="ngModel" id="inputRol" class="form-select selectPersonalizado" name="rol"
+        [(ngModel)]="datosUsuario.rol" [ngClass]="{'input-invalido': submit && rol.invalid}" required >
           <option value="" disabled selected>Perfil</option>
           <option value="profesor">Profesor</option>
           <option value="directivo">Directivo</option>
         </select>
-        <div class="invalid-feedback" *ngIf="submit && formularioLogin.get('rol')?.errors?.['required']">
-          Debe seleccionar un perfil
-        </div>
+      </div>
+      <div class="texto-invalido" *ngIf="submit && rol.invalid">
+        Debe seleccionar un perfil
       </div>
 
       <!-- Curso Académico -->
       <div class="input-group">
-        <select id="cursoInput" class="form-select selectPersonalizado" formControlName="cursoAcademico">
+        <select id="inputCurso" class="form-select selectPersonalizado" name="cursoAcademico">
           <option value="2024" selected>2024</option>
         </select>
       </div>
