@@ -1,20 +1,20 @@
 package com.daw.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
 public class UsuarioLoginDTO {
 
-	@NotNull
+	@NotEmpty
 	private String username;
 
-	@NotNull
+	@NotEmpty
 	private String password;
 
-	@NotNull
+	@NotEmpty
 	private String rol;
 
-	@NotNull
+	@NotEmpty
 	private String cursoAcademico;
 }
