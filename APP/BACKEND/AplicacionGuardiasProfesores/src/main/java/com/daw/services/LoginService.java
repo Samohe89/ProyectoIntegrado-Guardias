@@ -10,6 +10,10 @@ import com.daw.dto.UsuarioLoginDTO;
 import com.daw.repositories.ProfesorRepository;
 import com.daw.repositories.ProfesorRolRepository;
 
+import exceptions.PasswordInvalidaException;
+import exceptions.RolNoAsignadoException;
+import exceptions.UsuarioNoEncontradoException;
+
 @Service
 public class LoginService {
 
@@ -19,16 +23,16 @@ public class LoginService {
 	@Autowired
 	private ProfesorRolRepository profesorRolRepository;
 
-	public UsuarioAutenticadoDTO autenticarUsuario(UsuarioLoginDTO usuarioLogin) throws Exception {
+	public UsuarioAutenticadoDTO autenticarUsuario(UsuarioLoginDTO usuarioLogin) {
 		// Buscar el profesor por "usuario"
 		Profesor profesor = profesorRepository.findByUsuario(usuarioLogin.getUsername());
 		if (profesor == null) {
-			throw new Exception("El nombre de usuario no existe");
+			throw new UsuarioNoEncontradoException(usuarioLogin.getUsername());
 		}
 
 		// Comprobar contraseña
 		if (!profesor.getClaveProfesor().equals(usuarioLogin.getPassword())) {
-			throw new Exception("Contraseña incorrecta");
+			throw new PasswordInvalidaException();
 		}
 
 		// Verificar el rol del profesor
@@ -36,7 +40,7 @@ public class LoginService {
 				profesor.getId().getDniProfesor(), profesor.getId().getCursoAcademico(), usuarioLogin.getRol());
 
 		if (profesorRol == null) {
-			throw new Exception("El profesor no tiene el rol indicado");
+			throw new RolNoAsignadoException(usuarioLogin.getRol());
 		}
 
 		// Respuesta si todo está OK
