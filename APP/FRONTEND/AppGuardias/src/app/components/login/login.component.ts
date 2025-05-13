@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormsModule, NgForm} from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { LoginService } from '../../services/login.service';
 
 
@@ -38,6 +38,12 @@ export class LoginComponent {
     rol: ''
   };
 
+
+  // Variable para controlar la visualización del modal y el mensaje que muestra
+  modalActivo: boolean = false;
+  mensajeError: string = '';
+
+
   // Emisor de eventos para enviar los datos del usuario autenticado al componente principal
   @Output() loginOk = new EventEmitter<any>();
 
@@ -53,7 +59,7 @@ export class LoginComponent {
   }
 
 
-  
+
   onSubmit(formulario: NgForm) {
     this.submit = true;
 
@@ -70,12 +76,33 @@ export class LoginComponent {
         },
         error: (error) => {
           console.error('Error de autenticación', error);
+
+          if (error.status === 404) {
+            this.mostrarError('El usuario no existe.');
+          } else if (error.status === 401) {
+            this.mostrarError('Contraseña incorrecta.');
+          } else if (error.status === 403) {
+            this.mostrarError('El usuario no tiene el perfil asignado.');
+          } else {
+            this.mostrarError('Error desconocido');
+          }
+        
         },
         complete: () => {
           console.log('Login realizado con éxito');
         }
       });
     }
+  }
+
+
+  mostrarError(mensaje: string) {
+    this.mensajeError = mensaje;
+    this.modalActivo = true;
+  }
+
+  cerrarModal() {
+    this.modalActivo = false;
   }
 
 

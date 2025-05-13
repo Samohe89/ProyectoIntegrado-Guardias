@@ -1,16 +1,16 @@
 <div class="d-flex justify-content-center align-items-center fondo-login vh-100">
-  <div id="ventanaLogin" class="card shadow card-login" >
+  <div id="ventanaLogin" class="card shadow card-login">
 
-    <div id="iconoLogin" class="icono-login position-absolute top-0 start-50 translate-middle" >
+    <div id="iconoLogin" class="icono-login position-absolute top-0 start-50 translate-middle">
       <i class="bi bi-person-fill icono-login"></i>
     </div>
 
-    <form #formulario="ngForm" id="formularioLogin" (ngSubmit)="onSubmit(formulario)" autocomplete="off" novalidate >
+    <form #formulario="ngForm" id="formularioLogin" (ngSubmit)="onSubmit(formulario)" autocomplete="off" novalidate>
       <!-- Usuario -->
       <div class="input-group" [ngClass]="{'input-invalido': submit && password.invalid}">
         <span class="input-group-text"><i class="bi bi-person"></i></span>
-        <input #username="ngModel" type="text" id="inputUsuario" class="form-control" name="username" placeholder="Usuario"
-          [(ngModel)]="usuarioLogin.username" required />
+        <input #username="ngModel" type="text" id="inputUsuario" class="form-control" name="username"
+          placeholder="Usuario" [(ngModel)]="usuarioLogin.username" required />
       </div>
       <div class="texto-invalido" *ngIf="submit && username.invalid">
         Debe introducir el nombre de usuario
@@ -19,9 +19,10 @@
       <!-- Contraseña -->
       <div class="input-group" [ngClass]="{'input-invalido': submit && password.invalid}">
         <span class="input-group-text"><i class="bi bi-key"></i></span>
-        <input #password="ngModel" type="{{ inputType }}" id="inputPasword" class="form-control" name="password" placeholder="Contraseña"
-        [(ngModel)]="usuarioLogin.password" autocomplete="new-password" required/>
-        <span class="input-group-text icono-visualizar" (mousedown)="mostrarPassword()" (mouseup)="ocultarPassword()" (mouseleave)="ocultarPassword()">
+        <input #password="ngModel" type="{{ inputType }}" id="inputPasword" class="form-control" name="password"
+          placeholder="Contraseña" [(ngModel)]="usuarioLogin.password" autocomplete="new-password" required />
+        <span class="input-group-text icono-visualizar" (mousedown)="mostrarPassword()" (mouseup)="ocultarPassword()"
+          (mouseleave)="ocultarPassword()">
           <i class="bi bi-eye"></i>
         </span>
       </div>
@@ -32,7 +33,7 @@
       <!-- Perfil -->
       <div class="input-group">
         <select #rol="ngModel" id="inputRol" class="form-select selectPersonalizado" name="rol"
-        [(ngModel)]="usuarioLogin.rol" [ngClass]="{'input-invalido': submit && rol.invalid}" required >
+          [(ngModel)]="usuarioLogin.rol" [ngClass]="{'input-invalido': submit && rol.invalid}" required>
           <option value="" disabled selected>Perfil</option>
           <option value="Profesor">Profesor</option>
           <option value="Equipo Directivo">Directivo</option>
@@ -54,5 +55,21 @@
         <button type="submit" class="btn btn-login">CONECTAR</button>
       </div>
     </form>
+  </div>
+</div>
+
+
+<!-- Modal de errores -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" [ngClass]="{'show': modalActivo}" [style.display]="modalActivo ? 'block' : 'none'">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-center w-100" id="errorModalLabel">Error</h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ mensajeError }}</p>
+      </div>
+    </div>
   </div>
 </div>
