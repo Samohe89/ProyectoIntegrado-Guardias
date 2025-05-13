@@ -1,19 +1,18 @@
-<ng-container *ngIf="!usuarioLogueado">
-    <app-login></app-login>
-    <!-- <app-login (loginOk)="onLogin($event)"></app-login> -->
+<ng-container *ngIf="!estadoLogin">
+    <app-login (loginOk)="onLogin($event)"></app-login>
 </ng-container>
 
-<ng-container *ngIf="usuarioLogueado">
+<ng-container *ngIf="estadoLogin" >
     <ng-container [ngSwitch]="rol">
-        <app-menu-profesor *ngSwitchCase="'profesor'"></app-menu-profesor>
-        <app-menu-directivo *ngSwitchCase="'directivo'"></app-menu-directivo>
+        <app-menu-profesor *ngSwitchCase="'Profesor'"></app-menu-profesor>
+        <app-menu-directivo *ngSwitchCase="'Equipo Directivo'"></app-menu-directivo>
     </ng-container>
 </ng-container>
 
 
 
 
-
+<!-- PLANTILLA VENTANAS VISTAS
 <div class="main-container">
     <div class="view-container shadow mx-3 mx-xxl-0">
         <div class="view-title">
@@ -35,4 +34,7 @@
     </div>
 </div>
 
+-->
+
 <router-outlet></router-outlet>
+

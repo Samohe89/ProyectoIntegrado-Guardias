@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { LoginComponent } from "./components/login/login.component";
 import { MenuProfesorComponent } from "./components/menu-profesor/menu-profesor.component";
 import { MenuDirectivoComponent } from "./components/menu-directivo/menu-directivo.component";
-import { LoginComponent } from "./components/login/login.component";
+
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, MenuProfesorComponent, MenuDirectivoComponent, LoginComponent],
+  imports: [RouterOutlet, CommonModule, LoginComponent, MenuProfesorComponent, MenuDirectivoComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -16,15 +17,24 @@ import { LoginComponent } from "./components/login/login.component";
 export class AppComponent {
   title = 'AppGuardias';
   
-  usuarioLogueado: boolean = false;
+  // Variable que controla si el login se ha ejecutado o no
+  estadoLogin: boolean = false;
 
-  rol: String = "";
-  cursoAcademico: String = "";
-
-  onLogin(data: { rol: String, cursoAcademico: String}) {
-    this.usuarioLogueado = true;
-    this.rol = data.rol;
-    this.cursoAcademico = data.cursoAcademico;
+  // Variables que almacenan los datos del usuario logueado
+  dniProfesor: string = "";
+  cursoAcademico: string = "";
+  nombreProfesor: string = "";
+  alias: string = "";
+  rol: string = "";
+  
+  // Método que copiará los datos del usuario logueado recibidos desde el backend
+  onLogin(usuarioAutenticado: any) {
+    this.estadoLogin = true;
+    this.dniProfesor = usuarioAutenticado.dniProfesor;
+    this.cursoAcademico = usuarioAutenticado.cursoAcademico;
+    this.nombreProfesor = usuarioAutenticado.nombreProfesor;
+    this.alias = usuarioAutenticado.alias;
+    this.rol = usuarioAutenticado.rol;
   }
 
   

@@ -10,7 +10,7 @@
       <div class="input-group" [ngClass]="{'input-invalido': submit && password.invalid}">
         <span class="input-group-text"><i class="bi bi-person"></i></span>
         <input #username="ngModel" type="text" id="inputUsuario" class="form-control" name="username" placeholder="Usuario"
-          [(ngModel)]="datosUsuario.username" required />
+          [(ngModel)]="usuarioLogin.username" required />
       </div>
       <div class="texto-invalido" *ngIf="submit && username.invalid">
         Debe introducir el nombre de usuario
@@ -20,7 +20,7 @@
       <div class="input-group" [ngClass]="{'input-invalido': submit && password.invalid}">
         <span class="input-group-text"><i class="bi bi-key"></i></span>
         <input #password="ngModel" type="{{ inputType }}" id="inputPasword" class="form-control" name="password" placeholder="Contraseña"
-        [(ngModel)]="datosUsuario.password" autocomplete="new-password" required/>
+        [(ngModel)]="usuarioLogin.password" autocomplete="new-password" required/>
         <span class="input-group-text icono-visualizar" (mousedown)="mostrarPassword()" (mouseup)="ocultarPassword()" (mouseleave)="ocultarPassword()">
           <i class="bi bi-eye"></i>
         </span>
@@ -32,10 +32,10 @@
       <!-- Perfil -->
       <div class="input-group">
         <select #rol="ngModel" id="inputRol" class="form-select selectPersonalizado" name="rol"
-        [(ngModel)]="datosUsuario.rol" [ngClass]="{'input-invalido': submit && rol.invalid}" required >
+        [(ngModel)]="usuarioLogin.rol" [ngClass]="{'input-invalido': submit && rol.invalid}" required >
           <option value="" disabled selected>Perfil</option>
-          <option value="profesor">Profesor</option>
-          <option value="directivo">Directivo</option>
+          <option value="Profesor">Profesor</option>
+          <option value="Equipo Directivo">Directivo</option>
         </select>
       </div>
       <div class="texto-invalido" *ngIf="submit && rol.invalid">
