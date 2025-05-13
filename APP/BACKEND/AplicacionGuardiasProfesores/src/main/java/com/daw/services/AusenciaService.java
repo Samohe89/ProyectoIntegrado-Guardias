@@ -6,7 +6,12 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.daw.datamodel.entities.Ausencia;
+import com.daw.datamodel.entities.Horario;
+import com.daw.datamodel.entities.Profesor;
+import com.daw.dto.AusenciaDTO;
 import com.daw.repositories.AusenciaRepository;
+import com.daw.repositories.HorarioRepository;
+import com.daw.repositories.ProfesorRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +20,10 @@ import lombok.RequiredArgsConstructor;
 public class AusenciaService {
 	
 	private final AusenciaRepository repository;
+	
+	private final HorarioRepository horarioRepository;
+	
+	private final ProfesorRepository profesorRepository;
 
     public List<Ausencia> findAll() {
         return repository.findAll();
@@ -31,4 +40,27 @@ public class AusenciaService {
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+    
+    public Ausencia crearRegistroAusencia(AusenciaDTO ausenciaDTO) {
+    	
+    	//Crear y rellenar la ausencia
+    	Ausencia ausencia = new Ausencia();
+    	ausencia.setFechaAusencia(ausenciaDTO.getFechaAusencia());
+    	ausencia.setComentario(ausenciaDTO.getComentario());
+    	
+    	Horario horario = horarioRepository.getReferenceById(ausenciaDTO.getNumRegistro());
+    	ausencia.setHorariosProfesor(horario);
+    	
+    	Profesor profesor = profesorRepository.getReferenceById(ausenciaDTO.getId());
+    	ausencia.setProfesor(profesor);
+    	
+    	repository.save(ausencia);
+    	
+    	
+    	
+    	//Guardar en base de datos
+    	return repository.save(ausencia);
+    	
+    }
+
 }

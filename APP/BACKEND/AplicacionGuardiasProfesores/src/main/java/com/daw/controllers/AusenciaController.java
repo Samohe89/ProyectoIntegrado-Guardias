@@ -3,9 +3,17 @@ package com.daw.controllers;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.datamodel.entities.Ausencia;
+import com.daw.dto.AusenciaDTO;
 import com.daw.services.AusenciaService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,7 +39,13 @@ public class AusenciaController {
 	public Ausencia create(@RequestBody Ausencia ausencia) {
 		return service.save(ausencia);
 	}
-
+	
+	@PostMapping("/registroAusencia")
+	public ResponseEntity<AusenciaDTO> crearRegistroAusencia(@RequestBody AusenciaDTO ausenciaDTO) {
+		return ResponseEntity.ok().body(ausenciaDTO);
+		
+	}
+	
 	@PutMapping("/{id}")
 	public ResponseEntity<Ausencia> update(@PathVariable Long id, @RequestBody Ausencia updated) {
 		return service.findById(id).map(existing -> {
