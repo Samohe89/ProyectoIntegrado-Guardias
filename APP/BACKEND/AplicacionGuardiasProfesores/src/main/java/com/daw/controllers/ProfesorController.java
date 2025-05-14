@@ -25,8 +25,6 @@ public class ProfesorController {
 
     private final ProfesorService service;
     
-
-
     @GetMapping
     public List<Profesor> getAll() {
         return service.findAll();

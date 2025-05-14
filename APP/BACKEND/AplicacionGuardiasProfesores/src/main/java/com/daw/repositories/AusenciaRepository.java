@@ -6,4 +6,5 @@ import com.daw.datamodel.entities.Ausencia;
 
 public interface AusenciaRepository extends JpaRepository<Ausencia, Long> {
 
+
 }
