@@ -3,9 +3,17 @@ package com.daw.controllers;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.datamodel.entities.Horario;
+import com.daw.datamodel.entities.ProfesorId;
 import com.daw.services.HorarioService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +35,13 @@ public class HorarioController {
         return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+    
+    @GetMapping("/profesor/{dni}/{curso}")
+    public List<Horario> getHorariosPorProfesorYCurso(
+        @PathVariable("dni") String dniProfesor,
+        @PathVariable("curso") String cursoAcademico) {
+        return service.obtenerHorariosPorProfesorYCurso(dniProfesor, cursoAcademico);
     }
 
     @PostMapping

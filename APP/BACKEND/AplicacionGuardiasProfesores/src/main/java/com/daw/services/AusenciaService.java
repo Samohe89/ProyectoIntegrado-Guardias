@@ -48,19 +48,21 @@ public class AusenciaService {
     	ausencia.setFechaAusencia(ausenciaDTO.getFechaAusencia());
     	ausencia.setComentario(ausenciaDTO.getComentario());
     	
-    	Horario horario = horarioRepository.getReferenceById(ausenciaDTO.getNumRegistro());
+    	Horario horario = horarioRepository.findById(ausenciaDTO.getNumRegistro())
+    		    .orElseThrow(() -> new RuntimeException("No existe el horario con ID: " + ausenciaDTO.getNumRegistro()));
+    	
     	ausencia.setHorariosProfesor(horario);
     	
-    	Profesor profesor = profesorRepository.getReferenceById(ausenciaDTO.getId());
+    	Profesor profesor = profesorRepository.findById(ausenciaDTO.getId())
+    		    .orElseThrow(() -> new RuntimeException("No existe el profesor con ID: " + ausenciaDTO.getId()));
+    	
     	ausencia.setProfesor(profesor);
-    	
-    	repository.save(ausencia);
-    	
-    	
     	
     	//Guardar en base de datos
     	return repository.save(ausencia);
     	
     }
+    
+
 
 }
