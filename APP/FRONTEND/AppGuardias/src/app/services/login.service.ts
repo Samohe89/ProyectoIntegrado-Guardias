@@ -23,13 +23,13 @@ export class LoginService {
   De esta forma, al recargar la página en el navegador, no se sale de la sesión ni se reinicia la app
   */
   guardarSesionUsuario(usuario: any) {
-    localStorage.setItem('usuarioGuardado', JSON.stringify(usuario))
+    sessionStorage.setItem('usuarioGuardado', JSON.stringify(usuario))
   }
 
 
   // Método que devuleve los datos de la sesión guardada
   consultarSesionUsuario() {
-    const usuarioGuardado = localStorage.getItem('usuarioGuardado');
+    const usuarioGuardado = sessionStorage.getItem('usuarioGuardado');
     if (usuarioGuardado) {
       return JSON.parse(usuarioGuardado);
     } else {
@@ -39,7 +39,7 @@ export class LoginService {
 
   // Método que borra la sesión guardada
   borrarSesionUsuario() {
-    localStorage.removeItem('usuarioGuardado');
+    sessionStorage.removeItem('usuarioGuardado');
   }
 
 }

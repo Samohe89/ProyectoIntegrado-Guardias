@@ -34,8 +34,11 @@ export class AppComponent implements OnInit{
 
   //Método que se ejecuta siempre al incio
   //Permite guardar la sesión del usuario para que no se borre al recargar la página en el navegador    
+  
   ngOnInit(): void {
     const usuarioGuardado = this.loginService.consultarSesionUsuario();
+    console.log("Sesión de usuario: ", usuarioGuardado);
+    
     if (usuarioGuardado) {
       this.estadoLogin = true;
       this.dniProfesor = usuarioGuardado.dniProfesor;
@@ -44,6 +47,7 @@ export class AppComponent implements OnInit{
       this.alias = usuarioGuardado.alias;
       this.rol = usuarioGuardado.rol;
     }
+
   }
 
 

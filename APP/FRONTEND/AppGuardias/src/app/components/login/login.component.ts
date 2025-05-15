@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { LoginService } from '../../services/login.service';
+import { Router } from '@angular/router';
+import { inject } from '@angular/core';
 
 
 
@@ -47,9 +49,11 @@ export class LoginComponent {
   // Emisor de eventos para enviar los datos del usuario autenticado al componente principal
   @Output() loginOk = new EventEmitter<any>();
 
-  
-  // Inyección de servicios
-  constructor(private loginService: LoginService) { }
+
+  // Inyección de enrutador y servicios
+  constructor(private router: Router, private loginService: LoginService) { }
+
+
 
 
   mostrarPassword() {
@@ -73,11 +77,15 @@ export class LoginComponent {
           this.usuarioAutenticado = response;
 
           //Persistir los datos de la sesión en el navegador
-          localStorage.setItem('usuarioGuardado', JSON.stringify(this.usuarioAutenticado));
+          this.loginService.guardarSesionUsuario(this.usuarioAutenticado);
 
           // Emitir el evento con los datos del usuario autenticado
           this.loginOk.emit(this.usuarioAutenticado);
           console.log('Usuario autenticado', response);
+
+          //Redireccionar al componente Registro Ausencia (por defecto)
+          this.router.navigate(['/registro-ausencia']);
+
         },
         error: (error) => {
           console.error('Error de autenticación', error);
@@ -91,7 +99,7 @@ export class LoginComponent {
           } else {
             this.mostrarError('Error desconocido');
           }
-        
+
         },
         complete: () => {
           console.log('Login realizado con éxito');
