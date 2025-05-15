@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS profesor (
     DNIProfesor VARCHAR(10) NOT NULL,
     NombreProfesor VARCHAR(100) NOT NULL,
     ClaveProfesor VARCHAR(25) NOT NULL,
-    Usuario VARCHAR(15) NOT NULL,
+    Usuario VARCHAR(15) UNIQUE NOT NULL,
     CursoAcademico VARCHAR(7) NOT NULL,
     NombreDepartamento VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL,
