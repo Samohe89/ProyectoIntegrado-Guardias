@@ -4,13 +4,12 @@ import { CommonModule } from '@angular/common';
 import { LoginComponent } from "./components/login/login.component";
 import { MenuProfesorComponent } from "./components/menu-profesor/menu-profesor.component";
 import { MenuDirectivoComponent } from "./components/menu-directivo/menu-directivo.component";
-import { RegistroAusenciaProfesorComponent } from './components/registro-ausencia-profesor/registro-ausencia-profesor.component';
-import { RegistroAusenciaDirectivoComponent } from './components/registro-ausencia-directivo/registro-ausencia-directivo.component';
+import { RegistroAusenciaComponent } from './components/registro-ausencia/registro-ausencia.component';
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, LoginComponent, MenuProfesorComponent, MenuDirectivoComponent, RegistroAusenciaProfesorComponent, RegistroAusenciaDirectivoComponent],
+  imports: [RouterOutlet, CommonModule, LoginComponent, MenuProfesorComponent, MenuDirectivoComponent, RegistroAusenciaComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

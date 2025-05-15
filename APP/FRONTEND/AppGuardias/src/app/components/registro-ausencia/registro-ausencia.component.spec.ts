@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RegistroAusenciaDirectivoComponent } from './registro-ausencia-directivo.component';
+import { RegistroAusenciaComponent } from './registro-ausencia.component';
 
 describe('RegistroAusenciaDirectivoComponent', () => {
-  let component: RegistroAusenciaDirectivoComponent;
-  let fixture: ComponentFixture<RegistroAusenciaDirectivoComponent>;
+  let component: RegistroAusenciaComponent;
+  let fixture: ComponentFixture<RegistroAusenciaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RegistroAusenciaDirectivoComponent]
+      imports: [RegistroAusenciaComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(RegistroAusenciaDirectivoComponent);
+    fixture = TestBed.createComponent(RegistroAusenciaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

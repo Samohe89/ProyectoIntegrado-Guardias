@@ -4,11 +4,12 @@
       <h1>Registrar ausencia</h1>
     </div>
 
-      <form #formRef="ngForm" (ngSubmit)="onSubmit(formRef)" class="form-container">
-        <!--Select profesor-->
-        <div class="input-group">
+      <form #formRegistro="ngForm" (ngSubmit)="onSubmit(formRegistro)" class="form-container">
+
+        <!--Select profesor sólo para equipo directivo-->
+        <div class="input-group" *ngIf="rol === 'Equipo Directivo'">
           <label for="tramo" class="registroProfesor">Seleccione profesor</label>
-          <select name="regProfesor" id="regProfesor" class="selectRegPersonalizado" [(ngModel)]="ausencia.ProfesorId" required>
+          <select name="id" id="regProfesor" class="selectRegPersonalizado" [(ngModel)]="ausencia.id" (change)="onProfesorChange()"  required >
             <option [ngValue]="null" disabled selected>Seleccione profesor</option>
             <!--LÓGICA SELECT DINÁMICO MUESTRA TODOS LOS PROFESORES-->
             <option *ngFor="let profesor of profesores" [ngValue]="{ dniProfesor: profesor.id.dniProfesor, cursoAcademico: profesor.id.cursoAcademico }"
@@ -19,7 +20,7 @@
           </select>
 
           <!-- Mensaje si no selecciona profesor -->
-        <p class="error-message" *ngIf="formRef.submitted && formRef.controls['regProfesor']?.invalid">
+        <p class="error-message" *ngIf="formRegistro.submitted && formRegistro.controls['id']?.invalid">
           Debe seleccionar un profesor.
         </p>
         </div>
@@ -27,11 +28,11 @@
         <!--Día de ausencia-->
       <div class="input-group">
         <label class="fechaAusencia" for="fechaAusencia">Dia de ausencia</label>
-        <input type="date" class="form-date datePersonalizado" name="fechaAusencia" id="fechaAusencia"
-          [(ngModel)]="ausencia.FechaAusencia" required>
+        <input type="date" class="datePersonalizado" name="fechaAusencia" id="fechaAusencia"
+          [(ngModel)]="ausencia.fechaAusencia" required (change)="onFechaCambio()">
 
         <!-- Mensaje si no selecciona fecha -->
-        <p class="error-message" *ngIf="formRef.submitted && formRef.controls['fechaAusencia']?.invalid">
+        <p class="error-message" *ngIf="formRegistro.submitted && formRegistro.controls['fechaAusencia']?.invalid">
           Debe seleccionar el día de ausencia.
         </p>
       </div>
@@ -39,30 +40,22 @@
         <!--Tramo horario-->
       <div class="input-group">
         <label for="tramo">Seleccione tramo horario</label>
-        <select name="tramoRegistro" id="tramoRegistro" class="selectRegPersonalizado" [(ngModel)]="ausencia.Hora"
-          required>
-          <option disabled selected>Seleccione tramo(s)</option>
-          <option value="diaCompleto">Día completo</option>
-          <option value="primeraHora">Primera Hora</option>
-          <option value="segundaHora">Segunda hora</option>
-          <option value="terceraHora">Tercera hora</option>
-          <option value="cuartaHora">Cuarta hora</option>
-          <option value="quitaHora">Quinta hora</option>
-          <option value="sextaHora">Sexta hora</option>
+        <select id="tramo" name="tramo" [(ngModel)]="ausencia.tramoSeleccionado" [disabled]="selectTramoDisabled" required>
+          <option *ngFor="let tramo of tramosDisponibles" [value]="tramo.value">{{ tramo.label }}</option>
         </select>
 
         <!-- Mensaje si no selecciona tramo -->
-        <p class="error-message" *ngIf="formRef.submitted && formRef.controls['tramoRegistro']?.invalid">
+        <p class="error-message" *ngIf="formRegistro.submitted && formRegistro.controls['tramoRegistro']?.invalid">
           Debe seleccionar un tramo horario.
         </p>
       </div>
       <!--Motivo-->
       <div class="input-group">
         <label for="motivo">Motivo</label>
-        <textarea id="motivo" name="motivo" rows="6" [(ngModel)]="ausencia.Comentario" required></textarea>
+        <textarea id="motivo" name="comentario" rows="6" [(ngModel)]="ausencia.comentario" required></textarea>
 
         <!-- Mensaje si no escribes un motivo -->
-        <p class="error-message" *ngIf="formRef.submitted && formRef.controls['motivo']?.invalid">
+        <p class="error-message" *ngIf="formRegistro.submitted && formRegistro.controls['comentario']?.invalid">
           Debe escribir un motivo.
         </p>
       </div>
@@ -72,7 +65,7 @@
           <i class="bi bi-check-circle-fill"></i>
           Confirmar
         </button>
-        <button type="button" class="btn btn-red" (click)="limpiarFormulario(formRef)">
+        <button type="button" class="btn btn-red" (click)="limpiarFormulario(formRegistro)">
           <i class="bi bi-x-circle-fill"></i>
           Limpiar
         </button>
