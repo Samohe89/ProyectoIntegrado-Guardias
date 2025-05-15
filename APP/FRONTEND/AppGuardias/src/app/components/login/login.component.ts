@@ -47,6 +47,8 @@ export class LoginComponent {
   // Emisor de eventos para enviar los datos del usuario autenticado al componente principal
   @Output() loginOk = new EventEmitter<any>();
 
+  
+  // Inyección de servicios
   constructor(private loginService: LoginService) { }
 
 
@@ -69,6 +71,9 @@ export class LoginComponent {
         next: (response) => {
           // Guardar los datos del usuario autenticado recibidos como respuesta desde el Backend
           this.usuarioAutenticado = response;
+
+          //Persistir los datos de la sesión en el navegador
+          localStorage.setItem('usuarioGuardado', JSON.stringify(this.usuarioAutenticado));
 
           // Emitir el evento con los datos del usuario autenticado
           this.loginOk.emit(this.usuarioAutenticado);
