@@ -43,7 +43,8 @@ h2 {
 }
 
 .btn {
-    min-width: 130px;
+  height: 45px;
+  min-width: 130px;
 }
 
 .btn-green {

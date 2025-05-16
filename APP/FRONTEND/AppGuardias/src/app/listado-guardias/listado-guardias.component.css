@@ -1,0 +1,81 @@
+.table-container {
+  margin-top: 50px;
+  border-radius: 10px;
+  max-width: 1250px;
+}
+
+.tablaPrincipal {
+  width: 100%; 
+  table-layout: fixed; 
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid black;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th {
+  border: 1px solid black;
+  background-color: #3c7e66;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 600;
+}
+
+td {
+  border: 1px solid black;
+  text-align: center;
+  vertical-align: middle;
+}
+
+button i {
+  font-size: 20px;
+}
+
+.btn-detalles {
+  border: none;
+  background-color: white;
+}
+
+
+.btn-detalles i {
+  color: #3c7e66;
+  font-size: 25px;
+  transition: color 0.2s; 
+}
+
+.btn-detalles i:hover {
+    color: #51a687;
+}
+
+
+.celdaGrafico {
+  text-align: center;
+  vertical-align: middle;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.graficoTramos {
+  display: flex;
+  justify-content: center;
+  max-width: 180px;
+  min-width: 120px;
+  height: 25px;
+  border: 1px solid black;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.btn-tramo {
+  flex: 1;
+  border: 1px solid black;
+  background-color: white; /* o red/green según el estado */
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+}
+
+
