@@ -68,6 +68,9 @@ export class AppComponent implements OnInit {
     this.nombreProfesor = "";
     this.alias = "";
     this.rol = "";
+
+    // Redirige a la raiz y reemplaza la URL
+    this.router.navigate(['/'], { replaceUrl: true });
    
   }
 
