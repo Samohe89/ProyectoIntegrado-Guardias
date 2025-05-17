@@ -2,7 +2,7 @@
   <div class="main-container">
     <div class="view-container shadow mx-3 mx-xxl-0">
       <div class="view-title">
-        <h1>Mis Ausencias</h1>
+        <h1>Listado</h1>
       </div>
       <div class="tabla-container">
         <h3 class="titulo-tabla">Mis Ausencias</h3>
@@ -24,23 +24,38 @@
               <td>{{ ausencia.horariosProfesor.hora }}</td>
               <td>{{ ausencia.horariosProfesor.asignatura }}</td>
               <td>
-                <button class="btn-detalles">➕</button>
+                <button
+                  class="btn-detalles">
+                  <i class="bi bi-plus-lg"></i>
+                </button>
               </td>
               <td>
-                <button class="btn-eliminar">🗑️</button>
+                <button class="btn-eliminar" (click)="abrirModal(ausencia)">
+                  <i class="bi bi-trash-fill"></i>
+                </button>
               </td>
             </tr>
           </tbody>
         </table>
-
-        <div class="paginacion">
-          <button>&lt;</button>
-          <button class="pagina-activa">1</button>
-          <button>2</button>
-          <button>3</button>
-          <button>&gt;</button>
-        </div>
       </div>
     </div>
   </div>
 </ng-container>
+<!-- Modal -->
+<div class="modal-container" *ngIf="mostrarModal">
+  <div class="modal-content shadow mx-3 mx-xxl-0">
+    <div class="modal-header">
+      <h1>Eliminar</h1>
+    </div>
+    <div class="modal-body">
+      <p><strong>¿Desea Eliminar?</strong></p>
+      <button class="btn modal-btn-green" (click)="confirmarEliminacion()">
+        <i class="bi bi-check-circle-fill"></i>
+      </button>
+      <button class="btn modal-btn-red" (click)="cancelarEliminacion()">
+        <i class="bi bi-x-circle-fill"></i>
+      </button>
+    </div>
+  </div>
+</div>
+

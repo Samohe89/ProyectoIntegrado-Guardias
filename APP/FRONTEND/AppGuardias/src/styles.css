@@ -65,3 +65,94 @@ h2 {
   border: 2px solid #3c7e66;
   color: #3c7e66;
 }
+
+/* Estilos específicos para los botones del modal */
+.modal-btn-green {
+  background-color: white;
+}
+
+.modal-btn-green i {
+  color: #16604e;
+  font-size: 24px;
+}
+
+.modal-btn-green:hover {
+  background-color: #16604e;
+  border: 2px solid white;
+}
+
+.modal-btn-green:hover i {
+  color: green;
+}
+
+/* Botón rojo para cancelar en el modal */
+.modal-btn-red {
+  background-color: white;
+}
+
+.modal-btn-red i {
+  color: #d74e58;
+  font-size: 24px;
+}
+
+.modal-btn-red:hover {
+  background-color: #d74e58;
+  border: 2px solid white;
+}
+
+.modal-btn-red:hover i {
+  color: red;
+}
+
+/* Modal Container */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  text-align: center;
+}
+
+.modal-content {
+  background: #edf1ef;
+  border-radius: 10px;
+  width: 350px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.modal-header {
+  background: #16604e;
+  color: white;
+  padding: 10px 16px;
+  font-weight: bold;
+  border-radius: 10px 10px 0 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-body .btn {
+  width: 50px;
+  height: 50px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
