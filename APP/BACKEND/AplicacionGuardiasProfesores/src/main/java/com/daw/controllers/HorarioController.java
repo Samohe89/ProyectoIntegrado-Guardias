@@ -1,12 +1,9 @@
 package com.daw.controllers;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,11 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.datamodel.entities.Horario;
-import com.daw.errors.ApiError;
-import com.daw.exceptions.TramoNoDisponibleException;
+import com.daw.datamodel.entities.ProfesorId;
 import com.daw.services.HorarioService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -42,7 +37,6 @@ public class HorarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
     
-    //Método que obtiene profesor por dni y curso
     @GetMapping("/profesor/{dni}/{curso}")
     public List<Horario> getHorariosPorProfesorYCurso(
         @PathVariable("dni") String dniProfesor,
@@ -73,18 +67,5 @@ public class HorarioController {
         }
         return ResponseEntity.notFound().build();
     }
-    
-	// MANEJO DE EXCEPCIONES
-	
-	@ExceptionHandler(TramoNoDisponibleException.class)
-	public ResponseEntity<ApiError> handleTramoNoDisponible(TramoNoDisponibleException ex, HttpServletRequest req) {
-		ApiError apiError = new ApiError();
-		apiError.setEstado(HttpStatus.NOT_FOUND.toString());
-		apiError.setFecha(LocalDateTime.now());
-		apiError.setMensaje(ex.getMessage());
-		apiError.setPath(req.getServletPath());
-		return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
-		
-	}
 }
 

@@ -1,4 +1,4 @@
-package com.daw.exceptions;
+package exceptions;
 
 public class UsuarioNoEncontradoException extends RuntimeException {
 
