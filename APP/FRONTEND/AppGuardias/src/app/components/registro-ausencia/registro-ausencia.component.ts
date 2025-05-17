@@ -1,21 +1,22 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ProfesorService, Profesor } from '../../services/profesor.service';
 import { AusenciaService } from '../../services/ausencia.service';
 import { HorarioService } from '../../services/horario.service';
+import { ModalRegistroComponent } from '../../modal-registro/modal-registro.component';
 
 @Component({
   selector: 'app-registro-ausencia',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, ModalRegistroComponent],
   templateUrl: '../registro-ausencia/registro-ausencia.component.html',
   styleUrls: ['../registro-ausencia/registro-ausencia.component.css']
 })
-export class RegistroAusenciaComponent implements OnInit, OnChanges {
+export class RegistroAusenciaComponent implements OnInit {
+  @ViewChild('modalRegistro') modalRegistro!: ModalRegistroComponent;
 
-  @Input() rol = '';
-  @Input() usuarioAutenticado!: { dniProfesor: string, cursoAcademico: string };
+  usuario: { rol: string, dniProfesor: string, cursoAcademico: string } | null = null;
 
   //Lista de profesores para Equipo Directivo
   profesores: Profesor[] = [];
@@ -41,26 +42,27 @@ export class RegistroAusenciaComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
+    const usuarioGuardado = sessionStorage.getItem('usuarioGuardado');
+    if ( usuarioGuardado ){
+    const usuario = JSON.parse(usuarioGuardado);
+
+    this.usuario = usuario;
+
     // Al iniciar el componente, si el rol es Profesor, asignamos el id de ausencia con los datos del usuario autenticado y cargamos sus horarios
-    if (this.rol === 'Profesor' && this.usuarioAutenticado) {
-      this.setProfesor(this.usuarioAutenticado.dniProfesor, this.usuarioAutenticado.cursoAcademico);
+    if (usuario.rol === 'Profesor' && usuarioGuardado) {
+      this.setProfesor(usuario.dniProfesor, usuario.cursoAcademico);
     }
 
     // Si el rol es Equipo Directivo, cargamos la lista completa de profesores
-    if (this.rol === 'Equipo Directivo') {
+    if (usuario.rol === 'Equipo Directivo') {
       this.profesorService.getProfesores().subscribe({
         next: profesores => this.profesores = profesores,
         error: err => console.error('Error al cargar profesores:', err)
       });
     }
+    console.log('Rol usuario:', usuario.rol);
   }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    // Cuando cambia el usuario autenticado y el rol es Profesor, actualiza el id y carga horarios
-    if (changes['usuarioAutenticado'] && this.rol === 'Profesor' && this.usuarioAutenticado) {
-      this.setProfesor(this.usuarioAutenticado.dniProfesor, this.usuarioAutenticado.cursoAcademico);
-    }
-  }
+}
 
   // Método privado para fijar el profesor y cargar sus horarios
   private setProfesor(dni: string, curso: string): void {
@@ -161,15 +163,14 @@ export class RegistroAusenciaComponent implements OnInit, OnChanges {
 
   // Maneja el envío del formulario para registrar la ausencia
   async onSubmit(formRegistro: NgForm): Promise<void> {
-    if (!formRegistro.valid) return alert('Por favor, completa todos los campos requeridos.');
-    if (!this.ausencia.id) return alert('No se ha seleccionado un profesor válido.');
+    if (formRegistro.invalid) {
+      return;
+    }
 
     const diaSemana = new Date(this.ausencia.fechaAusencia).getDay();
 
     // No permite registrar ausencias en fines de semana
     if (diaSemana === 0 || diaSemana === 6) return alert('No se pueden registrar ausencias en fines de semana.');
-    // Si se selecciona día completo, se consideran todas las horas
-    if (!this.ausencia.tramoSeleccionado) return alert('Por favor, selecciona un tramo.');
 
     let horasAfectadas: number[] = [];
     if (this.ausencia.tramoSeleccionado === 'diaCompleto') {
@@ -198,7 +199,7 @@ export class RegistroAusenciaComponent implements OnInit, OnChanges {
     // Ejecuta todas las peticiones y maneja el resultado
     try {
       await Promise.all(registros);
-      alert('Ausencia registrada correctamente.');
+      this.modalRegistro.mostrarModal();
       this.limpiarFormulario(formRegistro);
     } catch (err) {
       console.error('Error registrando ausencia:', err);
@@ -208,15 +209,19 @@ export class RegistroAusenciaComponent implements OnInit, OnChanges {
 
   // Limpia y resetea el formulario de ausencia
   limpiarFormulario(form: NgForm): void {
+    const usuarioGuardado = sessionStorage.getItem('usuarioGuardado');
+    if ( usuarioGuardado ){
+    const usuario = JSON.parse(usuarioGuardado);
     form.resetForm();
     // Si es profesor, mantiene la selección fija
-    if (this.rol === 'Profesor' && this.usuarioAutenticado) {
-      this.setProfesor(this.usuarioAutenticado.dniProfesor, this.usuarioAutenticado.cursoAcademico);
+    if (usuario.rol === 'Profesor' && usuarioGuardado) {
+      this.setProfesor(usuario.dniProfesor, usuario.cursoAcademico);
     } else {
       this.ausencia.id = null;
     }
     this.horarios = [];
     this.resetTramos();
   }
+}
 
 }

@@ -3,13 +3,13 @@ import { RouterOutlet, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MenuComponent } from "./components/menu/menu.component";
 import { LoginComponent } from "./components/login/login.component";
-import { RegistroAusenciaComponent } from './components/registro-ausencia/registro-ausencia.component';
+
 import { LoginService } from './services/login.service';
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, LoginComponent, RegistroAusenciaComponent],
+  imports: [RouterOutlet, CommonModule, LoginComponent, MenuComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
