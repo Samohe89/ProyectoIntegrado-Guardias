@@ -75,7 +75,7 @@
 }
 
 @media (max-width: 992px) {
-.show {
+  .navbar-collapse.show {
     position: fixed;
     top: 75px;               
     left: 0;
