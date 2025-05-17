@@ -1,4 +1,4 @@
-package exceptions;
+package com.daw.exceptions;
 
 public class PasswordInvalidaException extends RuntimeException {
 

@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.dto.UsuarioAutenticadoDTO;
 import com.daw.dto.UsuarioLoginDTO;
+import com.daw.errors.ApiError;
+import com.daw.exceptions.PasswordInvalidaException;
+import com.daw.exceptions.RolNoAsignadoException;
+import com.daw.exceptions.UsuarioNoEncontradoException;
 import com.daw.services.LoginService;
 
-import errors.ApiError;
-import exceptions.PasswordInvalidaException;
-import exceptions.RolNoAsignadoException;
-import exceptions.UsuarioNoEncontradoException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController

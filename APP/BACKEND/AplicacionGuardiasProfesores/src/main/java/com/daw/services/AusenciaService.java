@@ -9,6 +9,8 @@ import com.daw.datamodel.entities.Ausencia;
 import com.daw.datamodel.entities.Horario;
 import com.daw.datamodel.entities.Profesor;
 import com.daw.dto.AusenciaDTO;
+import com.daw.exceptions.HorarioNoEncontradoException;
+import com.daw.exceptions.ProfesorNoEncontradoException;
 import com.daw.repositories.AusenciaRepository;
 import com.daw.repositories.HorarioRepository;
 import com.daw.repositories.ProfesorRepository;
@@ -49,12 +51,12 @@ public class AusenciaService {
     	ausencia.setComentario(ausenciaDTO.getComentario());
     	
     	Horario horario = horarioRepository.findById(ausenciaDTO.getNumRegistro())
-    		    .orElseThrow(() -> new RuntimeException("No existe el horario con ID: " + ausenciaDTO.getNumRegistro()));
+    		    .orElseThrow(() -> new HorarioNoEncontradoException(ausenciaDTO.getNumRegistro()));
     	
     	ausencia.setHorariosProfesor(horario);
     	
     	Profesor profesor = profesorRepository.findById(ausenciaDTO.getId())
-    		    .orElseThrow(() -> new RuntimeException("No existe el profesor con ID: " + ausenciaDTO.getId()));
+    		    .orElseThrow(() -> new ProfesorNoEncontradoException(ausenciaDTO.getId().getDniProfesor()));
     	
     	ausencia.setProfesor(profesor);
     	

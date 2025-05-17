@@ -8,9 +8,9 @@
 
         <!--Select profesor sólo para equipo directivo-->
         <div class="input-group" *ngIf="rol === 'Equipo Directivo'">
-          <label for="tramo" class="registroProfesor">Seleccione profesor</label>
+          <label for="regProfesor" class="registroProfesor">Seleccione profesor</label>
           <select name="id" id="regProfesor" class="selectRegPersonalizado" [(ngModel)]="ausencia.id" (change)="onProfesorChange()"  required >
-            <option [ngValue]="null" disabled selected>Seleccione profesor</option>
+            <option [ngValue]="null" disabled>Seleccione profesor</option>
             <!--LÓGICA SELECT DINÁMICO MUESTRA TODOS LOS PROFESORES-->
             <option *ngFor="let profesor of profesores" [ngValue]="{ dniProfesor: profesor.id.dniProfesor, cursoAcademico: profesor.id.cursoAcademico }"
             >
@@ -40,12 +40,12 @@
         <!--Tramo horario-->
       <div class="input-group">
         <label for="tramo">Seleccione tramo horario</label>
-        <select id="tramo" name="tramo" [(ngModel)]="ausencia.tramoSeleccionado" [disabled]="selectTramoDisabled" required>
+        <select id="tramo" name="tramo" [(ngModel)]="ausencia.tramoSeleccionado" required>
           <option *ngFor="let tramo of tramosDisponibles" [value]="tramo.value">{{ tramo.label }}</option>
         </select>
 
         <!-- Mensaje si no selecciona tramo -->
-        <p class="error-message" *ngIf="formRegistro.submitted && formRegistro.controls['tramoRegistro']?.invalid">
+        <p class="error-message" *ngIf="formRegistro.submitted && formRegistro.controls['tramo']?.invalid">
           Debe seleccionar un tramo horario.
         </p>
       </div>
@@ -75,3 +75,4 @@
   </div>
 </div>
 
+<app-modal-registro #modalRegistro></app-modal-registro>

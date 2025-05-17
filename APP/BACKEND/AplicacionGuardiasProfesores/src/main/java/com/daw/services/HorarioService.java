@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.daw.datamodel.entities.Horario;
-import com.daw.datamodel.entities.ProfesorId;
 import com.daw.repositories.HorarioRepository;
 
 import lombok.RequiredArgsConstructor;
