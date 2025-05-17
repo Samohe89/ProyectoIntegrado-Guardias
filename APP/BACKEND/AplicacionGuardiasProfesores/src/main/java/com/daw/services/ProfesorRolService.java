@@ -21,16 +21,16 @@ public class ProfesorRolService {
         return repository.findAll();
     }
 
-    public Optional<ProfesorRol> findById(ProfesorRolId profesorRolId) {
-        return repository.findById(profesorRolId);
+    public Optional<ProfesorRol> findById(ProfesorRolId id) {
+        return repository.findById(id);
     }
 
     public ProfesorRol save(ProfesorRol profesorRol) {
         return repository.save(profesorRol);
     }
 
-    public void deleteById(ProfesorRolId profesorRolId) {
-        repository.deleteById(profesorRolId);
+    public void deleteById(ProfesorRolId id) {
+        repository.deleteById(id);
     }
 }
 

@@ -13,7 +13,19 @@
         }">
     </app-registro-ausencia>
   </ng-container>
+
+<ng-container *ngIf="!sesionActiva">
+    <app-login (loginOk)="onLogin($event)"></app-login>
 </ng-container>
+
+<ng-container *ngIf="sesionActiva">
+    <header>
+        <app-menu [rol]="rol" (logout)="onLogout()"></app-menu>
+    </header>
+</ng-container>
+
+<main>
+<router-outlet *ngIf="sesionActiva"></router-outlet>
 
 
 
@@ -40,4 +52,6 @@
     </div>
 </div> -->
 
-<router-outlet></router-outlet>
+</main>
+
+

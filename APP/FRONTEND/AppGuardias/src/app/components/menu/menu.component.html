@@ -1,0 +1,86 @@
+<div class="row menu-container" >
+
+    <ng-container [ngSwitch]="rol">
+        <div class="col-12 col-lg-8 order-2 order-lg-1" id="menuProfesor" *ngSwitchCase="'Profesor'">
+            <nav class="navbar navbar-expand-lg">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarColapsable" aria-controls="navbarColapsable" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="bi bi-list icon-hamburguer"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarColapsable">
+                    <a class="navbar-brand menu" href="#"><i class="bi bi-person-fill menu-icon"></i>Profesor</a>
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle menu" href="/registro-ausencia" id="navbarAusencias" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-clock-fill menu-icon"></i>
+                                Ausencias
+                            </a>
+                            <ul class="dropdown-menu menu-desplegable" aria-labelledby="navbarAusencias">
+                                <li><a class="dropdown-item" href="/registro-ausencia">Registro</a></li>
+                                <li><a class="dropdown-item" href="/ausencias">Mis ausencias</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle menu" href="#" id="navbarGuardias" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-columns-gap menu-icon"></i>
+                                Guardias
+                            </a>
+                            <ul class="dropdown-menu menu-desplegable" aria-labelledby="navbarGuardias">
+                                <li><a class="dropdown-item" href="/guardias">Listado</a></li>
+                                <li><a class="dropdown-item" href="/horas-guardia">Total horas</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <div class="col-12 col-lg-8 order-2 order-lg-1" id="menuDirectivo" *ngSwitchCase="'Equipo Directivo'">
+            <nav class="navbar navbar-expand-lg">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarColapsable" aria-controls="navbarColapsable" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="bi bi-list icon-hamburguer"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarColapsable">
+                    <a class="navbar-brand menu" href="#"><i class="bi bi-person-fill menu-icon"></i>Directivo</a>
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle menu" href="#" id="navbarAusencias" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-clock-fill menu-icon"></i>
+                                Ausencias
+                            </a>
+                            <ul class="dropdown-menu menu-desplegable" aria-labelledby="navbarAusencias">
+                                <li><a class="dropdown-item" href="/registro-ausencia">Registro</a></li>
+                                <li><a class="dropdown-item" href="/ausencias">Listado</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle menu" href="#" id="navbarGuardias" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-columns-gap menu-icon"></i>
+                                Guardias
+                            </a>
+                            <ul class="dropdown-menu menu-desplegable" aria-labelledby="navbarGuardias">
+                                <li><a class="dropdown-item" href="/guardias">Listado</a></li>
+                                <li><a class="dropdown-item" href="/horas-guardia">Total horas</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </ng-container>
+
+    <div class="col-12 col-lg-4 order-1 order-lg-2 menu-logout" id="menuLogout">
+        <h2>Ausencias y Guardias</h2>
+        <button id="botonLogOut" class="btn icon-logout" (click)="cerrarSesion()"><i class="bi bi-escape"></i></button>
+    </div>
+
+</div>
