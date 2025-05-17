@@ -1,14 +1,20 @@
-<ng-container *ngIf="usuarioLogueado">
-    <ng-container [ngSwitch]="rol">
-        <app-menu-profesor *ngSwitchCase="'profesor'"></app-menu-profesor>
-        <app-menu-directivo *ngSwitchCase="'directivo'"></app-menu-directivo>
-    </ng-container>
+<ng-container *ngIf="!sesionActiva">
+    <app-login (loginOk)="onLogin($event)"></app-login>
 </ng-container>
 
+<ng-container *ngIf="sesionActiva">
+    <header>
+        <app-menu [rol]="rol" (logout)="onLogout()"></app-menu>
+    </header>
+</ng-container>
+
+<main>
+<router-outlet *ngIf="sesionActiva"></router-outlet>
 
 <app-listado-ausencias-profesor></app-listado-ausencias-profesor>
 
 
+<!-- PLANTILLA VENTANAS VISTAS
 <div class="main-container">
     <div class="view-container shadow mx-3 mx-xxl-0">
         <div class="view-title">
@@ -30,4 +36,8 @@
     </div>
 </div>
 
-<router-outlet></router-outlet>
+-->
+
+</main>
+
+

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.daw.datamodel.entities.ProfesorRol;
+import com.daw.datamodel.entities.ProfesorRolId;
 import com.daw.repositories.ProfesorRolRepository;
 import com.daw.datamodel.entities.ProfesorRolId;
 
