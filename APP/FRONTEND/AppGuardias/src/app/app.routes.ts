@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { RegistroAusenciaComponent } from './components/registro-ausencia/registro-ausencia.component';
-import { ListadoGuardiasComponent } from './listado-guardias/listado-guardias.component';
+import { ListadoGuardiasComponent } from './components/listado-guardias/listado-guardias.component';
 
 export const routes: Routes = [
     { path: "login", component: LoginComponent },

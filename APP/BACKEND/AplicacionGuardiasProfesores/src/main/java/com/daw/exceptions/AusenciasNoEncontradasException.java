@@ -10,3 +10,4 @@ public class AusenciasNoEncontradasException extends RuntimeException {
         super("No existen ausencias registradas para el día: " + fecha);
     }
 }
+

@@ -21,4 +21,5 @@ public interface AusenciaRepository extends JpaRepository<Ausencia, Long> {
 			+ "a.horariosProfesor.grupo ASC")
 	List<Ausencia> findByFechaOrdenPorHora(@Param("fecha") LocalDate fecha);
 
+
 }
