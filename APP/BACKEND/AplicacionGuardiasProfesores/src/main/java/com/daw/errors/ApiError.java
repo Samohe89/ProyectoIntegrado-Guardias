@@ -1,4 +1,4 @@
-package errors;
+package com.daw.errors;
 
 import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
