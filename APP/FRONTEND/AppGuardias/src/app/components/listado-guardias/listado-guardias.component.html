@@ -7,19 +7,30 @@
         <div class="view-body">
             <div id="opcionesListado" class="d-flex justify-content-between align-items-center">
                 <div id="botonesListado">
+                    <!-- Botón Imprimir PDF -->
                     <button class="btn btn-green">
                         <i class="bi bi-printer-fill"></i>
                         Imprimir PDF
                     </button>
-                    <button class="btn btn-green ms-3">
+                    <!-- Botón Día siguiente -->
+                    <button *ngIf="esMismaFecha(fechaMostrada, diaActual)" class="btn btn-green ms-3"
+                        (click)="cargarAusencias(diaSiguiente)">
                         <i class="bi bi-chevron-double-right"></i>
                         Día siguiente
                     </button>
+                    <!-- Botón Día actual -->
+                    <button *ngIf="!esMismaFecha(fechaMostrada, diaActual)" class="btn btn-green ms-3"
+                        (click)="cargarAusencias(diaActual)">
+                        <i class="bi bi-chevron-double-left"></i>
+                        Día actual
+                    </button>
                 </div>
 
-                <p class="fw-semibold m-0">Guardias del día {{ diaActual | date: 'dd/MM/yyyy' }}</p>
+                <!-- Indicador de fecha -->
+                <p class="fw-semibold m-0">Guardias del día {{ fechaMostrada | date: 'dd/MM/yyyy' }}</p>
 
             </div>
+
 
             <div id="divTabla" class="table-container">
 
@@ -35,9 +46,9 @@
                     <tbody>
 
                         <tr *ngFor="let ausencia of ausencias">
-                            <td>{{ausencia.numRegistro.hora}}</td>
-                            <td>{{ausencia.numRegistro.grupo}}</td>
-                            
+                            <td>{{ausencia.horariosProfesor.hora}}</td>
+                            <td>{{ausencia.horariosProfesor.grupo}}</td>
+
                             <td class="celdaGrafico">
                                 <div class="graficoTramos">
                                     <button class="btn-tramo"></button>
