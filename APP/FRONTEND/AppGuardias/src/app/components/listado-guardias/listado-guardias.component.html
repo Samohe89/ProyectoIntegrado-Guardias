@@ -44,21 +44,25 @@
                         </tr>
                     </thead>
                     <tbody>
-
-                        <tr *ngFor="let ausencia of ausencias">
-                            <td>{{ausencia.horariosProfesor.hora}}</td>
-                            <td>{{ausencia.horariosProfesor.grupo}}</td>
-
-                            <td class="celdaGrafico">
-                                <div class="graficoTramos">
-                                    <button class="btn-tramo"></button>
-                                    <button class="btn-tramo"></button>
-                                    <button class="btn-tramo"></button>
-                                    <button class="btn-tramo"></button>
-                                </div>
-                            </td>
-                            <td><button class="btn-detalles"><i class="bi bi-plus-square-fill"></i></button></td>
-                        </tr>
+                        <ng-container *ngFor="let agrupacion of ausenciasAgrupadas">
+                            <tr *ngFor="let ausencia of agrupacion.ausencias; let i = index">
+                                <td *ngIf="i === 0" [attr.rowspan]="agrupacion.ausencias.length">
+                                    {{agrupacion.hora}}ª Hora
+                                </td>
+                                <td>{{ ausencia.horariosProfesor.grupo }}</td>
+                                <td class="celdaGrafico" [attr.idAusencia]="ausencia.id">
+                                    <div class="graficoTramos">
+                                        <button class="btn-tramo"></button>
+                                        <button class="btn-tramo"></button>
+                                        <button class="btn-tramo"></button>
+                                        <button class="btn-tramo"></button>
+                                    </div>
+                                </td>
+                                <td [attr.idAusencia]="ausencia.id">
+                                    <button class="btn-detalles"><i class="bi bi-plus-square-fill"></i></button>
+                                </td>
+                            </tr>
+                        </ng-container>
                     </tbody>
                 </table>
 
