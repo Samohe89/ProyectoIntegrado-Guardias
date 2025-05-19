@@ -13,14 +13,18 @@ import com.daw.exceptions.UsuarioNoEncontradoException;
 import com.daw.repositories.ProfesorRepository;
 import com.daw.repositories.ProfesorRolRepository;
 
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class LoginService {
 
-	@Autowired
-	private ProfesorRepository profesorRepository;
+	private final ProfesorRepository profesorRepository;
 
 	@Autowired
-	private ProfesorRolRepository profesorRolRepository;
+	private final ProfesorRolRepository profesorRolRepository;
 
 	public UsuarioAutenticadoDTO autenticarUsuario(UsuarioLoginDTO usuarioLogin) {
 		// Buscar el profesor por "usuario"

@@ -17,7 +17,7 @@
                     </button>
                 </div>
 
-                <p class="fw-semibold m-0">Guardias del día XXX</p>
+                <p class="fw-semibold m-0">Guardias del día {{ diaActual | date: 'dd/MM/yyyy' }}</p>
 
             </div>
 
@@ -33,9 +33,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1ª Hora</td>
-                            <td>2º DAW</td>
+
+                        <tr *ngFor="let ausencia of ausencias">
+                            <td>{{ausencia.numRegistro.hora}}</td>
+                            <td>{{ausencia.numRegistro.grupo}}</td>
                             
                             <td class="celdaGrafico">
                                 <div class="graficoTramos">

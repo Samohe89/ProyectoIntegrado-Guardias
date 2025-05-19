@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,14 +22,16 @@ import com.daw.exceptions.UsuarioNoEncontradoException;
 import com.daw.services.LoginService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@Validated
+@RequiredArgsConstructor
 @RequestMapping("/api/login")
 @CrossOrigin(origins = "http://localhost:4200")	// URL del Frontend
 public class LoginController {
 
-	@Autowired
-	private LoginService loginService;
+	private final LoginService loginService;
 
 	@PostMapping
 	public ResponseEntity<UsuarioAutenticadoDTO> login(@RequestBody UsuarioLoginDTO usuarioLogin) {
