@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.daw.datamodel.entities.Guardia;
+import com.daw.dto.ProfesorTotalHorasGuardiaDTO;
 import com.daw.repositories.GuardiaRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,12 @@ public class GuardiaService {
 
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+    
+    //Método para obtener el total de horas de guardia por profesor
+    public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorProfesor() {
+        return repository.obtenerTotalHorasPorProfesor();
+      
+        
     }
 }

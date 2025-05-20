@@ -3,13 +3,13 @@ import { RouterOutlet, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MenuComponent } from "./components/menu/menu.component";
 import { LoginComponent } from "./components/login/login.component";
-
 import { LoginService } from './services/login.service';
+import { HorasGuardiaComponent } from './components/horas-guardia/horas-guardia.component';
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, LoginComponent, MenuComponent],
+  imports: [RouterOutlet, CommonModule, LoginComponent, MenuComponent, HorasGuardiaComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -19,14 +19,21 @@ export class AppComponent implements OnInit {
   title = 'AppGuardias';
 
   // Variable que controla si el login se ha ejecutado o no
-  sesionActiva: boolean = false;
+  //sesionActiva: boolean = false;
+  sesionActiva: boolean = true;
 
   // Variables que almacenan los datos del usuario logueado
+  // dniProfesor: string = "";
+  // cursoAcademico: string = "";
+  // nombreProfesor: string = "";
+  // alias: string = "";
+  // rol: string = "";
+
   dniProfesor: string = "";
   cursoAcademico: string = "";
   nombreProfesor: string = "";
   alias: string = "";
-  rol: string = "";
+  rol: string = "Profesor";
 
   // Inyección de servicios y enrutamiento
   constructor(private loginService: LoginService, private router: Router) { }
