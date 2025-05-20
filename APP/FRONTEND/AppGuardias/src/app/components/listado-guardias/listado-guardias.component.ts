@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { AusenciaService } from '../../services/ausencia.service'
@@ -13,18 +13,30 @@ import { AusenciaService } from '../../services/ausencia.service'
 
 
 export class ListadoGuardiasComponent implements OnInit {
+  // Variable que almacena los datos del usuario que tiene abierta la sesión
+  usuario = JSON.parse(sessionStorage.getItem('usuarioGuardado') || 'null');
+
   // Variables que almacenan el día actual y el siguiente
   diaActual: Date = new Date();     // Por defecto carga el dia actual
   diaSiguiente: Date = new Date(this.diaActual);
 
   // Variable para indicar la fecha del listado que se muestra en ese momento
-  fechaMostrada: Date = new Date(this.diaActual);
+  fechaUnica: Date = new Date(this.diaActual);
+  fechaDesde: Date | null = null;
+  fechaHasta: Date | null = null;
 
   // Array que almacena las ausencias que envía el backend
   ausencias: any[] = [];
 
-  // Array de ausencias agrupadas por hora
-  ausenciasAgrupadas: { hora: string, ausencias: any[] }[] = [];
+  // Array de ausencias agrupadas por fecha y hora
+  ausenciasAgrupadas: {
+    fecha: string,
+    horas: {
+      hora: string,
+      ausencias: any[]
+    }[],
+    cantidadAusencias: number;
+  }[] = [];
 
 
   constructor(private ausenciaService: AusenciaService) { }
@@ -41,41 +53,71 @@ export class ListadoGuardiasComponent implements OnInit {
   // Cargar las ausencias registradas en una fecha concreta
   cargarAusencias(fecha: Date): void {
     // Actualizar la fecha mostrada
-    this.fechaMostrada = fecha;
-    
+    this.fechaUnica = fecha;
+
     // Formatear fecha que sen envía al backend
     const fechaFormateada = this.formatearFecha(fecha);
-
     this.ausenciaService.getAusenciasPorFecha(fechaFormateada).subscribe({
       next: data => {
         this.ausencias = data;
         console.log(this.ausencias);
 
-        // Se resetea el array de ausencias agrupadas
+        //Resetear el array de ausencias agrupadas 
         this.ausenciasAgrupadas = [];
 
-        // Variable que almacena la hora por la que se está agrupando
-        let horaAgrupacion = null;
+        // Declaracion de variables que almacenan los distintos criterios de agrupacion
+        let fechaAgrupacion = "";
+        let horaAgrupacion = "";
+        let agrupacionPorFecha: {
+          fecha: string,
+          horas: { hora: string, ausencias: any[] }[],
+          cantidadAusencias: number
+        } | null = null;
+        let agrupacionPorHora: {
+          hora: string,
+          ausencias: any[]
+        } | null = null;
 
-        // Variable que contiene el índice del array de ausencias agrupadas
-        let indiceAgrupacion = -1;  // Se inicia en -1 porque está vacío, la primera agrupación sería el índice 0 del array
-
-        // Para cada ausencia enviada por el backend
+        // Para cada ausencia recibida del backend
         for (let ausencia of this.ausencias) {
-          // Si la hora de la ausencia no coincide con la hora por la que se está agrupando:
-          if (ausencia.horariosProfesor.hora !== horaAgrupacion) {
-            horaAgrupacion = ausencia.horariosProfesor.hora;
-            // Se crea una nueva agrupacion en la que se incluye esta ausencia
-            this.ausenciasAgrupadas.push({
-              hora: horaAgrupacion,
-              ausencias: [ausencia]
-            });
-            // Se incrementa el contador de esta agrupación    
-            indiceAgrupacion++;
-            // Si la hora de la ausencia coincide con la hora por la que ya se está agrupando:
-          } else {
-            // Se añade la ausencia a la misma agrupación anterior (con la misma hora e índice en el array)
-            this.ausenciasAgrupadas[indiceAgrupacion].ausencias.push(ausencia);
+          const fechaAusencia = ausencia.fechaAusencia;
+          const horaAusencia = ausencia.horariosProfesor.hora;
+
+          // Si la fecha de la ausencia cambia respecto a la fecha por la que se estaba agrupando
+          if (fechaAusencia !== fechaAgrupacion) {
+            // Se crea asigna la nueva fecha de agrupación
+            fechaAgrupacion = fechaAusencia;
+            // Se crea una nueva agrupacion para esa fecha
+            agrupacionPorFecha = {
+              fecha: fechaAusencia,
+              horas: [],
+              cantidadAusencias: 0
+            }
+            // Se añade dicha agrupación al array general de ausencias agrupadas por fecha y hora
+            this.ausenciasAgrupadas.push(agrupacionPorFecha);
+            // Se resetea la hora por la que se estaba agrupando 
+            horaAgrupacion = "";
+          }
+
+          // Si la hora de la ausencia cambia respecto a la hora por la que se estaba agrupando 
+          if (horaAusencia !== horaAgrupacion) {
+            // Se crea asigna la nueva hora de agrupación
+            horaAgrupacion = horaAusencia;
+            // Se crea una nueva agrupacion para esa hora
+            agrupacionPorHora = {
+              hora: horaAusencia,
+              ausencias: []
+            };
+            // Se añade dicha agrupación por hora a la agrupación por fecha que se está ejecutando
+            agrupacionPorFecha?.horas.push(agrupacionPorHora);
+          }
+
+          // Se añade la ausencia en cuestión a la agrupación por hora que se está ejecutando
+          agrupacionPorHora?.ausencias.push(ausencia);
+
+          // Se incrementa el contador de las ausencias de esa agrupación por fecha
+          if (agrupacionPorFecha) {
+            agrupacionPorFecha.cantidadAusencias++;
           }
         }
         console.log(this.ausenciasAgrupadas);
@@ -85,6 +127,8 @@ export class ListadoGuardiasComponent implements OnInit {
       }
     });
   }
+
+
 
 
   esMismaFecha(fecha1: Date, fecha2: Date): boolean {

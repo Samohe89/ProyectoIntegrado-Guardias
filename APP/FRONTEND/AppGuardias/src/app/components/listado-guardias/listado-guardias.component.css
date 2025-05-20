@@ -78,4 +78,10 @@ button i {
   border-radius: 0;
 }
 
+button[data-libre="true"] {
+  background-color: #67D0AA;
+}
 
+button[data-libre="false"] {
+  background-color: #D74E58;
+}

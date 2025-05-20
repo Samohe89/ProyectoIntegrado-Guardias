@@ -67,7 +67,9 @@ public class AusenciaService {
     	
     }
     
-    public List<Ausencia> getAusenciasPorFecha(LocalDate fecha) {
+    
+       
+    public List<Ausencia> getAusenciasPorFechaOrdenadasPorHora(LocalDate fecha) {
     	List<Ausencia> ausencias = repository.findByFechaOrdenPorHora(fecha);
         
         if (ausencias.isEmpty()) {

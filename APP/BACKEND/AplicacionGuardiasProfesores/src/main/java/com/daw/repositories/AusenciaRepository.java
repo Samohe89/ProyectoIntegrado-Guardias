@@ -13,7 +13,7 @@ public interface AusenciaRepository extends JpaRepository<Ausencia, Long> {
 	
 	/* 
 	Consultar ausencias por fecha, ordenadas por hora de clase, como primer criterio
-	y por grupo, como segundio criterio
+	y por grupo, como segundo criterio
 	*/
 	@Query("SELECT a FROM Ausencia a "
 			+ "WHERE a.fechaAusencia = :fecha "

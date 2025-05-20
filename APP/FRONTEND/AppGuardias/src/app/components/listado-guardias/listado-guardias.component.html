@@ -12,31 +12,42 @@
                         <i class="bi bi-printer-fill"></i>
                         Imprimir PDF
                     </button>
-                    <!-- Botón Día siguiente -->
-                    <button *ngIf="esMismaFecha(fechaMostrada, diaActual)" class="btn btn-green ms-3"
-                        (click)="cargarAusencias(diaSiguiente)">
-                        <i class="bi bi-chevron-double-right"></i>
-                        Día siguiente
-                    </button>
-                    <!-- Botón Día actual -->
-                    <button *ngIf="!esMismaFecha(fechaMostrada, diaActual)" class="btn btn-green ms-3"
-                        (click)="cargarAusencias(diaActual)">
-                        <i class="bi bi-chevron-double-left"></i>
-                        Día actual
-                    </button>
+                    <ng-container *ngIf="usuario?.rol =='Profesor'">
+                        <!-- Botón Día siguiente -->
+                        <button *ngIf="esMismaFecha(fechaUnica, diaActual)" class="btn btn-green ms-3"
+                            (click)="cargarAusencias(diaSiguiente)">
+                            <i class="bi bi-chevron-double-right"></i>
+                            Día siguiente
+                        </button>
+                        <!-- Botón Día actual -->
+                        <button *ngIf="!esMismaFecha(fechaUnica, diaActual)" class="btn btn-green ms-3"
+                            (click)="cargarAusencias(diaActual)">
+                            <i class="bi bi-chevron-double-left"></i>
+                            Día actual
+                        </button>
+                    </ng-container>
                 </div>
 
                 <!-- Indicador de fecha -->
-                <p class="fw-semibold m-0">Guardias del día {{ fechaMostrada | date: 'dd/MM/yyyy' }}</p>
+                <ng-container *ngIf="fechaDesde == null">
+                    <p class="fw-semibold m-0">Guardias del día {{ fechaUnica | date: 'dd/MM/yyyy' }}</p>
+                </ng-container>
+                <ng-container *ngIf="!fechaDesde == null">
+                    <p class="fw-semibold m-0">Guardias desde {{ fechaDesde | date: 'dd/MM/yyyy' }} hasta {{ fechaHasta
+                        | date: 'dd/MM/yyyy' }}</p>
+                </ng-container>
 
             </div>
 
-
+            <!-- TABLA DEL LISTADO -->
             <div id="divTabla" class="table-container">
 
                 <table class="table shadow tablaPrincipal">
                     <thead>
                         <tr>
+                            <ng-container *ngIf="usuario?.rol =='Equipo Directivo'">
+                                <th>Fecha</th>
+                            </ng-container>
                             <th>Hora</th>
                             <th>Grupo</th>
                             <th>Tramos</th>
@@ -44,37 +55,63 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <ng-container *ngFor="let agrupacion of ausenciasAgrupadas">
-                            <tr *ngFor="let ausencia of agrupacion.ausencias; let i = index">
-                                <td *ngIf="i === 0" [attr.rowspan]="agrupacion.ausencias.length">
-                                    {{agrupacion.hora}}ª Hora
-                                </td>
-                                <td>{{ ausencia.horariosProfesor.grupo }}</td>
-                                <td class="celdaGrafico" [attr.idAusencia]="ausencia.id">
-                                    <div class="graficoTramos">
-                                        <button class="btn-tramo"></button>
-                                        <button class="btn-tramo"></button>
-                                        <button class="btn-tramo"></button>
-                                        <button class="btn-tramo"></button>
-                                    </div>
-                                </td>
-                                <td [attr.idAusencia]="ausencia.id">
-                                    <button class="btn-detalles"><i class="bi bi-plus-square-fill"></i></button>
-                                </td>
-                            </tr>
+
+                        <ng-container *ngIf="usuario?.rol == 'Equipo Directivo'">
+                            <ng-container *ngFor="let agrupacionPorFecha of ausenciasAgrupadas">
+                                <ng-container *ngFor="let agrupacionPorHora of agrupacionPorFecha.horas; let i = index">
+                                    <tr *ngFor="let ausencia of agrupacionPorHora.ausencias; let n = index">
+                                        <td *ngIf="i === 0 && n === 0" [attr.rowspan]="agrupacionPorFecha.cantidadAusencias">
+                                            {{ agrupacionPorFecha.fecha | date: 'dd/MM/yyyy' }}
+                                        </td>
+                                        <td *ngIf="n === 0" [attr.rowspan]="agrupacionPorHora.ausencias.length">
+                                            {{ agrupacionPorHora.hora }}ª Hora
+                                        </td>
+                                        <td>{{ ausencia.horariosProfesor.grupo }}</td>
+                                        <td class="celdaGrafico" [attr.idAusencia]="ausencia.id">
+                                            <div class="graficoTramos">
+                                                <button class="btn-tramo" data-tramo="1" data-libre="false"></button>
+                                                <button class="btn-tramo" data-tramo="2" data-libre="true"></button>
+                                                <button class="btn-tramo" data-tramo="3" data-libre="true"></button>
+                                                <button class="btn-tramo" data-tramo="4" data-libre="true"></button>
+                                            </div>
+                                        </td>
+                                        <td [attr.idAusencia]="ausencia.id">
+                                            <button class="btn-detalles"><i class="bi bi-plus-square-fill"></i></button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
                         </ng-container>
+
+
+                        <ng-container *ngIf="usuario?.rol == 'Profesor'">
+                            <ng-container *ngFor="let agrupacionPorFecha of ausenciasAgrupadas">
+                                <ng-container *ngFor="let agrupacionPorHora of agrupacionPorFecha.horas">
+                                    <tr *ngFor="let ausencia of agrupacionPorHora.ausencias; let i = index">
+                                        <td *ngIf="i === 0" [attr.rowspan]="agrupacionPorHora.ausencias.length">
+                                            {{ agrupacionPorHora.hora }}ª Hora
+                                        </td>
+                                        <td>{{ ausencia.horariosProfesor.grupo }}</td>
+                                        <td class="celdaGrafico" [attr.idAusencia]="ausencia.id">
+                                            <div class="graficoTramos">
+                                                <button class="btn-tramo" data-tramo="1" data-libre="false"></button>
+                                                <button class="btn-tramo" data-tramo="2" data-libre="true"></button>
+                                                <button class="btn-tramo" data-tramo="3" data-libre="true"></button>
+                                                <button class="btn-tramo" data-tramo="4" data-libre="true"></button>
+                                            </div>
+                                        </td>
+                                        <td [attr.idAusencia]="ausencia.id">
+                                            <button class="btn-detalles"><i class="bi bi-plus-square-fill"></i></button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+
                     </tbody>
                 </table>
 
-
-
             </div>
-
-
-
-
-
-
         </div>
     </div>
 </div>

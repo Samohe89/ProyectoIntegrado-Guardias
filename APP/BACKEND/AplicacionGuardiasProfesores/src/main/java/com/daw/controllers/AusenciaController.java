@@ -36,14 +36,14 @@ public class AusenciaController {
 	}
 
 	@GetMapping("/fecha")
-	public ResponseEntity<List<Ausencia>> obtenerAusenciasPorFecha(
+	public ResponseEntity<List<Ausencia>> getAusenciasPorFechaOrdenadasPorHoras(
 	        @RequestParam("fecha") LocalDate fecha) {
 
-	    List<Ausencia> ausencias = service.getAusenciasPorFecha(fecha);
+	    List<Ausencia> ausencias = service.getAusenciasPorFechaOrdenadasPorHora(fecha);
 	    return ResponseEntity.ok(ausencias);
 	}
-
-
+	
+	
 	@PostMapping
 	public Ausencia create(@RequestBody Ausencia ausencia) {
 		return service.save(ausencia);
