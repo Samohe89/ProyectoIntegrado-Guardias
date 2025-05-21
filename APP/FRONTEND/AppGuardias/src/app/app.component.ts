@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MenuComponent } from "./components/menu/menu.component";
 import { LoginComponent } from "./components/login/login.component";
 import { LoginService } from './services/login.service';
+import { ListadoAusenciasComponent } from './components/listado-ausencias/listado-ausencias.component';
 
 
 @Component({
