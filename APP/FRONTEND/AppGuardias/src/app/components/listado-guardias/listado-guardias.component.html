@@ -3,7 +3,7 @@
         <div class="view-title">
             <h1>Guardias</h1>
         </div>
-
+        <!-- OPCIONES DE VISTA -->
         <div class="view-body">
             <div id="opcionesListado" class="d-flex justify-content-between align-items-center">
                 <div id="botonesListado">
@@ -32,7 +32,7 @@
                 <ng-container *ngIf="fechaDesde == null">
                     <p class="fw-semibold m-0">Guardias del día {{ fechaUnica | date: 'dd/MM/yyyy' }}</p>
                 </ng-container>
-                <ng-container *ngIf="!fechaDesde == null">
+                <ng-container *ngIf="fechaDesde != null">
                     <p class="fw-semibold m-0">Guardias desde {{ fechaDesde | date: 'dd/MM/yyyy' }} hasta {{ fechaHasta
                         | date: 'dd/MM/yyyy' }}</p>
                 </ng-container>
@@ -55,35 +55,7 @@
                         </tr>
                     </thead>
                     <tbody>
-
-                        <ng-container *ngIf="usuario?.rol == 'Equipo Directivo'">
-                            <ng-container *ngFor="let agrupacionPorFecha of ausenciasAgrupadas">
-                                <ng-container *ngFor="let agrupacionPorHora of agrupacionPorFecha.horas; let i = index">
-                                    <tr *ngFor="let ausencia of agrupacionPorHora.ausencias; let n = index">
-                                        <td *ngIf="i === 0 && n === 0" [attr.rowspan]="agrupacionPorFecha.cantidadAusencias">
-                                            {{ agrupacionPorFecha.fecha | date: 'dd/MM/yyyy' }}
-                                        </td>
-                                        <td *ngIf="n === 0" [attr.rowspan]="agrupacionPorHora.ausencias.length">
-                                            {{ agrupacionPorHora.hora }}ª Hora
-                                        </td>
-                                        <td>{{ ausencia.horariosProfesor.grupo }}</td>
-                                        <td class="celdaGrafico" [attr.idAusencia]="ausencia.id">
-                                            <div class="graficoTramos">
-                                                <button class="btn-tramo" data-tramo="1" data-libre="false"></button>
-                                                <button class="btn-tramo" data-tramo="2" data-libre="true"></button>
-                                                <button class="btn-tramo" data-tramo="3" data-libre="true"></button>
-                                                <button class="btn-tramo" data-tramo="4" data-libre="true"></button>
-                                            </div>
-                                        </td>
-                                        <td [attr.idAusencia]="ausencia.id">
-                                            <button class="btn-detalles"><i class="bi bi-plus-square-fill"></i></button>
-                                        </td>
-                                    </tr>
-                                </ng-container>
-                            </ng-container>
-                        </ng-container>
-
-
+                        <!-- Perfil profesor -->
                         <ng-container *ngIf="usuario?.rol == 'Profesor'">
                             <ng-container *ngFor="let agrupacionPorFecha of ausenciasAgrupadas">
                                 <ng-container *ngFor="let agrupacionPorHora of agrupacionPorFecha.horas">
@@ -92,14 +64,22 @@
                                             {{ agrupacionPorHora.hora }}ª Hora
                                         </td>
                                         <td>{{ ausencia.horariosProfesor.grupo }}</td>
-                                        <td class="celdaGrafico" [attr.idAusencia]="ausencia.id">
+                                        <td class="celdaGrafico" [attr.data-idAusencia]="ausencia.id">
                                             <div class="graficoTramos">
-                                                <button class="btn-tramo" data-tramo="1" data-libre="false"></button>
-                                                <button class="btn-tramo" data-tramo="2" data-libre="true"></button>
-                                                <button class="btn-tramo" data-tramo="3" data-libre="true"></button>
-                                                <button class="btn-tramo" data-tramo="4" data-libre="true"></button>
+                                              <ng-container *ngIf="!cargarTramosPorIdAusencia(ausencia.id).includes(5)">
+                                                <button class="btn-tramo" data-tramo="1" [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(1)"></button>
+                                                <button class="btn-tramo" data-tramo="2" [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(2)"></button>
+                                                <button class="btn-tramo" data-tramo="3" [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(3)"></button>
+                                                <button class="btn-tramo" data-tramo="4" [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(4)"></button>
+                                              </ng-container>
+                                              <ng-container *ngIf="cargarTramosPorIdAusencia(ausencia.id).includes(5)">
+                                                <button class="btn-tramo" data-tramo="1" data-guardia="true"></button>
+                                                <button class="btn-tramo" data-tramo="2" data-guardia="true"></button>
+                                                <button class="btn-tramo" data-tramo="3" data-guardia="true"></button>
+                                                <button class="btn-tramo" data-tramo="4" data-guardia="true"></button>
+                                              </ng-container>
                                             </div>
-                                        </td>
+                                          </td>
                                         <td [attr.idAusencia]="ausencia.id">
                                             <button class="btn-detalles"><i class="bi bi-plus-square-fill"></i></button>
                                         </td>
@@ -108,9 +88,75 @@
                             </ng-container>
                         </ng-container>
 
+                        <!-- Perfil directivo -->
+                        <ng-container *ngIf="usuario?.rol == 'Equipo Directivo'">
+                            <ng-container *ngFor="let agrupacionPorFecha of ausenciasAgrupadas; let i = index">
+                                <ng-container *ngFor="let agrupacionPorHora of agrupacionPorFecha.horas; let j = index">
+                                    <tr *ngFor="let ausencia of agrupacionPorHora.ausencias; let k = index">
+                                        <td *ngIf="j === 0 && k === 0"
+                                            [attr.rowspan]="agrupacionPorFecha.cantidadAusencias">
+                                            {{ agrupacionPorFecha.fecha | date: 'dd/MM/yyyy' }}
+                                        </td>
+                                        <td *ngIf="k === 0" [attr.rowspan]="agrupacionPorHora.ausencias.length">
+                                            {{ agrupacionPorHora.hora }}ª Hora
+                                        </td>
+                                        <td>{{ ausencia.horariosProfesor.grupo }}</td>
+                                        <td class="celdaGrafico" [attr.data-idAusencia]="ausencia.id">
+                                            <div class="graficoTramos">
+                                              <ng-container *ngIf="!cargarTramosPorIdAusencia(ausencia.id).includes(5)">
+                                                <button class="btn-tramo" data-tramo="1" [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(1)"></button>
+                                                <button class="btn-tramo" data-tramo="2" [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(2)"></button>
+                                                <button class="btn-tramo" data-tramo="3" [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(3)"></button>
+                                                <button class="btn-tramo" data-tramo="4" [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(4)"></button>
+                                              </ng-container>
+                                              <ng-container *ngIf="cargarTramosPorIdAusencia(ausencia.id).includes(5)">
+                                                <button class="btn-tramo" data-tramo="1" data-guardia="true"></button>
+                                                <button class="btn-tramo" data-tramo="2" data-guardia="true"></button>
+                                                <button class="btn-tramo" data-tramo="3" data-guardia="true"></button>
+                                                <button class="btn-tramo" data-tramo="4" data-guardia="true"></button>
+                                              </ng-container>
+                                            </div>
+                                          </td>
+                                        <td [attr.idAusencia]="ausencia.id">
+                                            <button class="btn-detalles"><i class="bi bi-plus-square-fill"></i></button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <tr *ngIf="i < ausenciasAgrupadas.length - 1">
+                                    <td [attr.colspan]="5" style="background-color: #3c7e66;"></td>
+                                </tr>
+                            </ng-container>
+
+                        </ng-container>
+                        <!-- Tabla vacía -->
+                        <tr *ngIf="ausenciasAgrupadas.length === 0">
+                            <td *ngIf="usuario?.rol == 'Profesor'" [attr.colspan]="4" class="text-center">
+                                {{ mensajeTablaVacia }}
+                            </td>
+                            <td *ngIf="usuario?.rol == 'Equipo Directivo'" [attr.colspan]="5" class="text-center">
+                                {{ mensajeTablaVacia }}
+                            </td>
+                        </tr>
+
                     </tbody>
                 </table>
 
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de errores -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true"
+    [ngClass]="{'show': modalActivo}" [style.display]="modalActivo ? 'block' : 'none'">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center w-100" id="errorModalLabel">Error</h5>
+                <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ mensajeError }}</p>
             </div>
         </div>
     </div>

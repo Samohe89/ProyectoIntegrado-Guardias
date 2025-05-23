@@ -19,4 +19,8 @@ export class AusenciaService {
     return this.http.get<any[]>(`${this.apiUrl}/fecha?fecha=${fecha}`);
   }
 
+  getAusenciasEntreFechas(fechaDesde: string, fechaHasta: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/fechas?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`);
+  }
+
 }

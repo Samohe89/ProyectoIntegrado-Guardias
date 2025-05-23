@@ -24,31 +24,38 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/ausencias")
-@CrossOrigin(origins = "http://localhost:4200")	// URL del Frontend
+@CrossOrigin(origins = "http://localhost:4200") // URL del Frontend
 @RequiredArgsConstructor
 public class AusenciaController {
 
 	private final AusenciaService service;
-	
+
 	@GetMapping
 	public List<Ausencia> getAll() {
 		return service.findAll();
 	}
 
 	@GetMapping("/fecha")
-	public ResponseEntity<List<Ausencia>> getAusenciasPorFechaOrdenadasPorHoras(
-	        @RequestParam("fecha") LocalDate fecha) {
+	public ResponseEntity<List<Ausencia>> getAusenciasPorFecha(@RequestParam("fecha") LocalDate fecha) {
 
-	    List<Ausencia> ausencias = service.getAusenciasPorFechaOrdenadasPorHora(fecha);
-	    return ResponseEntity.ok(ausencias);
+		List<Ausencia> ausencias = service.getAusenciasPorFechaOrdenadasPorHora(fecha);
+		return ResponseEntity.ok(ausencias);
 	}
-	
-	
+
+	@GetMapping("/fechas")
+	public ResponseEntity<List<Ausencia>> getAusenciasEntreFechas(
+			@RequestParam("fechaDesde") LocalDate fechaDesde,
+			@RequestParam("fechaHasta") LocalDate fechaHasta) {
+
+		List<Ausencia> ausencias = service.getAusenciasPorFechaOrdenadasPorHora(fechaDesde, fechaHasta);
+		return ResponseEntity.ok(ausencias);
+	}
+
 	@PostMapping
 	public Ausencia create(@RequestBody Ausencia ausencia) {
 		return service.save(ausencia);
 	}
-	
+
 //	@PostMapping("/registroAusencia")
 //	public ResponseEntity<Ausencia> crearRegistroAusencia(@RequestBody AusenciaDTO ausenciaDTO) {
 //	    Ausencia nuevaAusencia = service.crearRegistroAusencia(ausenciaDTO);
@@ -56,25 +63,26 @@ public class AusenciaController {
 //	}
 	@PostMapping("/registroAusencia")
 	public ResponseEntity<?> crearRegistroAusencia(@RequestBody AusenciaDTO ausenciaDTO) {
-	    try {
-	        LocalDate fecha = ausenciaDTO.getFechaAusencia();
-	        if (fecha == null) {
-	            return ResponseEntity.badRequest().body("Fecha de ausencia no puede ser nula.");
-	        }
-	        int diaSemana = fecha.getDayOfWeek().getValue(); // 1=lunes ... 7=domingo
-	        if (diaSemana == 6 || diaSemana == 7) { // sábado o domingo
-	            return ResponseEntity.badRequest().body("No se pueden registrar ausencias en fines de semana.");
-	        }
+		try {
+			LocalDate fecha = ausenciaDTO.getFechaAusencia();
+			if (fecha == null) {
+				return ResponseEntity.badRequest().body("Fecha de ausencia no puede ser nula.");
+			}
+			int diaSemana = fecha.getDayOfWeek().getValue(); // 1=lunes ... 7=domingo
+			if (diaSemana == 6 || diaSemana == 7) { // sábado o domingo
+				return ResponseEntity.badRequest().body("No se pueden registrar ausencias en fines de semana.");
+			}
 
-	        // Directamente crear la ausencia
-	        Ausencia nuevaAusencia = service.crearRegistroAusencia(ausenciaDTO);
-	        return ResponseEntity.ok(nuevaAusencia);
+			// Directamente crear la ausencia
+			Ausencia nuevaAusencia = service.crearRegistroAusencia(ausenciaDTO);
+			return ResponseEntity.ok(nuevaAusencia);
 
-	    } catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la ausencia: " + e.getMessage());
-	    }
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error al procesar la ausencia: " + e.getMessage());
+		}
 	}
-	
+
 	@PutMapping("/{id}")
 	public ResponseEntity<Ausencia> update(@PathVariable Long id, @RequestBody Ausencia updated) {
 		return service.findById(id).map(existing -> {

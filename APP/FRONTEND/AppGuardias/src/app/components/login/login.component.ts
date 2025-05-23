@@ -97,7 +97,7 @@ export class LoginComponent {
           } else if (error.status === 403) {
             this.mostrarError('El usuario no tiene el perfil asignado.');
           } else {
-            this.mostrarError('Error desconocido');
+            this.mostrarError('Error desconocido.');
           }
 
         },
