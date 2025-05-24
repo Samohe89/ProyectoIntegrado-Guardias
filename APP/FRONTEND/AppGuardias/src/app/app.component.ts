@@ -3,13 +3,14 @@ import { RouterOutlet, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MenuComponent } from "./components/menu/menu.component";
 import { LoginComponent } from "./components/login/login.component";
+
 import { LoginService } from './services/login.service';
 import { ListadoAusenciasComponent } from './components/listado-ausencias/listado-ausencias.component';
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, MenuComponent, LoginComponent],
+  imports: [RouterOutlet, CommonModule, LoginComponent, MenuComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -33,7 +34,7 @@ export class AppComponent implements OnInit {
 
 
   //Método que se ejecuta siempre al incio
-  //Permite guardar la sesión del usuario para que no se borre al recargar la página en el navegador    
+  //Permite guardar la sesión del usuario para que no se borre al recargar la página en el navegador
   ngOnInit(): void {
     const usuarioGuardado = this.loginService.consultarSesionUsuario();
     console.log("Sesión de usuario: ", usuarioGuardado);
@@ -72,7 +73,7 @@ export class AppComponent implements OnInit {
 
     // Redirige a la raiz y reemplaza la URL
     this.router.navigate(['/'], { replaceUrl: true });
-   
+
   }
 
 }

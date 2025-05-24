@@ -42,9 +42,13 @@ export interface Ausencia {
   providedIn: 'root'
 })
 export class AusenciaService {
-  private apiUrl = 'http://localhost:8080/api/ausencias';
+  private apiUrl = 'http://localhost:8080/api/ausencias/registroAusencia';
 
   constructor(private http: HttpClient) {}
+
+  crearRegistroAusencia(ausencia: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, ausencia);
+  }
 
   getAll(): Observable<Ausencia[]> {
     return this.http.get<Ausencia[]>(this.apiUrl);

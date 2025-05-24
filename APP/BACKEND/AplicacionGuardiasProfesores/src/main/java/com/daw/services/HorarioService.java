@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.daw.datamodel.entities.Horario;
+import com.daw.datamodel.entities.ProfesorId;
 import com.daw.repositories.HorarioRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,10 @@ public class HorarioService {
 
     public void deleteById(Integer id) {
         repository.deleteById(id);
+    }
+    
+    public List<Horario> obtenerHorariosPorProfesorYCurso(String dniProfesor, String cursoAcademico) {
+        return repository.findByProfesor_Id_DniProfesorAndProfesor_Id_CursoAcademico(dniProfesor, cursoAcademico);
     }
 }
 

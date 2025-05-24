@@ -1,1 +1,79 @@
-<p>registro-ausencia works!</p>
+<div class="main-container">
+  <div class="view-container-form">
+    <div class="view-title-form">
+      <h1>Registrar ausencia</h1>
+    </div>
+
+      <form #formRegistro="ngForm" (ngSubmit)="onSubmit(formRegistro)" class="form-container">
+
+        <!--Select profesor sólo para equipo directivo-->
+        <div class="input-group" *ngIf="usuario?.rol === 'Equipo Directivo'">
+          <label for="tramo" class="registroProfesor">Seleccione profesor</label>
+          <select name="id" id="regProfesor" class="selectRegPersonalizado" [(ngModel)]="ausencia.id" (change)="onProfesorChange()"  required >
+            <option [ngValue]="null" disabled>Seleccione profesor</option>
+            <!--LÓGICA SELECT DINÁMICO MUESTRA TODOS LOS PROFESORES-->
+            <option *ngFor="let profesor of profesores" [ngValue]="{ dniProfesor: profesor.id.dniProfesor, cursoAcademico: profesor.id.cursoAcademico }"
+            >
+              {{ profesor.nombreProfesor }}
+            </option>
+
+          </select>
+
+          <!-- Mensaje si no selecciona profesor -->
+        <p class="error-message" *ngIf="formRegistro.submitted && formRegistro.controls['id']?.invalid">
+          Debe seleccionar un profesor.
+        </p>
+        </div>
+
+        <!--Día de ausencia-->
+      <div class="input-group">
+        <label class="fechaAusencia" for="fechaAusencia">Dia de ausencia</label>
+        <input type="date" class="datePersonalizado" name="fechaAusencia" id="fechaAusencia"
+          [(ngModel)]="ausencia.fechaAusencia" required (change)="onFechaCambio()">
+
+        <!-- Mensaje si no selecciona fecha -->
+        <p class="error-message" *ngIf="formRegistro.submitted && formRegistro.controls['fechaAusencia']?.invalid">
+          Debe seleccionar el día de ausencia.
+        </p>
+      </div>
+
+        <!--Tramo horario-->
+      <div class="input-group">
+        <label for="tramo">Seleccione tramo horario</label>
+        <select id="tramo" name="tramo" [(ngModel)]="ausencia.tramoSeleccionado" [disabled]="selectTramoDisabled" required>
+          <option *ngFor="let tramo of tramosDisponibles" [value]="tramo.value">{{ tramo.label }}</option>
+        </select>
+
+        <!-- Mensaje si no selecciona tramo -->
+        <p class="error-message" *ngIf="formRegistro.submitted && formRegistro.controls['tramoRegistro']?.invalid">
+          Debe seleccionar un tramo horario.
+        </p>
+      </div>
+      <!--Motivo-->
+      <div class="input-group">
+        <label for="motivo">Motivo</label>
+        <textarea id="motivo" name="comentario" rows="6" [(ngModel)]="ausencia.comentario" required></textarea>
+
+        <!-- Mensaje si no escribes un motivo -->
+        <p class="error-message" *ngIf="formRegistro.submitted && formRegistro.controls['comentario']?.invalid">
+          Debe escribir un motivo.
+        </p>
+      </div>
+      <!--Botones-->
+      <div class="button-group">
+        <button type="submit" class="btn btn-green">
+          <i class="bi bi-check-circle-fill"></i>
+          Confirmar
+        </button>
+        <button type="button" class="btn btn-red" (click)="limpiarFormulario(formRegistro)">
+          <i class="bi bi-x-circle-fill"></i>
+          Limpiar
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<app-modal-registro #modalRegistro></app-modal-registro>
+
