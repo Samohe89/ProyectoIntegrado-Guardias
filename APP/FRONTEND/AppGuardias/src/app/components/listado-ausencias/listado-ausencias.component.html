@@ -3,7 +3,9 @@
     <div class="view-container shadow mx-3 mx-xxl-0">
       <div class="view-title">
         <h1>
-          {{usuario.rol === "Profesor" ? "Mis Ausencias" : "Todas las Ausencias"}}
+          {{
+            usuario.rol === "Profesor" ? "Mis Ausencias" : "Todas las Ausencias"
+          }}
         </h1>
       </div>
 
@@ -12,21 +14,52 @@
           <form class="row g-3 align-items-end" id="filtroForm">
             <div class="col-md-3">
               <label for="fechaDesde" class="form-label">Fecha desde:</label>
-              <input type="date" [(ngModel)]="fechaDesde" class="form-control" id="fechaDesde" name="fechaDesde" />
+              <input
+                type="date"
+                [(ngModel)]="fechaDesde"
+                class="form-control"
+                id="fechaDesde"
+                name="fechaDesde"
+              />
             </div>
 
             <div class="col-md-3">
               <label for="fechaHasta" class="form-label">Fecha hasta:</label>
-              <input type="date" [(ngModel)]="fechaHasta" class="form-control" id="fechaHasta" name="fechaHasta" />
+              <input
+                type="date"
+                [(ngModel)]="fechaHasta"
+                class="form-control"
+                id="fechaHasta"
+                name="fechaHasta"
+              />
             </div>
 
             <div class="col-md-4">
               <label for="profesor" class="form-label">Profesor:</label>
-              <input type="text" [(ngModel)]="profesorFiltro" class="form-control" id="profesor" name="profesor" placeholder="Nombre del profesor" />
+              <select
+                [(ngModel)]="profesorFiltro"
+                class="form-control"
+                id="profesor"
+                name="profesor"
+              >
+                <option value="">-- Todos --</option>
+                <option
+                  *ngFor="let profesor of profesores"
+                  [value]="profesor.nombreProfesor"
+                >
+                  {{ profesor.nombreProfesor }}
+                </option>
+              </select>
             </div>
 
             <div class="col-md-2">
-              <button type="button" class="btn btn-success w-100" (click)="aplicarFiltros()">Buscar</button>
+              <button
+                type="button"
+                class="btn btn-success w-100"
+                (click)="aplicarFiltros()"
+              >
+                Buscar
+              </button>
             </div>
           </form>
         </div>
