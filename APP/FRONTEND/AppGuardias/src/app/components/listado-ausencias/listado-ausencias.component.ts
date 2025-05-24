@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import {
   Ausencia,
   AusenciaService,
@@ -6,6 +6,7 @@ import {
 } from '../../services/ausencia.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ProfesorService } from '../../services/profesor.service';
 
 @Component({
   selector: 'app-listado-ausencias',
@@ -39,6 +40,23 @@ export class ListadoAusenciasComponent implements OnInit {
     private profesorService: ProfesorService
   ) {}
 
+  isMobileView: boolean = window.innerWidth <= 768;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.isMobileView = window.innerWidth <= 768;
+    this.recargarVista();
+  }
+
+  recargarVista() {
+    // Forzar refresco si necesitas hacer algo al cambiar entre móvil/escritorio.
+    this.ausencias = [...this.ausenciasFiltro];
+  }
+
+  isMobile(): boolean {
+    return this.isMobileView;
+  }
+
   ngOnInit() {
     const usuarioGuardado = sessionStorage.getItem('usuarioGuardado');
     if (usuarioGuardado) {
@@ -52,7 +70,7 @@ export class ListadoAusenciasComponent implements OnInit {
 
       this.ausenciaService.getAll().subscribe((data) => {
         this.todasLasAusencias = data;
-        
+
         if (usuario.rol === 'Equipo Directivo') {
           this.profesorService.getProfesores().subscribe({
             next: (profesores) => (this.profesores = profesores),
@@ -61,10 +79,16 @@ export class ListadoAusenciasComponent implements OnInit {
         }
 
         if (usuario.rol === 'Profesor') {
-          const ausenciasFiltradas = data.filter(
-            (ausencia) =>
-              ausencia.profesor?.id?.dniProfesor === this.dniProfesorLogueado
-          );
+          const hoy = new Date();
+          hoy.setHours(0, 0, 0, 0);
+          const ausenciasFiltradas = data.filter((ausencia) => {
+            const esProfesor =
+              ausencia.profesor?.id?.dniProfesor === this.dniProfesorLogueado;
+            const fechaAusencia = new Date(ausencia.fechaAusencia);
+            fechaAusencia.setHours(0, 0, 0, 0);
+            const esHoy = fechaAusencia >= hoy;
+            return esProfesor && esHoy;
+          });
           this.ausenciasFiltro = ausenciasFiltradas;
           this.ausencias = [...this.ausenciasFiltro];
         }
@@ -89,13 +113,18 @@ export class ListadoAusenciasComponent implements OnInit {
   aplicarFiltros() {
     let filtradas = this.todasLasAusencias;
 
-    if (this.fechaDesde) {
-      const desde = new Date(this.fechaDesde);
-      desde.setHours(0, 0, 0, 0);
-      filtradas = filtradas.filter(
-        (ausencia) => new Date(ausencia.fechaAusencia) >= desde
-      );
+    let fechaDesde = this.fechaDesde;
+    if (!fechaDesde) {
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+      fechaDesde = hoy.toISOString().split('T')[0]; // "YYYY-MM-DD"
     }
+
+    const desde = new Date(fechaDesde);
+    desde.setHours(0, 0, 0, 0);
+    filtradas = filtradas.filter(
+      (ausencia) => new Date(ausencia.fechaAusencia) >= desde
+    );
 
     if (this.fechaHasta) {
       const hasta = new Date(this.fechaHasta);
@@ -111,6 +140,7 @@ export class ListadoAusenciasComponent implements OnInit {
         ausencia.profesor?.nombreProfesor?.toLowerCase().includes(nombre)
       );
     }
+
     this.ausencias = filtradas;
   }
 

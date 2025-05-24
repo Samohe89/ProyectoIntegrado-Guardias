@@ -75,3 +75,89 @@
   background-color: white;
 }
 
+.posicion-icono {
+  position: relative;
+}
+
+/* Ajusta padding para dejar espacio al ícono */
+.campo-con-icono {
+  padding-right: 40px;
+}
+
+/* Ícono dentro de cuadro verde */
+.icono-input {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #3C7E66;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+  pointer-events: none;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+  /* Asegura padding adecuado en móviles */
+  .tabla-container {
+    padding: 15px;
+  }
+
+  /* Filtros en columna */
+  form.row.g-2 {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  form .col-md-3,
+  form .col-md-4,
+  form .col-md-2 {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .btn.btn-success {
+    width: 100%;
+  }
+
+  /* Tabla responsive: oculta tabla y muestra cards en móviles */
+  .tabla-ausencias {
+    display: none;
+  }
+
+  .responsive-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .ausencia-card {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+  }
+
+  .ausencia-card .card-header {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .card-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .btn-detalles,
+  .btn-eliminar {
+    width: 48%;
+  }
+}
+
