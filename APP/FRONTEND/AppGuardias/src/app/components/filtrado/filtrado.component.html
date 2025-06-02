@@ -1,12 +1,20 @@
 <div id="divFiltrado" class="filtrado-container">
-  <form class="row gy-3">
+  <form #formFiltrado="ngForm" class="row gy-3" (ngSubmit)="onSubmit(formFiltrado)">
+
     <!-- Fecha desde -->
     <div class="col-12 col-md-6 col-xxl-3 d-flex flex-column flex-xxl-row align-items-xxl-center">
       <label for="fechaDesde" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">
         <span class="label-text">Fecha desde:</span>
       </label>
-      <input type="date" class="form-control datePersonalizado" id="fechaDesde" [(ngModel)]="fechaDesde"
+      <input type="date" class="form-control datePersonalizado" id="fechaDesde" [(ngModel)]="fechaDesde" (ngModelChange)="resetValidacion()"
         name="fechaDesde" />
+            <!-- Mensaje si no se introduce una de las fechas-->
+      <p *ngIf="faltanFechas && !fechaDesde" class="error-message">
+        Debe seleccionar la fecha de filtrado.
+      </p>
+      <p *ngIf="fechasErroneas" class="error-message">
+        La fecha no puede ser posterior a la fecha hasta.
+      </p>
     </div>
 
     <!-- Fecha hasta -->
@@ -14,8 +22,14 @@
       <label for="fechaHasta" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">
         <span class="label-text">Fecha hasta:</span>
       </label>
-      <input type="date" class="form-control datePersonalizado" id="fechaHasta" [(ngModel)]="fechaHasta"
+      <input type="date" class="form-control datePersonalizado" id="fechaHasta" [(ngModel)]="fechaHasta" (ngModelChange)="resetValidacion()"
         name="fechaHasta" />
+      <p *ngIf="faltanFechas && !fechaHasta" class="error-message">
+        Debe seleccionar la fecha de filtrado.
+      </p>
+      <p *ngIf="fechasErroneas" class="error-message">
+        La fecha no puede ser anterior a la fecha desde.
+      </p>
     </div>
 
     <!-- Profesor -->
@@ -32,10 +46,17 @@
 
     <!-- Botón buscar -->
     <div class="col-12 col-md-6 col-xxl-2 d-flex justify-content-md-end align-items-md-end mt-4 mt-md-0">
-      <button type="button" class="btn btn-green" (click)="aplicarFiltros()">
+      <button type="submit" class="btn btn-green">
         <i class="bi bi-search"></i>
         Buscar
       </button>
+    </div>
+
+    <!-- Mensaje si no se introduce ningún criterio de filtrado-->
+    <div class="col-12" *ngIf="faltanCriterios">
+      <p class="error-message">
+        Debe introducir un criterio de filtrado: por fechas, por profesor o por ambos.
+      </p>
     </div>
   </form>
 </div>

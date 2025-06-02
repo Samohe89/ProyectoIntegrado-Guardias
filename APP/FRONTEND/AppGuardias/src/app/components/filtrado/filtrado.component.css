@@ -2,6 +2,7 @@
     padding-top: 40px;
 }
 
+
 .datePersonalizado {
     height: 45px;
     background-color: white;
@@ -18,16 +19,13 @@
     -webkit-appearance: none;
     -moz-appearance: none;
   }
-  
+
+
   /* Oculta el icono nativo del calendario */
   .datePersonalizado::-webkit-calendar-picker-indicator {
     opacity: 0;
-    position: absolute;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
   }
+  
   
   .selectRegPersonalizado {
     height: 45px;
@@ -47,4 +45,11 @@
   }
 
   
+  .error-message {
+    margin-top: 5px;;
+
+    color: red;
+    font-size: smaller;
+  }
+
 
