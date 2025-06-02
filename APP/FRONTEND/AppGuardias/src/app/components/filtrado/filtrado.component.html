@@ -1,0 +1,67 @@
+<form class="row g-2 align-items-end mb-3">
+  <!-- Fecha desde -->
+  <div class="col-md-3">
+    <label for="fechaDesde" class="form-label">Fecha desde:</label>
+    <div class="posicion-icono">
+      <input
+        type="date"
+        class="form-control campo-con-icono"
+        id="fechaDesde"
+        [(ngModel)]="fechaDesde"
+        name="fechaDesde"
+      />
+      <span class="icono-input">
+        <i class="bi bi-calendar-event-fill"></i>
+      </span>
+    </div>
+  </div>
+
+  <!-- Fecha hasta -->
+  <div class="col-md-3">
+    <label for="fechaHasta" class="form-label">Fecha hasta:</label>
+    <div class="posicion-icono">
+      <input
+        type="date"
+        class="form-control campo-con-icono"
+        id="fechaHasta"
+        [(ngModel)]="fechaHasta"
+        name="fechaHasta"
+      />
+      <span class="icono-input">
+        <i class="bi bi-calendar-event-fill"></i>
+      </span>
+    </div>
+  </div>
+
+  <!-- Profesor -->
+  <div class="col-md-4">
+    <label for="profesor" class="form-label">Profesor:</label>
+    <div class="posicion-icono">
+      <select
+        class="form-select campo-con-icono"
+        id="profesor"
+        [(ngModel)]="profesorFiltro"
+        name="profesor"
+      >
+        <option [ngValue]="null" disabled>Seleccione profesor</option>
+        <option
+          *ngFor="let profesor of profesores"
+          [value]="profesor.nombreProfesor"
+        >
+          {{ profesor.nombreProfesor }}
+        </option>
+      </select>
+      <span class="icono-input">
+        <i class="bi bi-caret-down-fill"></i>
+      </span>
+    </div>
+  </div>
+
+  <!-- Botón buscar -->
+  <div class="col-md-2">
+    <button type="button" class="btn btn-success w-100" (click)="aplicarFiltros()">
+      <i class="bi bi-search"></i> Buscar
+    </button>
+  </div>
+</form>
+
