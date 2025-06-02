@@ -6,15 +6,11 @@
       <label for="fechaDesde" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">
         <span class="label-text">Fecha desde:</span>
       </label>
-      <input type="date" class="form-control datePersonalizado" id="fechaDesde" [(ngModel)]="fechaDesde" (ngModelChange)="resetValidacion()"
-        name="fechaDesde" />
-            <!-- Mensaje si no se introduce una de las fechas-->
-      <p *ngIf="faltanFechas && !fechaDesde" class="error-message">
-        Debe seleccionar la fecha de filtrado.
-      </p>
-      <p *ngIf="fechasErroneas" class="error-message">
-        La fecha no puede ser posterior a la fecha hasta.
-      </p>
+      <input type="date" id="fechaDesde" name="fechaDesde" class="form-control datePersonalizado"
+        [ngClass]="{ 'is-invalid': (faltanFechas && !fechaDesde) || fechasErroneas || faltanCriterios}" 
+        [(ngModel)]="fechaDesde"
+        (ngModelChange)="resetValidacion()" />
+
     </div>
 
     <!-- Fecha hasta -->
@@ -22,22 +18,20 @@
       <label for="fechaHasta" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">
         <span class="label-text">Fecha hasta:</span>
       </label>
-      <input type="date" class="form-control datePersonalizado" id="fechaHasta" [(ngModel)]="fechaHasta" (ngModelChange)="resetValidacion()"
-        name="fechaHasta" />
-      <p *ngIf="faltanFechas && !fechaHasta" class="error-message">
-        Debe seleccionar la fecha de filtrado.
-      </p>
-      <p *ngIf="fechasErroneas" class="error-message">
-        La fecha no puede ser anterior a la fecha desde.
-      </p>
+      <input type="date" id="fechaHasta" name="fechaHasta" class="form-control datePersonalizado"
+        [ngClass]="{ 'is-invalid': (faltanFechas && !fechaHasta) || fechasErroneas || faltanCriterios }" 
+        [(ngModel)]="fechaHasta"
+        (ngModelChange)="resetValidacion()" />
     </div>
 
     <!-- Profesor -->
     <div class="col-12 col-md-6 col-xxl-4 d-flex flex-column flex-xxl-row align-items-xxl-center">
       <label for="profesorFiltro" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">Profesor:</label>
-      <select class="form-select selectRegPersonalizado" id="profesorFiltro" [(ngModel)]="profesorFiltro"
-        name="profesorFiltro">
-        <option [ngValue]="null" disabled>Seleccione profesor</option>
+      <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado"  
+      [ngStyle]="faltanCriterios ? {'border': '2px solid red'} : {'border': '2px solid transparent'}"
+      [(ngModel)]="profesorFiltro"
+      (ngModelChange)="resetValidacion()">
+        <option [ngValue]="null">Seleccione profesor</option>
         <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
           {{ profesor.nombreProfesor }}
         </option>
@@ -52,11 +46,21 @@
       </button>
     </div>
 
+
     <!-- Mensaje si no se introduce ningún criterio de filtrado-->
-    <div class="col-12" *ngIf="faltanCriterios">
-      <p class="error-message">
-        Debe introducir un criterio de filtrado: por fechas, por profesor o por ambos.
-      </p>
-    </div>
+    <p *ngIf="faltanCriterios" class="error-message">
+      Debe introducir un criterio de filtrado: por fechas, por profesor o por ambos.
+    </p>
+
+    <!-- Mensaje si no se introduce una de las fechas-->
+    <p *ngIf="faltanFechas" class="error-message">
+      Debe seleccionar ambas fechas de filtrado.
+    </p>
+    
+
+    <!-- Mensaje si la fecha hasta es anterior a fecha desde-->
+    <p *ngIf="fechasErroneas" class="error-message">
+      "Fecha hasta" debe ser posterior a "Fecha desde".
+    </p>
   </form>
 </div>

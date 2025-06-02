@@ -27,7 +27,7 @@
   }
   
   
-  .selectRegPersonalizado {
+  .selectFiltroPersonalizado {
     height: 45px;
     background-color: white;
     color: gray;
@@ -44,12 +44,16 @@
     -moz-appearance: none;
   }
 
+ 
   
   .error-message {
-    margin-top: 5px;;
-
+    margin-top: 10px;
     color: red;
     font-size: smaller;
+  }
+
+  .is-invalid {
+    border: 2px solid red;
   }
 
 
