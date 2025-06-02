@@ -7,12 +7,12 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfesorService } from '../../services/profesor.service';
-import { FiltroAusenciasComponent } from '../filtrado/filtrado.component';
+import { FiltradoComponent } from '../filtrado/filtrado.component';
 
 @Component({
   selector: 'app-listado-ausencias',
   standalone: true,
-  imports: [CommonModule, FormsModule, FiltroAusenciasComponent],
+  imports: [CommonModule, FormsModule, FiltradoComponent],
   templateUrl: './listado-ausencias.component.html',
   styleUrl: './listado-ausencias.component.css',
 })

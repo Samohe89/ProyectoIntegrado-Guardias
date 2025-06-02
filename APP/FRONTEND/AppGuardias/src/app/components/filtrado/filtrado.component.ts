@@ -8,8 +8,10 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './filtrado.component.html',
+  styleUrls: ['./filtrado.component.css']
 })
-export class FiltroAusenciasComponent {
+
+export class FiltradoComponent {
   @Input() profesores: Profesor[] = [];
 
   fechaDesde: string = '';

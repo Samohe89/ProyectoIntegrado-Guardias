@@ -1,5 +1,6 @@
 package com.daw.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,13 +10,16 @@ import com.daw.datamodel.entities.Ausencia;
 import com.daw.datamodel.entities.Horario;
 import com.daw.datamodel.entities.Profesor;
 import com.daw.dto.AusenciaDTO;
+import com.daw.exceptions.AusenciasNoEncontradasException;
 import com.daw.repositories.AusenciaRepository;
 import com.daw.repositories.HorarioRepository;
 import com.daw.repositories.ProfesorRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AusenciaService {
 	
@@ -62,6 +66,25 @@ public class AusenciaService {
     	return repository.save(ausencia);
     	
     }
+    
+    
+       
+    public List<Ausencia> getAusenciasPorFechaOrdenadasPorHora(LocalDate fecha) {
+    	List<Ausencia> ausencias = repository.findByFechaOrdenPorHora(fecha);
+        if (ausencias.isEmpty()) {
+            throw new AusenciasNoEncontradasException();
+        }
+        return ausencias;
+    }
+    
+    public List<Ausencia> getAusenciasPorFechaOrdenadasPorHora(LocalDate fechaDesde, LocalDate fechaHasta) {
+    	List<Ausencia> ausencias = repository.findByFechasOrdenPorFechaYHora(fechaDesde, fechaHasta);
+        if (ausencias.isEmpty()) {
+            throw new AusenciasNoEncontradasException();
+        }
+        return ausencias;
+    }
+    
     
 
 

@@ -3,7 +3,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { LoginService } from '../../services/login.service';
 import { Router } from '@angular/router';
-import { inject } from '@angular/core';
+
 
 
 
@@ -97,7 +97,7 @@ export class LoginComponent {
           } else if (error.status === 403) {
             this.mostrarError('El usuario no tiene el perfil asignado.');
           } else {
-            this.mostrarError('Error desconocido');
+            this.mostrarError('Error desconocido.');
           }
 
         },

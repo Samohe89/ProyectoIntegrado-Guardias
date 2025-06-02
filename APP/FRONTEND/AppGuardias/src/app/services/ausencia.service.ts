@@ -50,6 +50,14 @@ export class AusenciaService {
     return this.http.post<any>(`${this.apiUrl}/registroAusencia`, ausencia);
   }
 
+  getAusenciasPorFecha(fecha: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/fecha?fecha=${fecha}`);
+  }
+
+  getAusenciasEntreFechas(fechaDesde: string, fechaHasta: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/fechas?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`);
+  }
+
   getAll(): Observable<Ausencia[]> {
     return this.http.get<Ausencia[]>(this.apiUrl);
   }

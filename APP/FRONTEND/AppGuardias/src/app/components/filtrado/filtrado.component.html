@@ -1,58 +1,37 @@
-<form class="row g-2 align-items-end mb-3">
-  <!-- Fecha desde -->
-  <div class="col-md-3">
-    <label for="fechaDesde" class="form-label">Fecha desde:</label>
-    <div class="posicion-icono">
-      <input
-        type="date"
-        class="form-control campo-con-icono"
-        id="fechaDesde"
-        [(ngModel)]="fechaDesde"
-        name="fechaDesde"
-      />
+<div id="divFiltrado" class="filtrado-container">
+  <form class="row gy-3">
+    <!-- Fecha desde -->
+    <div class="col-12 col-md-6 col-xxl-3 d-flex flex-column flex-xxl-row align-items-xxl-center">
+      <label for="fechaDesde" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">
+        <span class="label-text">Fecha desde:</span>
+      </label>
+      <input type="date" class="form-control datePersonalizado" id="fechaDesde" [(ngModel)]="fechaDesde" name="fechaDesde" />
     </div>
-  </div>
 
-  <!-- Fecha hasta -->
-  <div class="col-md-3">
-    <label for="fechaHasta" class="form-label">Fecha hasta:</label>
-    <div class="posicion-icono">
-      <input
-        type="date"
-        class="form-control campo-con-icono"
-        id="fechaHasta"
-        [(ngModel)]="fechaHasta"
-        name="fechaHasta"
-      />
+    <!-- Fecha hasta -->
+    <div class="col-12 col-md-6 col-xxl-3 d-flex flex-column flex-xxl-row align-items-xxl-center">
+      <label for="fechaHasta" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">
+        <span class="label-text">Fecha hasta:</span>
+      </label>
+      <input type="date" class="form-control datePersonalizado" id="fechaHasta" [(ngModel)]="fechaHasta" name="fechaHasta" />
     </div>
-  </div>
 
-  <!-- Profesor -->
-  <div class="col-md-4">
-    <label for="profesor" class="form-label">Profesor:</label>
-    <div class="posicion-icono">
-      <select
-        class="form-select campo-con-icono"
-        id="profesor"
-        [(ngModel)]="profesorFiltro"
-        name="profesor"
-      >
+    <!-- Profesor -->
+    <div class="col-12 col-md-6 col-xxl-4 d-flex flex-column flex-xxl-row align-items-xxl-center">
+      <label for="profesor" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">Profesor:</label>
+      <select class="form-select selectRegPersonalizado" id="profesor" [(ngModel)]="profesorFiltro" name="profesor">
         <option [ngValue]="null" disabled>Seleccione profesor</option>
-        <option
-          *ngFor="let profesor of profesores"
-          [value]="profesor.nombreProfesor"
-        >
+        <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
           {{ profesor.nombreProfesor }}
         </option>
       </select>
     </div>
-  </div>
 
-  <!-- Botón buscar -->
-  <div class="col-md-2">
-    <button type="button" class="btn btn-success w-100" (click)="aplicarFiltros()">
-      <i class="bi bi-search"></i> Buscar
-    </button>
-  </div>
-</form>
-
+    <!-- Botón buscar -->
+    <div class="col-12 col-md-6 col-xxl-2 d-flex justify-content-md-end align-items-md-end mt-4 mt-md-0">
+      <button type="button" class="btn btn-green" (click)="aplicarFiltros()">
+        <i class="bi bi-search"></i> Buscar
+      </button>
+    </div>
+  </form>
+</div>
