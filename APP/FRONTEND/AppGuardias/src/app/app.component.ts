@@ -3,13 +3,13 @@ import { RouterOutlet, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MenuComponent } from "./components/menu/menu.component";
 import { LoginComponent } from "./components/login/login.component";
-
 import { LoginService } from './services/login.service';
+import { PdfTestComponent } from './components/pdf-test/pdf-test.component';
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, LoginComponent, MenuComponent],
+  imports: [RouterOutlet, CommonModule, LoginComponent, MenuComponent, PdfTestComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
