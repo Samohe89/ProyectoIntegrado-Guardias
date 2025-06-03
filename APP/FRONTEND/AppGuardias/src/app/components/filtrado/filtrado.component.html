@@ -7,9 +7,9 @@
         <span class="label-text">Fecha desde:</span>
       </label>
       <input type="date" id="fechaDesde" name="fechaDesde" class="form-control datePersonalizado"
-        [ngClass]="{ 'is-invalid': (faltanFechas && !fechaDesde) || fechasErroneas || faltanCriterios}" 
+        [ngClass]="{ 'input-invalido': (faltanFechas && !fechaDesde) || fechasErroneas || faltanCriterios}" 
         [(ngModel)]="fechaDesde"
-        (ngModelChange)="resetValidacion()" />
+        (focus)="resetValidacion()" />
 
     </div>
 
@@ -19,18 +19,18 @@
         <span class="label-text">Fecha hasta:</span>
       </label>
       <input type="date" id="fechaHasta" name="fechaHasta" class="form-control datePersonalizado"
-        [ngClass]="{ 'is-invalid': (faltanFechas && !fechaHasta) || fechasErroneas || faltanCriterios }" 
+        [ngClass]="{ 'input-invalido': (faltanFechas && !fechaHasta) || fechasErroneas || faltanCriterios }" 
         [(ngModel)]="fechaHasta"
-        (ngModelChange)="resetValidacion()" />
+        (focus)="resetValidacion()" />
     </div>
 
     <!-- Profesor -->
     <div class="col-12 col-md-6 col-xxl-4 d-flex flex-column flex-xxl-row align-items-xxl-center">
       <label for="profesorFiltro" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">Profesor:</label>
       <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado"  
-      [ngStyle]="faltanCriterios ? {'border': '2px solid red'} : {'border': '2px solid transparent'}"
+      [ngClass]="{ 'input-invalido': faltanCriterios }"
       [(ngModel)]="profesorFiltro"
-      (ngModelChange)="resetValidacion()">
+      (focus)="resetValidacion()">
         <option [ngValue]="null">Seleccione profesor</option>
         <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
           {{ profesor.nombreProfesor }}

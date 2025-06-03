@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { AusenciaService } from '../../services/ausencia.service'
 import { GuardiaService } from '../../services/guardia.service';
-import { FiltradoComponent} from "../filtrado/filtrado.component";
+import { FiltradoComponent } from "../filtrado/filtrado.component";
 
 @Component({
   selector: 'app-listado-guardias',
@@ -24,8 +24,8 @@ export class ListadoGuardiasComponent implements OnInit {
 
   // Variable para indicar la fecha del listado que se muestra en ese momento
   fechaUnica: Date = new Date(this.diaActual);
-  fechaDesde: Date | null = null;
-  fechaHasta: Date | null = null;
+  fechaDesde: string | null = null;
+  fechaHasta: string | null = null;
 
   // Array que almacena las ausencias que envía el backend
   ausencias: any[] = [];
@@ -52,9 +52,6 @@ export class ListadoGuardiasComponent implements OnInit {
 
 
 
-  // Variable para controlar la visualización del modal y el mensaje que muestra
-  modalActivo: boolean = false;
-  mensajeError: string = ''
 
   constructor(private ausenciaService: AusenciaService, private guardiaService: GuardiaService) { }
 
@@ -95,23 +92,20 @@ export class ListadoGuardiasComponent implements OnInit {
           this.ausenciasAgrupadas = [];
           this.mensajeTablaVacia = "No existen ausencias registradas.";
         } else {
-          this.mostrarError('Error desconocido.');
+          //this.mostrarError('Error desconocido.');
         }
       }
     });
   }
 
   // Cargar las ausencias registradas en un intervalo de fechas
-  cargarAusenciasEntreFechas(fechaDesde: Date, fechaHasta: Date): void {
+  cargarAusenciasEntreFechas(fechaDesde: string, fechaHasta: string): void {
     // Actualizar la fecha mostrada
     this.fechaDesde = fechaDesde;
     this.fechaHasta = fechaHasta;
+ 
 
-    // Formatear fecha que sen envía al backend
-    const fechaDesdeFormateada = this.formatearFecha(fechaDesde);
-    const fechaHastaFormateada = this.formatearFecha(fechaHasta);
-
-    this.ausenciaService.getAusenciasEntreFechas(fechaDesdeFormateada, fechaHastaFormateada).subscribe({
+    this.ausenciaService.getAusenciasEntreFechas(fechaDesde, fechaHasta).subscribe({
       next: data => {
         this.ausencias = data;
         console.log("Ausencias devueltas por backend: ", this.ausencias);
@@ -128,13 +122,13 @@ export class ListadoGuardiasComponent implements OnInit {
           this.ausenciasAgrupadas = [];
           this.mensajeTablaVacia = "No existen ausencias registradas.";
         } else {
-          this.mostrarError('Error desconocido.');
+          //this.mostrarError('Error desconocido.');
         }
       }
     });
   }
 
-
+  // Método para verificar la equivalencia de fechas
   esMismaFecha(fecha1: Date, fecha2: Date): boolean {
     if (fecha1.toDateString() === fecha2.toDateString()) {
       return true;
@@ -143,10 +137,12 @@ export class ListadoGuardiasComponent implements OnInit {
     };
   }
 
+  // Método para dar formato a la fecha que se envía desde el frontend
   formatearFecha(fecha: Date): string {
     return fecha.toISOString().split('T')[0]; // Se queda solo con la fecha 'YYYY-MM-DD'
   }
 
+  // Método que agrupa las ausencias por fecha y hora
   agruparAusencias(ausencias: any[]): void {
     //Resetear el array de ausencias agrupadas 
     this.ausenciasAgrupadas = [];
@@ -227,14 +223,24 @@ export class ListadoGuardiasComponent implements OnInit {
   }
 
 
+  // Método para aplicvar filtros a la tabla
+  filtrarTabla(filtros: { fechaDesde: string, fechaHasta: string, profesorFiltro: string | null }) {
+    console.log('Filtros recibidos del hijo:', filtros);
+    this.fechaDesde = filtros.fechaDesde;
+    this.fechaHasta = filtros.fechaHasta;
 
-  mostrarError(mensaje: string) {
-    this.mensajeError = mensaje;
-    this.modalActivo = true;
+    this.cargarAusenciasEntreFechas(this.fechaDesde, this.fechaHasta);
+    /*
+    
+    // Aquí puedes usar los valores como quieras:
+    this.fechaDesde = filtros.fechaDesde;
+    this.fechaHasta = filtros.fechaHasta;
+    const idProfesor = filtros.idProfesor;
+
+    // Por ejemplo, podrías llamar a un método que aplique los filtros:
+    this.cargarAusenciasFiltradas(this.fechaDesde, this.fechaHasta);
   }
+    */
 
-  cerrarModal() {
-    this.modalActivo = false;
   }
-
 }
