@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/profesor-roles")
+@CrossOrigin(origins = "http://localhost:4200")	// URL del Frontend
 //@RequiredArgsConstructor
 public class ProfesorRolController {
 
