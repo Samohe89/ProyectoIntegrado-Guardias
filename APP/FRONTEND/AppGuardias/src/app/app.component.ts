@@ -20,22 +20,16 @@ import { ListadoAusenciasComponent } from './components/listado-ausencias/listad
 export class AppComponent implements OnInit {
   title = 'AppGuardias';
 
-  // Variable que controla si el login se ha ejecutado o no
-  //sesionActiva: boolean = false;
-  sesionActiva: boolean = true;
+  //Variable que controla si el login se ha ejecutado o no
+  sesionActiva: boolean = false;
+  //sesionActiva: boolean = true;
 
-  // Variables que almacenan los datos del usuario logueado
-  // dniProfesor: string = "";
-  // cursoAcademico: string = "";
-  // nombreProfesor: string = "";
-  // alias: string = "";
-  // rol: string = "";
-
+  //Variables que almacenan los datos del usuario logueado
   dniProfesor: string = "";
   cursoAcademico: string = "";
   nombreProfesor: string = "";
   alias: string = "";
-  rol: string = "Profesor";
+  rol: string = "";
 
 /*
   dniProfesor: string = "";
