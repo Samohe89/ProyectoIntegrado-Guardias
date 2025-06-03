@@ -1,7 +1,7 @@
 package com.daw.services;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -15,28 +15,37 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GuardiaService {
 
-    private final GuardiaRepository repository;
+    private final GuardiaRepository guardiaRepository;
 
     public List<Guardia> findAll() {
-        return repository.findAll();
+        return guardiaRepository.findAll();
     }
 
-    public Optional<Guardia> findById(Long id) {
-        return repository.findById(id);
-    }
+    // public Optional<Guardia> findById(Long id) {
+    //     return guardiaRepository.findById(id);
+    // }
 
     public Guardia save(Guardia guardia) {
-        return repository.save(guardia);
+        return guardiaRepository.save(guardia);
     }
 
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        guardiaRepository.deleteById(id);
     }
     
     //Método para obtener el total de horas de guardia por profesor
     public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorProfesor() {
-        return repository.obtenerTotalHorasPorProfesor();
+        return guardiaRepository.obtenerTotalHorasPorProfesor();
       
         
     }
+   public List<Integer> getTramosPorIdAusencia(Long idAusencia) {
+	   List<Guardia> guardias = guardiaRepository.findGuardiasPorIdAusencias(idAusencia);
+	   List<Integer> tramos = new ArrayList<>();
+	   for (Guardia guardia : guardias) {
+		   tramos.add(guardia.getTramo());
+	   }
+	   return tramos;
+	   
+   }
 }

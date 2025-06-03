@@ -5,6 +5,8 @@ import { MenuComponent } from "./components/menu/menu.component";
 import { LoginComponent } from "./components/login/login.component";
 import { LoginService } from './services/login.service';
 import { HorasGuardiaComponent } from './components/horas-guardia/horas-guardia.component';
+import { ListadoAusenciasComponent } from './components/listado-ausencias/listado-ausencias.component';
+
 
 
 @Component({
@@ -34,6 +36,14 @@ export class AppComponent implements OnInit {
   nombreProfesor: string = "";
   alias: string = "";
   rol: string = "Profesor";
+
+/*
+  dniProfesor: string = "";
+  cursoAcademico: string = "";
+  nombreProfesor: string = "";
+  alias: string = "";
+  rol: string = "Profesor";
+*/
 
   // Inyección de servicios y enrutamiento
   constructor(private loginService: LoginService, private router: Router) { }

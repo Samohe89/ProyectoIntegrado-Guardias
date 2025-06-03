@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.datamodel.entities.Horario;
-import com.daw.datamodel.entities.ProfesorId;
 import com.daw.services.HorarioService;
 
 import lombok.RequiredArgsConstructor;

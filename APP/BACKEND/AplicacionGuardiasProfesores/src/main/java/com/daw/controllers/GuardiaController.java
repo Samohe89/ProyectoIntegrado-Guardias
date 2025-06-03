@@ -4,12 +4,9 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,48 +22,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GuardiaController {
 
-    private final GuardiaService service;
+    private final GuardiaService guardiaService;
 
     @GetMapping
-    public List<Guardia> buscarTodasGuardias() {
-        return service.findAll();
+    public List<Guardia> getAllGuardias() {
+        return guardiaService.findAll();
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Guardia> buscarGuardiasPorId(@PathVariable Long id) {
-        return service.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public Guardia createGuardia(@RequestBody Guardia guardia) {
-        return service.save(guardia);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Guardia> updateGuardia(@PathVariable Long id, @RequestBody Guardia updatedGuardia) {
-        return service.findById(id)
-                .map(existing -> {
-                    updatedGuardia.setIdGuardia(id);
-                    return ResponseEntity.ok(service.save(updatedGuardia));
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGuardia(@PathVariable Long id) {
-        if (service.findById(id).isPresent()) {
-            service.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    
+    
+    @GetMapping("/tramos/{id}")
+    public ResponseEntity<List<Integer>> getTramosporUdAusencia (@PathVariable("id") Long idAusencia) {
+    	List<Integer> tramos = guardiaService.getTramosPorIdAusencia(idAusencia);
+    	return ResponseEntity.ok(tramos);
     }
     
     //Método para obtener el total de horas de guardia por profesor
     @GetMapping("/totalHoras")
     public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHoras() {
-        return service.obtenerTotalHorasPorProfesor();
+        return guardiaService.obtenerTotalHorasPorProfesor();
     }
     
 }
