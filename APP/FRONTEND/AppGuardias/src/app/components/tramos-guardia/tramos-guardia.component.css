@@ -1,32 +1,88 @@
 .modal-dialog {
     padding: 0;
     width: 425px;
-    border-radius: 10px;
+    
+    
   }
   
   .modal-header {
     padding: 0 25px;
     height: 50px;
-    background-color: #3C7E66;
+    background-color: #16604E;
     color: white;
   }
   
   .modal-content {
-    height: 165px;
     width: 425px;
     border-radius: 10px;
     background-color: #EDF1EF;
-    text-align: center;
+    border: 3px solid #16604E;
   }
   
   .modal-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 25px;
-    height: 115px;
+    padding: 50px;
+    padding-top: 35px;
     font-size: 18px;
   }
+
+  input[type="checkbox"] {
+    margin-right: 15px;
+  }
+
+
+
+/* Ocultar el recuadro del checkbox original */
+.checkboxPersonalizado input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Recuadro de checkbox personalizado */
+.recuadroCheck {
+  display: inline-block;
+  width: 24px;  
+  height: 24px; 
+  background-color: #ffffff;
+  border-radius: 10px; 
+  border: 2px solid #999999;
+  vertical-align: text-bottom;
+  margin-right: 15px;
+  position: relative;
+}
+
+/* Fondo del recuadro cuando el checkbox está seleccionado */
+input:checked + .recuadroCheck {
+  background-color: #51A687;
+}
+
+/* Posibilita establecer la marca de "check" en el recuadro */
+.recuadroCheck:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Marca de "check" cuando el checkbox está seleccionado */
+input:checked + .recuadroCheck:after {
+  display: block;
+  left: 7px;
+  top: 3px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+
+.profesorGuardia {
+  padding-left: 50px;
+  font-size: 14px;
+}
+
+
+
   
   button.btn-close{
     padding: 0;
@@ -42,4 +98,9 @@
   
   .btn-close:hover{
     opacity: 0.6;
+  }
+
+  .btn-form{
+    display: flex;
+    justify-content: end;
   }
