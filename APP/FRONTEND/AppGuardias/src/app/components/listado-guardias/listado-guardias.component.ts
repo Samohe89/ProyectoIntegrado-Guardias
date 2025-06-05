@@ -222,7 +222,7 @@ export class ListadoGuardiasComponent implements OnInit {
         this.tramosPorAusencia.push({ idAusencia, tramos: data })
       },
       error: err => {
-        console.error("Error al cargar los tramos de la ausencia: " + idAusencia, err);
+        console.error("Error al cargar los tramos de las guardias asociadas a la ausencia: " + idAusencia, err);
       }
     });
   }

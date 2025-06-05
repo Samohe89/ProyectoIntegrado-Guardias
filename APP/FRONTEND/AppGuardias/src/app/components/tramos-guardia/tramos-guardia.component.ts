@@ -2,46 +2,49 @@ import { Component, computed, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Profesor, ProfesorService } from '../../services/profesor.service';
+import { GuardiaService } from '../../services/guardia.service';
 
 @Component({
   selector: 'app-tramos-guardia',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './tramos-guardia.component.html',
-  styleUrl: './tramos-guardia.component.css'
+  styleUrl: './tramos-guardia.component.css',
+  providers: [GuardiaService]
 })
 
 export class TramosGuardiaComponent {
-  
-   // Variable que almacena los datos del usuario que tiene abierta la sesión
-   usuario = JSON.parse(sessionStorage.getItem('usuarioGuardado') || 'null');
 
-  // Variable que almacena la ausencia correspondiente
+  // Variable que almacena los datos del usuario que tiene abierta la sesión
+  usuario = JSON.parse(sessionStorage.getItem('usuarioGuardado') || 'null');
+
+  // Variable que almacena la ausencia correspondiente (la recibe del padre)
   idAusencia: number | null = null;
 
   // Variable que almacena el profesor de guardia
   profesorGuardia: string | null = null;
 
   // Array de profesores para mostrar en el select
-    profesores: Profesor[] = [];
+  profesores: Profesor[] = [];
 
- // Variable para controlar la visualización del modal y el mensaje que muestra
- modalActivo: boolean = false;
-
- 
- tramos = {
-  primerTramo: false,
-  segundoTramo: false,
-  tercerTramo: false,
-  cuartoTramo: false,
-  horaCompleta: false
-};
+  // Variable para controlar la visualización del modal y el mensaje que muestra
+  modalActivo: boolean = false;
 
 
+  tramos = {
+    primerTramo: false,
+    segundoTramo: false,
+    tercerTramo: false,
+    cuartoTramo: false,
+    horaCompleta: false
+  };
 
 
- constructor(
-    private profesorService: ProfesorService
+
+
+  constructor(
+    private profesorService: ProfesorService,
+    private guardiaService: GuardiaService
   ) { }
 
 
@@ -54,17 +57,17 @@ export class TramosGuardiaComponent {
 
 
 
-eliminarGuardia() {
+  eliminarGuardia() {
 
-}
-
-
+  }
 
 
 
- cerrarModal() {
-  this.modalActivo = false;
-}
+
+
+  cerrarModal() {
+    this.modalActivo = false;
+  }
 
 
 

@@ -32,8 +32,15 @@ public class GuardiaController {
     }
     
     
+    @GetMapping("/{id}")
+    public ResponseEntity<List<Guardia>> getGuardiasPorIdAusencia (@PathVariable("id") Long idAusencia) {
+    	List<Guardia> guardias = guardiaService.getGuardiasPorIdAusencia(idAusencia);
+    	return ResponseEntity.ok(guardias);
+    }
+        
+    
     @GetMapping("/tramos/{id}")
-    public ResponseEntity<List<Integer>> getTramosporUdAusencia (@PathVariable("id") Long idAusencia) {
+    public ResponseEntity<List<Integer>> getTramosPorIdAusencia (@PathVariable("id") Long idAusencia) {
     	List<Integer> tramos = guardiaService.getTramosPorIdAusencia(idAusencia);
     	return ResponseEntity.ok(tramos);
     }

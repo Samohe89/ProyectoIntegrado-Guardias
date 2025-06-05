@@ -19,14 +19,21 @@ public class GuardiaService {
     public List<Guardia> findAll() {
         return guardiaRepository.findAll();
     }
+    
+    public List<Guardia> getGuardiasPorIdAusencia(Long idAusencia) {
+ 	   List<Guardia> guardias = guardiaRepository.findGuardiasPorIdAusencia(idAusencia);
+ 	   return guardias;
+    }
 
    public List<Integer> getTramosPorIdAusencia(Long idAusencia) {
-	   List<Guardia> guardias = guardiaRepository.findGuardiasPorIdAusencias(idAusencia);
+	   List<Guardia> guardias = guardiaRepository.findGuardiasPorIdAusencia(idAusencia);
 	   List<Integer> tramos = new ArrayList<>();
 	   for (Guardia guardia : guardias) {
 		   tramos.add(guardia.getTramo());
 	   }
-	   return tramos;
-	   
+	   return tramos;  
    }
+
+
+    
 }

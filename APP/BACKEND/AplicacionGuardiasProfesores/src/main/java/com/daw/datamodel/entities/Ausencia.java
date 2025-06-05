@@ -44,7 +44,7 @@ public class Ausencia {
 	@Column(name = "Fichero", nullable = true, columnDefinition = "BLOB")
 	private byte[] fichero;
 
-	@OneToMany(mappedBy = "ausenciasProfesor")
+	@OneToMany(mappedBy = "ausencia")
 	@JsonIgnore
 	private Set<Guardia> guardiasProfesores;
 

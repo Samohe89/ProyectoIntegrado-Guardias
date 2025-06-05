@@ -15,7 +15,7 @@ import com.daw.errors.ApiError;
 import jakarta.servlet.http.HttpServletRequest;
 
 
-@RestControllerAdvice
+//@RestControllerAdvice
 public class GlobalExceptionHandler {
 	
 
