@@ -17,11 +17,11 @@ export class PdfTestComponent {
       'Fecha hasta': '2025-06-01',
       'Profesor': 'Todos'
     };
-    const headers = ['Nombre', 'Horas de Guardia', 'Fecha'];
+    const headers = ['Profesor', 'Total Horas'];
     const data = [
-      ['Juan Pérez', 12, '2025-05-15'],
-      ['Ana López', 8, '2025-05-10'],
-      ['Luis Martínez', 10, '2025-05-20'],
+      ['Juan Pérez', 12],
+      ['Ana López', 8],
+      ['Luis Martínez'],
     ];
     const nombreArchivo = 'guardias.pdf';
 

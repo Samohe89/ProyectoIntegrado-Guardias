@@ -28,7 +28,7 @@ export class PdfGeneratorService {
 
     // Título general centrado arriba
     doc.setFontSize(12);
-    doc.setFont('poppins', 'bold');
+    doc.setFont('Poppins-Medium', 'normal');
     doc.text('AUSENCIAS Y GUARDIAS', 105, 20, { align: 'center' });
 
     // Línea horizontal
@@ -38,11 +38,11 @@ export class PdfGeneratorService {
 
     // Subtítulo
     doc.setFontSize(10);
-    doc.setFont('poppins', 'bold');
+    doc.setFont('Poppins-Medium', 'normal');
     doc.text('TOTAL DE HORAS DE GUARDIA', 14, 33);
 
     // Filtros (formato alineado)
-    doc.setFont('helvetica', 'normal');
+    doc.setFont('Poppins-Medium', 'normal');
     doc.setFontSize(10);
     let filtrosTextY = 39;
     Object.entries(filtros).forEach(([clave, valor]) => {
@@ -61,7 +61,7 @@ export class PdfGeneratorService {
       headStyles: {
         fillColor: [22, 96, 78],  // Verde 16604E
         textColor: 255,
-        halign: 'center'
+        halign: 'center',
       },
       bodyStyles: {
         halign: 'center'

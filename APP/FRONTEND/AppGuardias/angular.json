@@ -31,7 +31,9 @@
               "src/styles.css"
             ],
             "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "src/app/pdf-fonts/Poppins-Medium-normal.js",
+              "src/app/pdf-fonts/Poppins-SemiBold-normal.js"
             ]
           },
           "configurations": {
