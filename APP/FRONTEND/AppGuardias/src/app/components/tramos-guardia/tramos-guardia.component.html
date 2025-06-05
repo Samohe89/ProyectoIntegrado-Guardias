@@ -9,70 +9,110 @@
       <div class="modal-body">
 
         <form>
-
           <div>
-            <div>
+            <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
                 <input type="checkbox" id="primerTramo" name="primerTramo" value="1">
                 <span class="recuadroCheck"></span>
                 Primer tramo
               </label>
+              <button *ngIf="usuario?.rol == 'Profesor'" class="btn-eliminar" (click)="eliminarGuardia()"><i
+                  class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: </p>
+            <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado">
+              <option [ngValue]="null">Seleccione profesor</option>
+              <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
+                {{ profesor.nombreProfesor }}
+              </option>
+            </select>
           </div>
 
           <div>
-            <div>
+            <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
                 <input type="checkbox" id="segundoTramo" name="segunddoTramo" value="2">
                 <span class="recuadroCheck"></span>
                 Segundo tramo
               </label>
+              <button *ngIf="usuario?.rol == 'Profesor'" class="btn-eliminar" (click)="eliminarGuardia()"><i
+                  class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: </p>
+            <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado">
+              <option [ngValue]="null">Seleccione profesor</option>
+              <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
+                {{ profesor.nombreProfesor }}
+              </option>
+            </select>
           </div>
 
           <div>
-            <div>
+            <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
                 <input type="checkbox" id="tercerTramo" name="tercerTramo" value="3">
                 <span class="recuadroCheck"></span>
                 Tercer tramo
               </label>
+              <button *ngIf="usuario?.rol == 'Profesor'" class="btn-eliminar" (click)="eliminarGuardia()"><i
+                  class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: </p>
+            <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado">
+              <option [ngValue]="null">Seleccione profesor</option>
+              <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
+                {{ profesor.nombreProfesor }}
+              </option>
+            </select>
           </div>
 
           <div>
-            <div>
+            <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
                 <input type="checkbox" id="cuartoTramo" name="cuartoTramo" value="4">
                 <span class="recuadroCheck"></span>
                 Cuarto tramo
               </label>
+              <button *ngIf="usuario?.rol == 'Profesor'" class="btn-eliminar" (click)="eliminarGuardia()"><i
+                  class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: </p>
+            <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado">
+              <option [ngValue]="null">Seleccione profesor</option>
+              <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
+                {{ profesor.nombreProfesor }}
+              </option>
+            </select>
           </div>
 
           <hr>
 
           <div>
-            <div>
+            <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
                 <input type="checkbox" id="horaCompleta" name="horaCompleta" value="5">
                 <span class="recuadroCheck"></span>
                 Hora completa
               </label>
+              <button *ngIf="usuario?.rol == 'Profesor'" class="btn-eliminar" (click)="eliminarGuardia()"><i
+                  class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: </p>
+            <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado">
+              <option [ngValue]="null">Seleccione profesor</option>
+              <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
+                {{ profesor.nombreProfesor }}
+              </option>
+            </select>
           </div>
 
-          <div class="btn-form">
+          <div class="botonForm">
             <button type="submit" class="btn btn-green">
               <i class="bi bi-check-circle-fill"></i>
               Confirmar
             </button>
           </div>
+
         </form>
 
         <!--
