@@ -57,6 +57,19 @@ input:checked + .recuadroCheck {
   background-color: #51A687;
 }
 
+
+/* Fondo del recuadro cuando el checkbox está deshabilitado */
+input:disabled + .recuadroCheck {
+  background-color: #C3C9C6;
+};
+
+/* Fondo del recuadro cuando el checkbox está seleccionado y deshabilitado */
+input:checked:disabled + .recuadroCheck {
+  background-color: #C3C9C6;
+}
+
+
+
 /* Posibilita establecer la marca de "check" en el recuadro */
 .recuadroCheck:after {
   content: "";
@@ -66,6 +79,18 @@ input:checked + .recuadroCheck {
 
 /* Marca de "check" cuando el checkbox está seleccionado */
 input:checked + .recuadroCheck:after {
+  display: block;
+  left: 7px;
+  top: 3px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+/* Marca de "check" cuando el checkbox está seleccionado y deshabilitado */
+input:checked:disabled + .recuadroCheck::after {
   display: block;
   left: 7px;
   top: 3px;

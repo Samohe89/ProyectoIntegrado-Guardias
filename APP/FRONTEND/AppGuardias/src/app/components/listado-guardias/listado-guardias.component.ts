@@ -56,9 +56,6 @@ export class ListadoGuardiasComponent implements OnInit {
   mensajeTablaVacia: String = "";
 
 
-  
-
-
   constructor(private ausenciaService: AusenciaService, private guardiaService: GuardiaService) { }
 
   ngOnInit(): void {
@@ -222,7 +219,7 @@ export class ListadoGuardiasComponent implements OnInit {
         this.tramosPorAusencia.push({ idAusencia, tramos: data })
       },
       error: err => {
-        console.error("Error al cargar los tramos de las guardias asociadas a la ausencia: " + idAusencia, err);
+        console.error("Error al cargar los tramos de las guardias correspondientes a la ausencia: " + idAusencia, err);
       }
     });
   }
@@ -257,7 +254,7 @@ export class ListadoGuardiasComponent implements OnInit {
 
   // Método para abrir el modal de tramos de guardia
   abrirModalTramos(idAusencia: number) {
-    this.modalTramos.idAusencia = idAusencia;
+    this.modalTramos.cargarGuardias (idAusencia);
     this.modalTramos.modalActivo = true;
   }
 }

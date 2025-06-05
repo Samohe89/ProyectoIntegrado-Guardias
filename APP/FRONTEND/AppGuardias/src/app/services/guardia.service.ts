@@ -10,11 +10,16 @@ export class GuardiaService {
 
   constructor(private http: HttpClient) { }
 
+  getGuardiasPorIdAusencia(idAusencia: number) {
+    return this.http.get<number[]>(`${this.apiUrl}/${idAusencia}`)
+  }
+
   
   getTramosPorIdAusencia(idAusencia: number) {
     return this.http.get<number[]>(`${this.apiUrl}/tramos/${idAusencia}`)
-
   }
+
+
 
 
 }

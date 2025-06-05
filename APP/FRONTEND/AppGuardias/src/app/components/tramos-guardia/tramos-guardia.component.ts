@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Profesor, ProfesorService } from '../../services/profesor.service';
@@ -19,10 +19,13 @@ export class TramosGuardiaComponent {
   usuario = JSON.parse(sessionStorage.getItem('usuarioGuardado') || 'null');
 
   // Variable que almacena la ausencia correspondiente (la recibe del padre)
-  idAusencia: number | null = null;
+  idAusencia!: number;
+
+ 
+
 
   // Variable que almacena el profesor de guardia
-  profesorGuardia: string | null = null;
+  //profesorGuardia: string | null = null;
 
   // Array de profesores para mostrar en el select
   profesores: Profesor[] = [];
@@ -30,14 +33,8 @@ export class TramosGuardiaComponent {
   // Variable para controlar la visualización del modal y el mensaje que muestra
   modalActivo: boolean = false;
 
-
-  tramos = {
-    primerTramo: false,
-    segundoTramo: false,
-    tercerTramo: false,
-    cuartoTramo: false,
-    horaCompleta: false
-  };
+  //Array que almacena las guardias de la ausencia
+  guardias: any[] = [];
 
 
 
@@ -49,13 +46,46 @@ export class TramosGuardiaComponent {
 
 
   ngOnInit(): void {
+    // Cargar los profesores del select al inicio (Perfil Directivo)
     this.profesorService.getProfesores().subscribe({
       next: profesores => this.profesores = profesores,
       error: err => console.error('Error al cargar profesores:', err)
     });
+
+
   }
 
 
+
+  // Cargar las guardias asociada a la ausencia
+  cargarGuardias(idAusencia: number) {
+    this.idAusencia = idAusencia;
+    this.guardiaService.getGuardiasPorIdAusencia(idAusencia).subscribe({
+      next: data => {
+        this.guardias = data;
+        console.log("Guardias: ", this.guardias)
+      },
+      error: err => {
+        console.error("Error al cargar las guardias correspondientes a la ausencia: " + idAusencia, err);
+      }
+    });
+  }
+
+
+  // Comprobar si existe una guardia para un tramo concreto
+  existeTramoGuardia(tramo: number): boolean {
+    const existe = this.guardias.find(guardia => guardia.tramo === tramo) !== undefined;
+    return existe;
+  }
+
+  // Cargar el nombre del profesor asignado a un tramo de guardia
+  cargarProfesorPorTramo(tramo: number): string {
+    const guardia = this.guardias.find(g => g.tramo === tramo);
+    if (guardia) {
+      return guardia.profesor.nombreProfesor;
+    }
+    return '';
+  }
 
   eliminarGuardia() {
 
