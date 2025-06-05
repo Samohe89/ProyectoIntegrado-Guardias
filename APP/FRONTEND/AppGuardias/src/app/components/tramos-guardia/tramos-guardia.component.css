@@ -109,6 +109,7 @@ input:checked + .recuadroCheck:after {
 .botonForm{
   display: flex;
   justify-content: end;
+  margin-top: 35px;
 }
 
   

@@ -16,11 +16,11 @@
                 <span class="recuadroCheck"></span>
                 Primer tramo
               </label>
-              <button *ngIf="usuario?.rol == 'Profesor'" class="btn-eliminar" (click)="eliminarGuardia()"><i
+              <button *ngIf="usuario?.rol == 'Equipo Directivo'" class="btn-eliminar" (click)="eliminarGuardia()"><i
                   class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: </p>
-            <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado">
+            <select *ngIf="usuario?.rol == 'Equipo Directivo'" name="profesorGuardia" class="form-select selectFiltroPersonalizado">
               <option [ngValue]="null">Seleccione profesor</option>
               <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
                 {{ profesor.nombreProfesor }}
@@ -35,11 +35,11 @@
                 <span class="recuadroCheck"></span>
                 Segundo tramo
               </label>
-              <button *ngIf="usuario?.rol == 'Profesor'" class="btn-eliminar" (click)="eliminarGuardia()"><i
+              <button *ngIf="usuario?.rol == 'Equipo Directivo'" class="btn-eliminar" (click)="eliminarGuardia()"><i
                   class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: </p>
-            <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado">
+            <select *ngIf="usuario?.rol == 'Equipo Directivo'" name="profesorGuardia" class="form-select selectFiltroPersonalizado">
               <option [ngValue]="null">Seleccione profesor</option>
               <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
                 {{ profesor.nombreProfesor }}
@@ -54,11 +54,11 @@
                 <span class="recuadroCheck"></span>
                 Tercer tramo
               </label>
-              <button *ngIf="usuario?.rol == 'Profesor'" class="btn-eliminar" (click)="eliminarGuardia()"><i
+              <button *ngIf="usuario?.rol == 'Equipo Directivo'" class="btn-eliminar" (click)="eliminarGuardia()"><i
                   class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: </p>
-            <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado">
+            <select *ngIf="usuario?.rol == 'Equipo Directivo'" name="profesorGuardia" class="form-select selectFiltroPersonalizado">
               <option [ngValue]="null">Seleccione profesor</option>
               <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
                 {{ profesor.nombreProfesor }}
@@ -73,11 +73,11 @@
                 <span class="recuadroCheck"></span>
                 Cuarto tramo
               </label>
-              <button *ngIf="usuario?.rol == 'Profesor'" class="btn-eliminar" (click)="eliminarGuardia()"><i
+              <button *ngIf="usuario?.rol == 'Equipo Directivo'" class="btn-eliminar" (click)="eliminarGuardia()"><i
                   class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: </p>
-            <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado">
+            <select *ngIf="usuario?.rol == 'Equipo Directivo'" name="profesorGuardia" class="form-select selectFiltroPersonalizado">
               <option [ngValue]="null">Seleccione profesor</option>
               <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
                 {{ profesor.nombreProfesor }}
@@ -94,11 +94,11 @@
                 <span class="recuadroCheck"></span>
                 Hora completa
               </label>
-              <button *ngIf="usuario?.rol == 'Profesor'" class="btn-eliminar" (click)="eliminarGuardia()"><i
+              <button *ngIf="usuario?.rol == 'Equipo Directivo'" class="btn-eliminar" (click)="eliminarGuardia()"><i
                   class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: </p>
-            <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado">
+            <select *ngIf="usuario?.rol == 'Equipo Directivo'" name="profesorGuardia" class="form-select selectFiltroPersonalizado">
               <option [ngValue]="null">Seleccione profesor</option>
               <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
                 {{ profesor.nombreProfesor }}
