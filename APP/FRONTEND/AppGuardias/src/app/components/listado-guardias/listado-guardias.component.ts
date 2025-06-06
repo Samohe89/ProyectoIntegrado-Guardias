@@ -17,6 +17,8 @@ import { TramosGuardiaComponent } from '../tramos-guardia/tramos-guardia.compone
 
 
 export class ListadoGuardiasComponent implements OnInit {
+
+  // Permite acceder al componente hijo a través de una variable
   @ViewChild('modalTramos') modalTramos!: TramosGuardiaComponent;
 
 

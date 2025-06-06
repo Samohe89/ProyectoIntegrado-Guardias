@@ -1,19 +1,23 @@
-import { Component, computed, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Profesor, ProfesorService } from '../../services/profesor.service';
 import { GuardiaService } from '../../services/guardia.service';
+import { ModalRegistroComponent } from '../modal-registro/modal-registro.component';
 
 @Component({
   selector: 'app-tramos-guardia',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalRegistroComponent],
   templateUrl: './tramos-guardia.component.html',
   styleUrl: './tramos-guardia.component.css',
   providers: [GuardiaService]
 })
 
 export class TramosGuardiaComponent {
+
+  // Permite acceder al componente hijo a través de una variable
+  @ViewChild('modalRegistro') modalRegistro!: ModalRegistroComponent;
 
   // Variable para controlar la visualización del modal y el mensaje que muestra
   modalActivo: boolean = false;
@@ -139,9 +143,7 @@ export class TramosGuardiaComponent {
   }
 
 
-
-
-
+  // Método para registrar guardias
   onSubmit(form: NgForm): void {
     const guardiasRegistro: any[] = [];
 
@@ -183,6 +185,7 @@ export class TramosGuardiaComponent {
       this.guardiaService.registrarGuardias(guardiasRegistro).subscribe({
         next: (respuesta) => {
           console.log("guardias que se han registrado: ", respuesta);
+          this.modalRegistro.mostrarModal();
           this.guardiasActualizadas.emit();
           this.cerrarModal();
         },
