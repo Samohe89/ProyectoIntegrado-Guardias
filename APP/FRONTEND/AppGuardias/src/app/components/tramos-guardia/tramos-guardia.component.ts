@@ -15,26 +15,26 @@ import { GuardiaService } from '../../services/guardia.service';
 
 export class TramosGuardiaComponent {
 
+  // Variable para controlar la visualización del modal y el mensaje que muestra
+  modalActivo: boolean = false;
+
   // Variable que almacena los datos del usuario que tiene abierta la sesión
   usuario = JSON.parse(sessionStorage.getItem('usuarioGuardado') || 'null');
 
   // Variable que almacena la ausencia correspondiente (la recibe del padre)
   idAusencia!: number;
 
- 
+  // Array que almacena las guardias de la ausencia
+  guardias: any[] = [];
 
+  // Objeto que almacena si los checkbox están marcados (checked) o no
+  checkboxMarcados: {
+    [tramo: number]: boolean
+  } = {}
 
-  // Variable que almacena el profesor de guardia
-  //profesorGuardia: string | null = null;
 
   // Array de profesores para mostrar en el select
   profesores: Profesor[] = [];
-
-  // Variable para controlar la visualización del modal y el mensaje que muestra
-  modalActivo: boolean = false;
-
-  //Array que almacena las guardias de la ausencia
-  guardias: any[] = [];
 
 
 
@@ -51,8 +51,6 @@ export class TramosGuardiaComponent {
       next: profesores => this.profesores = profesores,
       error: err => console.error('Error al cargar profesores:', err)
     });
-
-
   }
 
 
@@ -98,6 +96,25 @@ export class TramosGuardiaComponent {
     }
     return '';
   }
+
+
+  // Almacenar el estado (checked o no) de un checkbox
+  estadoCheckbox(event: Event, tramo: number): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.checkboxMarcados[tramo] = checked;
+  }
+
+
+  // Cargar profesores del select (Perfil Directivo)
+  cargarProfesoresSelect() {
+    this.profesorService.getProfesores().subscribe({
+      next: profesores => this.profesores = profesores,
+      error: err => console.error('Error al cargar profesores:', err)
+    });
+  }
+
+
+
 
   eliminarGuardia() {
 
