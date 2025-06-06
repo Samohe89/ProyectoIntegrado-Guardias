@@ -1,5 +1,5 @@
 import { Component, computed, inject, Input } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Profesor, ProfesorService } from '../../services/profesor.service';
 import { GuardiaService } from '../../services/guardia.service';
@@ -24,6 +24,9 @@ export class TramosGuardiaComponent {
   // Variable que almacena la ausencia correspondiente (la recibe del padre)
   idAusencia!: number;
 
+  // Variable que almacena el grupo correspondiente de la ausencia (la recibe del padre)
+  grupo!: string;
+
   // Array que almacena las guardias de la ausencia
   guardias: any[] = [];
 
@@ -37,21 +40,15 @@ export class TramosGuardiaComponent {
   profesores: Profesor[] = [];
 
 
+  // Variable para controlar la visualización del modal de errores y el mensaje que muestra
+  modalErrorActivo: boolean = false;
+  mensajeError: string = '';
 
 
   constructor(
     private profesorService: ProfesorService,
     private guardiaService: GuardiaService
   ) { }
-
-
-  ngOnInit(): void {
-    // Cargar los profesores del select al inicio (Perfil Directivo)
-    this.profesorService.getProfesores().subscribe({
-      next: profesores => this.profesores = profesores,
-      error: err => console.error('Error al cargar profesores:', err)
-    });
-  }
 
 
 
@@ -92,11 +89,11 @@ export class TramosGuardiaComponent {
     const existeAlgunTramoRegistrado = this.guardias.some(guardia => guardia.tramo >= 1 && guardia.tramo <= 4);
     const existeAlgunTramoMarcado = [1, 2, 3, 4].some(tramo => this.checkboxMarcados[tramo] == true);
     if (existeAlgunTramoRegistrado || existeAlgunTramoMarcado) {
-    return true;
-  } else {
-    return false;
+      return true;
+    } else {
+      return false;
+    }
   }
-}
 
   // Cargar el nombre del profesor asignado a un tramo de guardia
   cargarProfesorPorTramo(tramo: number): string {
@@ -131,11 +128,54 @@ export class TramosGuardiaComponent {
   }
 
 
-onSubmit() {
+  onSubmit(form: NgForm): void {
+    const guardiasRegistro: any[] = [];
 
-  this.cerrarModal();
+    let idProfesor: {
+      dniProfesor: string;
+      cursoAcademico: string
+    } = {
+      dniProfesor: '',
+      cursoAcademico: ''
+    };
 
-}
+
+    // Guardar el profesor de guardia (Perfil Profesor)
+    if (this.usuario.rol == 'Profesor') {
+      idProfesor = {
+        dniProfesor: this.usuario.dniProfesor,
+        cursoAcademico: this.usuario.cursoAcademico
+      }
+    }
+
+    /* Verificar los checkbox de tramos que realmente se van a mandar en el registro
+    (deben estar seleccionados/checked y habilitados; los deshabilitados no se mandan) */
+    for (let tramo = 1; tramo <= 5; tramo++) {
+      const checkboxMarcado = this.checkboxMarcados[tramo];
+      if (checkboxMarcado && !this.existeTramoGuardia(tramo)) {
+        const guardiaDTO = {
+          grupo: this.grupo,
+          tramo: tramo,
+          idProfesor: idProfesor,
+          idAusencia: this.idAusencia
+        }
+        guardiasRegistro.push(guardiaDTO);
+      }
+    }
+      console.log("guardias que se envian: ", guardiasRegistro);
+
+    if (guardiasRegistro.length == 0) {
+      this.mostrarError("Debe seleccionar algún tramo de guardia o cerrar el formulario de tramos de guardia")
+    } else {
+      this.cerrarModal();
+    }
+
+
+
+
+    
+
+  }
 
 
   cerrarModal() {
@@ -144,6 +184,13 @@ onSubmit() {
   }
 
 
+  mostrarError(mensaje: string) {
+    this.mensajeError = mensaje;
+    this.modalErrorActivo = true;
+  }
 
+  cerrarModalError() {
+    this.modalErrorActivo = false;
+  }
 
 }

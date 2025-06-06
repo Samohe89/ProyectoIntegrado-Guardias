@@ -71,7 +71,7 @@
                                             {{ agrupacionPorHora.hora }}ª Hora
                                         </td>
                                         <td>{{ ausencia.horariosProfesor.grupo }}</td>
-                                        <td class="celdaGrafico" [attr.data-idAusencia]="ausencia.id" (click)="abrirModalTramos(ausencia.id)">
+                                        <td class="celdaGrafico" [attr.data-idAusencia]="ausencia.id" (click)="abrirModalTramos(ausencia.id, ausencia.horariosProfesor.grupo)">
                                             <div class="graficoTramos">
                                                 <ng-container
                                                     *ngIf="!cargarTramosPorIdAusencia(ausencia.id).includes(5)">
@@ -118,7 +118,7 @@
                                             {{ agrupacionPorHora.hora }}ª Hora
                                         </td>
                                         <td>{{ ausencia.horariosProfesor.grupo }}</td>
-                                        <td class="celdaGrafico" [attr.data-idAusencia]="ausencia.id" (click)="abrirModalTramos(ausencia.id)">
+                                        <td class="celdaGrafico" [attr.data-idAusencia]="ausencia.id" (click)="abrirModalTramos(ausencia.id, ausencia.horariosProfesor.grupo)">
                                             <div class="graficoTramos">
                                                 <ng-container
                                                     *ngIf="!cargarTramosPorIdAusencia(ausencia.id).includes(5)">

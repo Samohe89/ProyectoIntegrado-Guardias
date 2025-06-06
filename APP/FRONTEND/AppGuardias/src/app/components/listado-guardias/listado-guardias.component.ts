@@ -253,8 +253,9 @@ export class ListadoGuardiasComponent implements OnInit {
 
 
   // Método para abrir el modal de tramos de guardia
-  abrirModalTramos(idAusencia: number) {
+  abrirModalTramos(idAusencia: number, grupo: string) {
     this.modalTramos.cargarGuardias (idAusencia);
+    this.modalTramos.grupo = grupo;
     this.modalTramos.modalActivo = true;
   }
 }

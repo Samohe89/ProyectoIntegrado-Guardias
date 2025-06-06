@@ -8,16 +8,16 @@
       </div>
       <div class="modal-body">
 
-        <form *ngIf="modalActivo">
+        <form *ngIf="modalActivo" #formTramos="ngForm" (ngSubmit)="onSubmit(formTramos)">
           <div>
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
-                <input type="checkbox" id="primerTramo" name="primerTramo" value="1" [checked]="existeTramoGuardia(1)"
+                <input type="checkbox" id="primerTramo" name="tramo" value="1" [checked]="existeTramoGuardia(1)"
                   [disabled]="existeTramoGuardia(1) || existeHoraCompleta()" (change)="estadoCheckbox($event,1)">
                 <span class="recuadroCheck"></span>
                 Primer tramo
               </label>
-              <button *ngIf="usuario?.rol == 'Equipo Directivo'" class="btn-eliminar" (click)="eliminarGuardia()"><i
+              <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(1)" class="btn-eliminar" (click)="eliminarGuardia()"><i
                   class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(1) }}</p>
@@ -33,12 +33,12 @@
           <div>
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
-                <input type="checkbox" id="segundoTramo" name="segundoTramo" value="2"
+                <input type="checkbox" id="segundoTramo" name="tramo" value="2"
                   [checked]="existeTramoGuardia(2)" [disabled]="existeTramoGuardia(2) || existeHoraCompleta()" (change)="estadoCheckbox($event,2)">
                 <span class="recuadroCheck"></span>
                 Segundo tramo
               </label>
-              <button *ngIf="usuario?.rol == 'Equipo Directivo'" class="btn-eliminar" (click)="eliminarGuardia()"><i
+              <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(2)" class="btn-eliminar" (click)="eliminarGuardia()"><i
                   class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(2) }}</p>
@@ -54,12 +54,12 @@
           <div>
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
-                <input type="checkbox" id="tercerTramo" name="tercerTramo" value="3" [checked]="existeTramoGuardia(3)"
+                <input type="checkbox" id="tercerTramo" name="tramo" value="3" [checked]="existeTramoGuardia(3)"
                   [disabled]="existeTramoGuardia(3) || existeHoraCompleta()" (change)="estadoCheckbox($event,3)">
                 <span class="recuadroCheck"></span>
                 Tercer tramo
               </label>
-              <button *ngIf="usuario?.rol == 'Equipo Directivo'"
+              <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(3)"
                 class="btn-eliminar" (click)="eliminarGuardia()"><i class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(3) }}</p>
@@ -75,12 +75,12 @@
           <div>
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
-                <input type="checkbox" id="cuartoTramo" name="cuartoTramo" value="4" [checked]="existeTramoGuardia(4)"
+                <input type="checkbox" id="cuartoTramo" name="tramo" value="4" [checked]="existeTramoGuardia(4)"
                   [disabled]="existeTramoGuardia(4) || existeHoraCompleta()" (change)="estadoCheckbox($event,4)">
                 <span class="recuadroCheck"></span>
                 Cuarto tramo
               </label>
-              <button *ngIf="usuario?.rol == 'Equipo Directivo'"
+              <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(4)"
                 class="btn-eliminar" (click)="eliminarGuardia()"><i class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(4) }}</p>
@@ -98,12 +98,12 @@
           <div>
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
-                <input type="checkbox" id="horaCompleta" name="horaCompleta" value="5" [checked]="existeTramoGuardia(5)"
+                <input type="checkbox" id="horaCompleta" name="tramo" value="5" [checked]="existeTramoGuardia(5)"
                   [disabled]="existeTramoGuardia(5) || deshabilitarHoraCompleta()" (change)="estadoCheckbox($event,5)">
                 <span class="recuadroCheck"></span>
                 Hora completa
               </label>
-              <button *ngIf="usuario?.rol == 'Equipo Directivo'" class="btn-eliminar" (click)="eliminarGuardia()"><i
+              <button *ngIf="usuario?.rol == 'Equipo Directivo'  && existeTramoGuardia(5)" class="btn-eliminar" (click)="eliminarGuardia()"><i
                   class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(5) }}</p>
@@ -125,9 +125,22 @@
 
         </form>
 
-        <!--
-        <p> {{ idAusencia }} </p>
-        -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal de errores -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" [ngClass]="{'show': modalErrorActivo}" [style.display]="modalErrorActivo ? 'block' : 'none'">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-center w-100" id="errorModalLabel">Error</h5>
+        <button type="button" class="btn-close" (click)="cerrarModalError()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-center">{{ mensajeError }}</p>
       </div>
     </div>
   </div>
