@@ -258,4 +258,16 @@ export class ListadoGuardiasComponent implements OnInit {
     this.modalTramos.grupo = grupo;
     this.modalTramos.modalActivo = true;
   }
+
+
+  // Método para recargar la vista si se han actualizado las guardias (creado o borrado)
+  recargarDatos(): void {
+    if (this.fechaDesde && this.fechaHasta) {
+      this.cargarAusenciasEntreFechas(this.fechaDesde, this.fechaHasta);
+    } else {
+      this.cargarAusencias(this.fechaUnica);
+    }
+  }
+
+
 }

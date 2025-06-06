@@ -1,4 +1,4 @@
-import { Component, computed, inject, Input } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Profesor, ProfesorService } from '../../services/profesor.service';
@@ -43,6 +43,9 @@ export class TramosGuardiaComponent {
   // Variable para controlar la visualización del modal de errores y el mensaje que muestra
   modalErrorActivo: boolean = false;
   mensajeError: string = '';
+
+  // Variable que se manda al padre en caso de se haya actualizado alguna guardia (creado o borrado)
+  @Output() guardiasActualizadas = new EventEmitter<void>();
 
 
   constructor(
@@ -150,7 +153,6 @@ export class TramosGuardiaComponent {
       cursoAcademico: ''
     };
 
-
     // Guardar el profesor de guardia (Perfil Profesor)
     if (this.usuario.rol == 'Profesor') {
       idProfesor = {
@@ -167,44 +169,50 @@ export class TramosGuardiaComponent {
         const guardiaDTO = {
           grupo: this.grupo,
           tramo: tramo,
-          idProfesor: idProfesor,
+          idProfesorGuardia: idProfesor,
           idAusencia: this.idAusencia
         }
         guardiasRegistro.push(guardiaDTO);
       }
     }
-    console.log("guardias que se envian: ", guardiasRegistro);
+    //console.log("guardias que se envian: ", guardiasRegistro);
 
     if (guardiasRegistro.length == 0) {
       this.mostrarError("Debe seleccionar algún tramo de guardia o cerrar el formulario de tramos de guardia")
     } else {
-      this.guardiaService.registrarGuardias(guardiasRegistro);
-      this.cerrarModal();
+      this.guardiaService.registrarGuardias(guardiasRegistro).subscribe({
+        next: (respuesta) => {
+          console.log("guardias que se han registrado: ", respuesta);
+          this.guardiasActualizadas.emit();
+          this.cerrarModal();
+        },
+        error: (error) => {
+          console.error("Error al registrar guardias:", error);
+          this.mostrarError("Error al registrar las guardias. Inténtelo de nuevo.");
+        }
+      });
+    }
+  }
+
+
+    eliminarGuardia() {
+
     }
 
 
+    cerrarModal() {
+      this.checkboxMarcados = {};
+      this.modalActivo = false;
+    }
+
+
+    mostrarError(mensaje: string) {
+      this.mensajeError = mensaje;
+      this.modalErrorActivo = true;
+    }
+
+    cerrarModalError() {
+      this.modalErrorActivo = false;
+    }
 
   }
-
-
-  eliminarGuardia() {
-
-  }
-
-
-  cerrarModal() {
-    this.checkboxMarcados = {};
-    this.modalActivo = false;
-  }
-
-
-  mostrarError(mensaje: string) {
-    this.mensajeError = mensaje;
-    this.modalErrorActivo = true;
-  }
-
-  cerrarModalError() {
-    this.modalErrorActivo = false;
-  }
-
-}
