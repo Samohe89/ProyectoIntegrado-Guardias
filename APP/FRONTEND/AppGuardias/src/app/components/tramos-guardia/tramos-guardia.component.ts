@@ -57,7 +57,7 @@ export class TramosGuardiaComponent {
 
 
 
-  // Cargar las guardias asociada a la ausencia
+  // Cargar las guardias asociadas a la ausencia
   cargarGuardias(idAusencia: number) {
     this.idAusencia = idAusencia;
     this.guardiaService.getGuardiasPorIdAusencia(idAusencia).subscribe({
@@ -72,10 +72,22 @@ export class TramosGuardiaComponent {
   }
 
 
-  // Comprobar si existe una guardia para un tramo concreto
+  // Comprobar si existe una guardia registrada para un tramo concreto
   existeTramoGuardia(tramo: number): boolean {
-    const existe = this.guardias.find(guardia => guardia.tramo === tramo) !== undefined;
-    return existe;
+    const existeTramo = this.guardias.some(guardia => guardia.tramo === tramo);
+    return existeTramo;
+  }
+
+  // Comprobar si existe una guardia registrada para la hora completa
+  existeHoraCompleta(): boolean {
+    const existeHoraCompleta = this.guardias.some(guardia => guardia.tramo === 5);
+    return existeHoraCompleta;
+  }
+
+  // Deshabilitar el checkbox de hora completa si existe algun tramo guardado
+  deshabilitarHoraCompleta(): boolean {
+    const existeAlgunTramo = this.guardias.some(guardia => guardia.tramo >= 1 && guardia.tramo <= 4);
+    return existeAlgunTramo;
   }
 
   // Cargar el nombre del profesor asignado a un tramo de guardia

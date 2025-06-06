@@ -13,7 +13,7 @@
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
                 <input type="checkbox" id="primerTramo" name="primerTramo" value="1" [checked]="existeTramoGuardia(1)"
-                  [disabled]="existeTramoGuardia(1)">
+                  [disabled]="existeTramoGuardia(1) || existeHoraCompleta()">
                 <span class="recuadroCheck"></span>
                 Primer tramo
               </label>
@@ -34,7 +34,7 @@
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
                 <input type="checkbox" id="segundoTramo" name="segunddoTramo" value="2"
-                  [checked]="existeTramoGuardia(2)" [disabled]="existeTramoGuardia(2)">
+                  [checked]="existeTramoGuardia(2)" [disabled]="existeTramoGuardia(2) || existeHoraCompleta()">
                 <span class="recuadroCheck"></span>
                 Segundo tramo
               </label>
@@ -55,7 +55,7 @@
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
                 <input type="checkbox" id="tercerTramo" name="tercerTramo" value="3" [checked]="existeTramoGuardia(3)"
-                  [disabled]="existeTramoGuardia(3)">
+                  [disabled]="existeTramoGuardia(3) || existeHoraCompleta()">
                 <span class="recuadroCheck"></span>
                 Tercer tramo
               </label>
@@ -76,7 +76,7 @@
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
                 <input type="checkbox" id="cuartoTramo" name="cuartoTramo" value="4" [checked]="existeTramoGuardia(4)"
-                  [disabled]="existeTramoGuardia(4)">
+                  [disabled]="existeTramoGuardia(4) || existeHoraCompleta()">
                 <span class="recuadroCheck"></span>
                 Cuarto tramo
               </label>
@@ -99,7 +99,7 @@
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
                 <input type="checkbox" id="horaCompleta" name="horaCompleta" value="5" [checked]="existeTramoGuardia(5)"
-                  [disabled]="existeTramoGuardia(5)">
+                  [disabled]="existeTramoGuardia(5) || deshabilitarHoraCompleta()">
                 <span class="recuadroCheck"></span>
                 Hora completa
               </label>
