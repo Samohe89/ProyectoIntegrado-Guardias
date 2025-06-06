@@ -1,7 +1,6 @@
 .modal-dialog {
     padding: 0;
-    width: 425px;
-    
+    max-width: 425px;
     
   }
   

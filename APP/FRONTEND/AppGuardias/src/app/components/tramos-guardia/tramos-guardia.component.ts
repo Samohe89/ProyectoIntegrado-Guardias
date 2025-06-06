@@ -178,6 +178,7 @@ export class TramosGuardiaComponent {
     if (guardiasRegistro.length == 0) {
       this.mostrarError("Debe seleccionar algún tramo de guardia o cerrar el formulario de tramos de guardia")
     } else {
+      this.guardiaService.registrarGuardias(guardiasRegistro);
       this.cerrarModal();
     }
 
