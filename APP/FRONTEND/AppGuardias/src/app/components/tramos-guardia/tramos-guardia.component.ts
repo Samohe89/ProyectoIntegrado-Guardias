@@ -76,17 +76,27 @@ export class TramosGuardiaComponent {
     return existeTramo;
   }
 
-  // Comprobar si existe una guardia registrada para la hora completa
+  // Comprobar si existe la hora completa está registrada o marcada
   existeHoraCompleta(): boolean {
-    const existeHoraCompleta = this.guardias.some(guardia => guardia.tramo === 5);
-    return existeHoraCompleta;
+    const existeHoraCompletaRegistrada = this.guardias.some(guardia => guardia.tramo === 5);
+    const existeHoraCompletaMarcada = this.checkboxMarcados[5];
+    if (existeHoraCompletaRegistrada || existeHoraCompletaMarcada) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  // Deshabilitar el checkbox de hora completa si existe algun tramo guardado
+  // Deshabilitar el checkbox de hora completa si existe algun tramo guardado o marcado
   deshabilitarHoraCompleta(): boolean {
-    const existeAlgunTramo = this.guardias.some(guardia => guardia.tramo >= 1 && guardia.tramo <= 4);
-    return existeAlgunTramo;
+    const existeAlgunTramoRegistrado = this.guardias.some(guardia => guardia.tramo >= 1 && guardia.tramo <= 4);
+    const existeAlgunTramoMarcado = [1, 2, 3, 4].some(tramo => this.checkboxMarcados[tramo] == true);
+    if (existeAlgunTramoRegistrado || existeAlgunTramoMarcado) {
+    return true;
+  } else {
+    return false;
   }
+}
 
   // Cargar el nombre del profesor asignado a un tramo de guardia
   cargarProfesorPorTramo(tramo: number): string {
@@ -121,10 +131,15 @@ export class TramosGuardiaComponent {
   }
 
 
+onSubmit() {
 
+  this.cerrarModal();
+
+}
 
 
   cerrarModal() {
+    this.checkboxMarcados = {};
     this.modalActivo = false;
   }
 

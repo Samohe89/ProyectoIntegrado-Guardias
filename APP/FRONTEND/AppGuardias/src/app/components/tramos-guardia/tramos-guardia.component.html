@@ -107,7 +107,7 @@
                   class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(5) }}</p>
-            <select *ngIf="usuario?.rol == 'Equipo Directivo'  && checkboxMarcados[5]" name="profesorGuardia"
+            <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[5]" name="profesorGuardia"
               class="form-select selectFiltroPersonalizado" (click)="cargarProfesoresSelect()">
               <option [ngValue]="null">Seleccione profesor</option>
               <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
