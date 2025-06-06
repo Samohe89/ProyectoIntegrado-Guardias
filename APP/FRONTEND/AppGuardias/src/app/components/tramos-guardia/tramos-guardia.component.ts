@@ -121,11 +121,22 @@ export class TramosGuardiaComponent {
   }
 
 
-
-
-  eliminarGuardia() {
-
+  // Verificar si la guardia ya está completa (todos los tramos asignados u hora completa)
+  guardiaCompleta(): boolean {
+    if (this.existeHoraCompleta()) {
+      return true;
+    } else {
+      for (let tramo = 1; tramo <= 4; tramo++) {
+        if (!this.existeTramoGuardia(tramo)) {
+          return false;
+        }
+      }
+      return true;
+    }
   }
+
+
+
 
 
   onSubmit(form: NgForm): void {
@@ -162,7 +173,7 @@ export class TramosGuardiaComponent {
         guardiasRegistro.push(guardiaDTO);
       }
     }
-      console.log("guardias que se envian: ", guardiasRegistro);
+    console.log("guardias que se envian: ", guardiasRegistro);
 
     if (guardiasRegistro.length == 0) {
       this.mostrarError("Debe seleccionar algún tramo de guardia o cerrar el formulario de tramos de guardia")
@@ -172,8 +183,10 @@ export class TramosGuardiaComponent {
 
 
 
+  }
 
-    
+
+  eliminarGuardia() {
 
   }
 
