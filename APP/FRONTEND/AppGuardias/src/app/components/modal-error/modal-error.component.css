@@ -1,7 +1,7 @@
 .modal-dialog {
     padding: 0;
     height: 165px;
-    max-width: 425px;
+    max-width: 400px;
     border-radius: 10px;
   }
   
@@ -16,6 +16,7 @@
     height: 165px;
     max-width: 425px;
     border-radius: 10px;
+    border: 1px solid #3C7E66;
     background-color: #EDF1EF;
     text-align: center;
   }

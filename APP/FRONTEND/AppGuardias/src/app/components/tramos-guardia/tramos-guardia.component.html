@@ -132,19 +132,7 @@
 
 
 <!-- Modal de errores -->
-<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" [ngClass]="{'show': modalErrorActivo}" [style.display]="modalErrorActivo ? 'block' : 'none'">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title text-center w-100" id="errorModalLabel">Error</h5>
-        <button type="button" class="btn-close" (click)="cerrarModalError()" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p class="text-center">{{ mensajeError }}</p>
-      </div>
-    </div>
-  </div>
-</div>
+<app-modal-error #modalError></app-modal-error>
 
 
 <!-- Modal de registro correcto -->

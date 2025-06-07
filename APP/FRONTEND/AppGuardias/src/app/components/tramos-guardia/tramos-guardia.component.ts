@@ -5,12 +5,13 @@ import { Profesor, ProfesorService } from '../../services/profesor.service';
 import { GuardiaService } from '../../services/guardia.service';
 import { Ausencia, AusenciaService } from '../../services/ausencia.service';
 import { ModalRegistroComponent } from '../modal-registro/modal-registro.component';
+import { ModalErrorComponent } from "../modal-error/modal-error.component";
 
 
 @Component({
   selector: 'app-tramos-guardia',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalRegistroComponent],
+  imports: [CommonModule, FormsModule, ModalRegistroComponent, ModalErrorComponent],
   templateUrl: './tramos-guardia.component.html',
   styleUrl: './tramos-guardia.component.css',
   providers: [GuardiaService, ProfesorService, AusenciaService]
@@ -20,6 +21,7 @@ export class TramosGuardiaComponent {
 
   // Permite acceder al componente hijo a través de una variable
   @ViewChild('modalRegistro') modalRegistro!: ModalRegistroComponent;
+  @ViewChild('modalError') modalError!: ModalErrorComponent;
 
 
   // Variable para controlar la visualización del modal y el mensaje que muestra
@@ -183,15 +185,6 @@ export class TramosGuardiaComponent {
         cursoAcademico: this.usuario.cursoAcademico
       }
     }
-    
-    console.log("Profesor ausente: ", idProfesorAusente);
-    console.log("Profesor guardia: ", idProfesorGuardia);
-
-    //Verificar que el profesor de guardia no es el mismo que el profesor de la ausencia
-    if (idProfesorGuardia.dniProfesor == idProfesorAusente.dniProfesor && idProfesorGuardia.cursoAcademico == idProfesorAusente.cursoAcademico) {
-      this.mostrarError("El profesor de guardia no puede ser el mismo que el profesor ausente.")
-      return;
-    }
 
     /* Verificar los checkbox de tramos que realmente se van a mandar en el registro
     (deben estar seleccionados/checked y habilitados; los deshabilitados no se mandan) */
@@ -212,10 +205,17 @@ export class TramosGuardiaComponent {
     if (guardiasRegistro.length == 0) {
       this.mostrarError("Debe seleccionar algún tramo de guardia o cerrar el formulario de tramos de guardia")
     } else {
+      //Verificar que el profesor de guardia no es el mismo que el profesor de la ausencia
+      if (idProfesorGuardia.dniProfesor == idProfesorAusente.dniProfesor && idProfesorGuardia.cursoAcademico == idProfesorAusente.cursoAcademico) {
+        this.mostrarError("El profesor de guardia no puede ser el mismo que el profesor ausente.")
+        return;
+      }
+
       this.guardiaService.registrarGuardias(guardiasRegistro).subscribe({
         next: (respuesta) => {
           console.log("guardias que se han registrado: ", respuesta);
           this.modalRegistro.mostrarModal();
+          this.cargarGuardias(this.idAusencia);
           this.guardiasActualizadas.emit();
           //this.cerrarModal();
         },
@@ -238,14 +238,26 @@ export class TramosGuardiaComponent {
     this.modalActivo = false;
   }
 
+  /*
+    mostrarError(mensaje: string) {
+      this.mensajeError = mensaje;
+      this.modalErrorActivo = true;
+    }
+  */
+
 
   mostrarError(mensaje: string) {
-    this.mensajeError = mensaje;
-    this.modalErrorActivo = true;
+    this.modalError.mensajeError = mensaje;
+    this.modalError.modalErrorActivo = true;
   }
+
 
   cerrarModalError() {
     this.modalErrorActivo = false;
   }
+
+
+
+
 
 }
