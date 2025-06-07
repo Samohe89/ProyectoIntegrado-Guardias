@@ -13,7 +13,7 @@
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
                 <input type="checkbox" id="primerTramo" name="tramo" value="1" [checked]="existeTramoGuardia(1)"
-                  [disabled]="existeTramoGuardia(1) || existeHoraCompleta()" (change)="estadoCheckbox($event,1)">
+                  [disabled]="existeTramoGuardia(1) || existeHoraCompleta() || deshabilitarTramo()" (change)="estadoCheckbox($event,1)">
                 <span class="recuadroCheck"></span>
                 Primer tramo
               </label>
@@ -35,7 +35,7 @@
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
                 <input type="checkbox" id="segundoTramo" name="tramo" value="2" [checked]="existeTramoGuardia(2)"
-                  [disabled]="existeTramoGuardia(2) || existeHoraCompleta()" (change)="estadoCheckbox($event,2)">
+                  [disabled]="existeTramoGuardia(2) || existeHoraCompleta() || deshabilitarTramo()" (change)="estadoCheckbox($event,2)">
                 <span class="recuadroCheck"></span>
                 Segundo tramo
               </label>
@@ -57,7 +57,7 @@
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
                 <input type="checkbox" id="tercerTramo" name="tramo" value="3" [checked]="existeTramoGuardia(3)"
-                  [disabled]="existeTramoGuardia(3) || existeHoraCompleta()" (change)="estadoCheckbox($event,3)">
+                  [disabled]="existeTramoGuardia(3) || existeHoraCompleta() || deshabilitarTramo()" (change)="estadoCheckbox($event,3)">
                 <span class="recuadroCheck"></span>
                 Tercer tramo
               </label>
@@ -79,7 +79,7 @@
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
                 <input type="checkbox" id="cuartoTramo" name="tramo" value="4" [checked]="existeTramoGuardia(4)"
-                  [disabled]="existeTramoGuardia(4) || existeHoraCompleta()" (change)="estadoCheckbox($event,4)">
+                  [disabled]="existeTramoGuardia(4) || existeHoraCompleta() || deshabilitarTramo()" (change)="estadoCheckbox($event,4)">
                 <span class="recuadroCheck"></span>
                 Cuarto tramo
               </label>

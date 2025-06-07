@@ -102,12 +102,13 @@ export class TramosGuardiaComponent {
   // Comprobar si existe la hora completa está registrada o marcada
   existeHoraCompleta(): boolean {
     const existeHoraCompletaRegistrada = this.guardias.some(guardia => guardia.tramo === 5);
+    return existeHoraCompletaRegistrada;
+  }
+
+  // Deshabilitar tramo si se marca la hora completa
+  deshabilitarTramo(): boolean {
     const existeHoraCompletaMarcada = this.checkboxMarcados[5];
-    if (existeHoraCompletaRegistrada || existeHoraCompletaMarcada) {
-      return true;
-    } else {
-      return false;
-    }
+    return existeHoraCompletaMarcada;
   }
 
   // Deshabilitar el checkbox de hora completa si existe algun tramo guardado o marcado
@@ -147,9 +148,9 @@ export class TramosGuardiaComponent {
   }
 
 
-  // Verificar si la guardia ya está completa (todos los tramos asignados u hora completa)
+  // Verificar si la guardia ya está completa (todos los tramos asignados u hora completa, dehabilita el formulario)
   guardiaCompleta(): boolean {
-    if (this.existeHoraCompleta()) {
+    if (this.existeHoraCompleta()){
       return true;
     } else {
       for (let tramo = 1; tramo <= 4; tramo++) {
@@ -160,6 +161,7 @@ export class TramosGuardiaComponent {
       return true;
     }
   }
+
 
 
 
@@ -246,15 +248,12 @@ export class TramosGuardiaComponent {
   // Método para verificar si el usuario es profesor de guardia de algun tramo
   esProfesorDeGuardia(tramo: number): boolean {
     const guardia = this.guardias.find(g => g.tramo === tramo);
-
     if (!guardia) {
       return false;
     }
-
     const dniProfesorGuardia = guardia.profesor.id.dniProfesor;
     return (this.usuario.dniProfesor === dniProfesorGuardia);
   }
-
 
 
 
@@ -267,7 +266,8 @@ export class TramosGuardiaComponent {
     this.guardiaService.eliminarGuardia(idGuardia).subscribe({
       next: () => {
         //this.modalConfirmarEliminar.mostrarModal();
-        this.cargarGuardias(this.idAusencia);
+        this.checkboxMarcados[tramo] = false;
+        this.cargarGuardias(this.idAusencia);        
         this.guardiasActualizadas.emit();
       },
       error: (error) => {
