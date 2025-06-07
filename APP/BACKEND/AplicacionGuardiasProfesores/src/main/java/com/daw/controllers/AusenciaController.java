@@ -34,6 +34,13 @@ public class AusenciaController {
 	public List<Ausencia> getAll() {
 		return service.findAll();
 	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Ausencia> getAusenciaPorId(@PathVariable("id") Long idAusencia) {
+		Ausencia ausencia = service.getAusenciaPorId(idAusencia);
+		return ResponseEntity.ok(ausencia);
+	}
+	
 
 	@GetMapping("/fecha")
 	public ResponseEntity<List<Ausencia>> getAusenciasPorFecha(@RequestParam("fecha") LocalDate fecha) {

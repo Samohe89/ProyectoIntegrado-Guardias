@@ -19,7 +19,6 @@ import com.daw.datamodel.entities.Guardia;
 import com.daw.dto.GuardiaDTO;
 import com.daw.errors.ApiError;
 import com.daw.exceptions.GuardiaNoEncontradaException;
-import com.daw.exceptions.UsuarioNoEncontradoException;
 import com.daw.services.GuardiaService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,7 +37,7 @@ public class GuardiaController {
 		return guardiaService.findAll();
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/ausencia/{id}")
 	public ResponseEntity<List<Guardia>> getGuardiasPorIdAusencia(@PathVariable("id") Long idAusencia) {
 		List<Guardia> guardias = guardiaService.getGuardiasPorIdAusencia(idAusencia);
 		return ResponseEntity.ok(guardias);

@@ -238,7 +238,7 @@ export class TramosGuardiaComponent {
       },
       error: (error) => {
         console.error("Error al registrar guardias:", error);
-        this.mostrarError("Error al registrar las guardias. Inténtelo de nuevo.");
+        this.mostrarError("Error al registrar las guardias.");
       }
     });
   }
@@ -265,14 +265,14 @@ export class TramosGuardiaComponent {
     const idGuardia = guardia.idGuardia;
 
     this.guardiaService.eliminarGuardia(idGuardia).subscribe({
-      next: (respuesta) => {
+      next: () => {
         //this.modalConfirmarEliminar.mostrarModal();
         this.cargarGuardias(this.idAusencia);
         this.guardiasActualizadas.emit();
       },
       error: (error) => {
-        console.error("Error al registrar guardias:", error);
-        this.mostrarError("Error al registrar las guardias. Inténtelo de nuevo.");
+        console.error("Error al eliminar la guardia:", error);
+        this.mostrarError("Error al eliminar la guardia.");
       }
     });
   }

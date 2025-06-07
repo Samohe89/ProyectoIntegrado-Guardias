@@ -12,7 +12,7 @@ export class GuardiaService {
   constructor(private http: HttpClient) { }
 
   getGuardiasPorIdAusencia(idAusencia: number): Observable<any> {
-    return this.http.get<number[]>(`${this.apiUrl}/${idAusencia}`)
+    return this.http.get<number[]>(`${this.apiUrl}/ausencia/${idAusencia}`)
   }
 
   
@@ -25,7 +25,7 @@ export class GuardiaService {
   }
 
   eliminarGuardia(idGuardia: number): Observable<any> {
-    return this.http.get<number[]>(`${this.apiUrl}/eliminar/${idGuardia}`)
+    return this.http.delete(`${this.apiUrl}/eliminar/${idGuardia}`, { responseType: 'text' as 'json' });
   }
 
 

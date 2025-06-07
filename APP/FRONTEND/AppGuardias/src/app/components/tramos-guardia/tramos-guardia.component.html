@@ -19,7 +19,7 @@
               </label>
               <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(1)
               || (usuario?.rol == 'Profesor' && esProfesorDeGuardia(1))" class="btn-eliminar"
-                (click)="eliminarGuardia(1)"><i class="bi bi-x-circle-fill"></i></button>
+                type="button" (click)="eliminarGuardia(1)"><i class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(1) }}</p>
             <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[1] && !existeTramoGuardia(1)"
@@ -41,7 +41,7 @@
               </label>
               <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(2) 
                   || (usuario?.rol == 'Profesor' && esProfesorDeGuardia(2))" class="btn-eliminar"
-                (click)="eliminarGuardia(2)"><i class="bi bi-x-circle-fill"></i></button>
+                type="button" (click)="eliminarGuardia(2)"><i class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(2) }}</p>
             <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[2] && !existeTramoGuardia(2)"
@@ -63,7 +63,7 @@
               </label>
               <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(3) 
               || (usuario?.rol == 'Profesor' && esProfesorDeGuardia(3))" class="btn-eliminar"
-                (click)="eliminarGuardia(3)"><i class="bi bi-x-circle-fill"></i></button>
+                type="button" (click)="eliminarGuardia(3)"><i class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(3) }}</p>
             <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[3] && !existeTramoGuardia(3)"
@@ -85,7 +85,7 @@
               </label>
               <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(4)
               || (usuario?.rol == 'Profesor' && esProfesorDeGuardia(4))" class="btn-eliminar"
-                (click)="eliminarGuardia(4)"><i class="bi bi-x-circle-fill"></i></button>
+                type="button" (click)="eliminarGuardia(4)"><i class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(4) }}</p>
             <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[4] && !existeTramoGuardia(4)"
@@ -109,7 +109,7 @@
               </label>
               <button *ngIf="usuario?.rol == 'Equipo Directivo'  && existeTramoGuardia(5)
               || (usuario?.rol == 'Profesor' && esProfesorDeGuardia(5))" class="btn-eliminar"
-                (click)="eliminarGuardia(5)"><i class="bi bi-x-circle-fill"></i></button>
+                type="button" (click)="eliminarGuardia(5)"><i class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(5) }}</p>
             <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[5] && !existeTramoGuardia(5)"

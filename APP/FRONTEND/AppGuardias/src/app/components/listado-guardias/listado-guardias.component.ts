@@ -70,10 +70,7 @@ export class ListadoGuardiasComponent implements OnInit {
     } else {  // en cualquie otro caso, carga el dia siguiente
       this.diaSiguiente.setDate(this.diaActual.getDate() + 1);
     }
-    console.log("dia semana: ", diaSemana);
-    console.log("dia actual: ", this.diaActual);
-    console.log("dia siguiente: ", this.diaSiguiente);
-
+   
     // Cargar las ausencias del día actual al inicio
     this.cargarAusencias(this.diaActual);
   }
@@ -247,18 +244,13 @@ export class ListadoGuardiasComponent implements OnInit {
   }
 
 
-  // Método para aplicvar filtros a la tabla
+  // Método para aplicar filtros a la tabla
   filtrarTabla(filtros: { fechaDesde: string, fechaHasta: string, profesorFiltro: string | null }) {
     console.log('Filtros recibidos del hijo:', filtros);
     this.fechaDesde = filtros.fechaDesde;
     this.fechaHasta = filtros.fechaHasta;
 
     this.cargarAusenciasEntreFechas(this.fechaDesde, this.fechaHasta);
-    /*
-    this.fechaDesde = filtros.fechaDesde;
-    this.fechaHasta = filtros.fechaHasta;
-    const idProfesor = filtros.idProfesor;
-    */
 
   }
 
