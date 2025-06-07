@@ -1,9 +1,11 @@
-import { Component, computed, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Profesor, ProfesorService } from '../../services/profesor.service';
 import { GuardiaService } from '../../services/guardia.service';
+import { Ausencia, AusenciaService } from '../../services/ausencia.service';
 import { ModalRegistroComponent } from '../modal-registro/modal-registro.component';
+
 
 @Component({
   selector: 'app-tramos-guardia',
@@ -11,13 +13,14 @@ import { ModalRegistroComponent } from '../modal-registro/modal-registro.compone
   imports: [CommonModule, FormsModule, ModalRegistroComponent],
   templateUrl: './tramos-guardia.component.html',
   styleUrl: './tramos-guardia.component.css',
-  providers: [GuardiaService]
+  providers: [GuardiaService, ProfesorService, AusenciaService]
 })
 
 export class TramosGuardiaComponent {
 
   // Permite acceder al componente hijo a través de una variable
   @ViewChild('modalRegistro') modalRegistro!: ModalRegistroComponent;
+
 
   // Variable para controlar la visualización del modal y el mensaje que muestra
   modalActivo: boolean = false;
@@ -31,6 +34,9 @@ export class TramosGuardiaComponent {
   // Variable que almacena el grupo correspondiente de la ausencia (la recibe del padre)
   grupo!: string;
 
+  // Variable que almacena el objeto ausencia completo
+  ausencia!: Ausencia;
+
   // Array que almacena las guardias de la ausencia
   guardias: any[] = [];
 
@@ -39,10 +45,8 @@ export class TramosGuardiaComponent {
     [tramo: number]: boolean
   } = {}
 
-
   // Array de profesores para mostrar en el select
   profesores: Profesor[] = [];
-
 
   // Variable para controlar la visualización del modal de errores y el mensaje que muestra
   modalErrorActivo: boolean = false;
@@ -54,14 +58,29 @@ export class TramosGuardiaComponent {
 
   constructor(
     private profesorService: ProfesorService,
-    private guardiaService: GuardiaService
+    private guardiaService: GuardiaService,
+    private ausenciaService: AusenciaService
   ) { }
 
+
+  // Cargar ausencia
+  cargarAusencia(idAusencia: number): void {
+    this.ausenciaService.getById(idAusencia).subscribe({
+      next: (data) => {
+        this.ausencia = data;
+        console.log("Ausencia cargada: ", this.ausencia);
+      },
+      error: (error) => {
+        console.error("Error al cargar ausencia:", error);
+      }
+    });
+  }
 
 
   // Cargar las guardias asociadas a la ausencia
   cargarGuardias(idAusencia: number) {
     this.idAusencia = idAusencia;
+    this.cargarAusencia(idAusencia);
     this.guardiaService.getGuardiasPorIdAusencia(idAusencia).subscribe({
       next: data => {
         this.guardias = data;
@@ -147,20 +166,31 @@ export class TramosGuardiaComponent {
   onSubmit(form: NgForm): void {
     const guardiasRegistro: any[] = [];
 
-    let idProfesor: {
-      dniProfesor: string;
-      cursoAcademico: string
-    } = {
+    let idProfesorAusente = {
+      dniProfesor: this.ausencia.profesor.id.dniProfesor,
+      cursoAcademico: this.ausencia.profesor.id.cursoAcademico
+    };
+
+    let idProfesorGuardia = {
       dniProfesor: '',
       cursoAcademico: ''
     };
 
-    // Guardar el profesor de guardia (Perfil Profesor)
+    // Guardar el usuario activo como profesor de guardia (solo en Perfil Profesor)
     if (this.usuario.rol == 'Profesor') {
-      idProfesor = {
+      idProfesorGuardia = {
         dniProfesor: this.usuario.dniProfesor,
         cursoAcademico: this.usuario.cursoAcademico
       }
+    }
+    
+    console.log("Profesor ausente: ", idProfesorAusente);
+    console.log("Profesor guardia: ", idProfesorGuardia);
+
+    //Verificar que el profesor de guardia no es el mismo que el profesor de la ausencia
+    if (idProfesorGuardia.dniProfesor == idProfesorAusente.dniProfesor && idProfesorGuardia.cursoAcademico == idProfesorAusente.cursoAcademico) {
+      this.mostrarError("El profesor de guardia no puede ser el mismo que el profesor ausente.")
+      return;
     }
 
     /* Verificar los checkbox de tramos que realmente se van a mandar en el registro
@@ -171,7 +201,7 @@ export class TramosGuardiaComponent {
         const guardiaDTO = {
           grupo: this.grupo,
           tramo: tramo,
-          idProfesorGuardia: idProfesor,
+          idProfesorGuardia: idProfesorGuardia,
           idAusencia: this.idAusencia
         }
         guardiasRegistro.push(guardiaDTO);
@@ -187,7 +217,7 @@ export class TramosGuardiaComponent {
           console.log("guardias que se han registrado: ", respuesta);
           this.modalRegistro.mostrarModal();
           this.guardiasActualizadas.emit();
-          this.cerrarModal();
+          //this.cerrarModal();
         },
         error: (error) => {
           console.error("Error al registrar guardias:", error);
@@ -198,24 +228,24 @@ export class TramosGuardiaComponent {
   }
 
 
-    eliminarGuardia() {
-
-    }
-
-
-    cerrarModal() {
-      this.checkboxMarcados = {};
-      this.modalActivo = false;
-    }
-
-
-    mostrarError(mensaje: string) {
-      this.mensajeError = mensaje;
-      this.modalErrorActivo = true;
-    }
-
-    cerrarModalError() {
-      this.modalErrorActivo = false;
-    }
+  eliminarGuardia() {
 
   }
+
+
+  cerrarModal() {
+    this.checkboxMarcados = {};
+    this.modalActivo = false;
+  }
+
+
+  mostrarError(mensaje: string) {
+    this.mensajeError = mensaje;
+    this.modalErrorActivo = true;
+  }
+
+  cerrarModalError() {
+    this.modalErrorActivo = false;
+  }
+
+}

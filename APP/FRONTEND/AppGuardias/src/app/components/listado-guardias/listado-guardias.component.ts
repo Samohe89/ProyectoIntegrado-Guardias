@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, } from '@angular/core';
+import { Component, OnInit, ViewChild, } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { AusenciaService } from '../../services/ausencia.service'
@@ -62,14 +62,20 @@ export class ListadoGuardiasComponent implements OnInit {
 
   ngOnInit(): void {
     // Calcular el dia siguiente
-    this.diaSiguiente.setDate(this.diaActual.getDate() + 1);
+    const diaSemana = this.diaActual.getDay();
+    if (diaSemana === 5) {  // si hoy es viernes, carga el lunes
+      this.diaSiguiente.setDate(this.diaActual.getDate() + 3);
+    } else if (diaSemana === 6) { // si hoy es sábado, carga el lunes
+      this.diaSiguiente.setDate(this.diaActual.getDate() + 2);
+    } else {  // en cualquie otro caso, carga el dia siguiente
+      this.diaSiguiente.setDate(this.diaActual.getDate() + 1);
+    }
+    console.log("dia semana: ", diaSemana);
+    console.log("dia actual: ", this.diaActual);
+    console.log("dia siguiente: ", this.diaSiguiente);
 
     // Cargar las ausencias del día actual al inicio
     this.cargarAusencias(this.diaActual);
-
-    // Prueba para cargar ausencias entre fechas al inicio
-    // this.fechaDesde = new Date(this.diaActual.getFullYear(), 4, 1);
-    // this.cargarAusenciasEntreFechas(this.fechaDesde, this.diaActual);
   }
 
 
@@ -83,6 +89,7 @@ export class ListadoGuardiasComponent implements OnInit {
 
     // Formatear fecha que sen envía al backend
     const fechaFormateada = this.formatearFecha(fecha);
+    //console.log("fecha formateada: ",fechaFormateada);
     this.ausenciaService.getAusenciasPorFecha(fechaFormateada).subscribe({
       next: data => {
         this.ausencias = data;
