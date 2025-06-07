@@ -17,14 +17,18 @@
         </div>
         <div>
           <p class="fw-semibold m-0 text-center text-md-start">
-            <span class="d-block d-md-inline">Desde dd/MM/aaaa</span>
-            <span class="d-block d-md-inline ms-md-1">hasta dd/MM/aaaa</span>
+            <span class="d-block d-md-inline">
+              Desde {{ fechaDesde ? (fechaDesde | date:'dd/MM/yyyy') : 'dd/MM/aaaa' }}
+            </span>
+            <span class="d-block d-md-inline ms-md-1">
+              hasta {{ fechaHasta ? (fechaHasta | date:'dd/MM/yyyy') : 'dd/MM/aaaa' }}
+            </span>
           </p>
         </div>
       </div>
 
       <!-- FILTRADO -->
-      <app-filtrado></app-filtrado>
+      <app-filtrado (filtrosAplicados)="onFiltrosAplicados($event)"></app-filtrado>
 
       <!-- TABLA -->
       <div id="divTabla" class="table-container">

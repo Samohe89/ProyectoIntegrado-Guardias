@@ -1,5 +1,6 @@
 package com.daw.services;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,11 +35,17 @@ public class GuardiaService {
     }
     
     //Método para obtener el total de horas de guardia por profesor
-    public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorProfesor() {
-        return guardiaRepository.obtenerTotalHorasPorProfesor();
-      
-        
+//    public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorProfesor() {
+//        return guardiaRepository.obtenerTotalHorasPorProfesor(); 
+//    }
+    
+    public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorProfesor(LocalDate fechaDesde, LocalDate fechaHasta, String profesorFiltro) {
+        if (profesorFiltro == null || profesorFiltro.trim().isEmpty() || profesorFiltro.equalsIgnoreCase("null")) {
+            profesorFiltro = null;
+        }
+        return guardiaRepository.obtenerTotalHorasPorProfesorConFiltro(fechaDesde, fechaHasta, profesorFiltro);
     }
+    
    public List<Integer> getTramosPorIdAusencia(Long idAusencia) {
 	   List<Guardia> guardias = guardiaRepository.findGuardiasPorIdAusencias(idAusencia);
 	   List<Integer> tramos = new ArrayList<>();

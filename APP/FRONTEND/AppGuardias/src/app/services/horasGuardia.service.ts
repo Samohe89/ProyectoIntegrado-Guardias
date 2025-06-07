@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface ProfesorTotalHorasGuardiaDTO {
@@ -19,7 +19,23 @@ export class HorasGuardiaService {
 
   constructor(private http: HttpClient) {}
 
-  getTotalHorasPorProfesor(): Observable<ProfesorTotalHorasGuardiaDTO[]> {
-    return this.http.get<ProfesorTotalHorasGuardiaDTO[]>(this.apiUrl);
+  // getTotalHorasPorProfesor(): Observable<ProfesorTotalHorasGuardiaDTO[]> {
+  //   return this.http.get<ProfesorTotalHorasGuardiaDTO[]>(this.apiUrl);
+  // }
+
+  getTotalHorasPorProfesor(fechaDesde?: string, fechaHasta?: string, profesorFiltro?: string | null): Observable<ProfesorTotalHorasGuardiaDTO[]> {
+    let params = new HttpParams();
+
+    if (fechaDesde) {
+      params = params.set('fechaDesde', fechaDesde);
+    }
+    if (fechaHasta) {
+      params = params.set('fechaHasta', fechaHasta);
+    }
+    // Aquí evitamos enviar el string "null"
+  if (profesorFiltro && profesorFiltro !== 'null') {
+    params = params.set('profesorFiltro', profesorFiltro);
+  }
+    return this.http.get<ProfesorTotalHorasGuardiaDTO[]>(this.apiUrl, { params });
   }
 }
