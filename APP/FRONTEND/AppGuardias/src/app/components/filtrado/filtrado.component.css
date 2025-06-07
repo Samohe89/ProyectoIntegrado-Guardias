@@ -52,7 +52,7 @@
     font-size: smaller;
   }
 
-  .is-invalid {
+  .input-invalido{
     border: 2px solid red;
   }
 
