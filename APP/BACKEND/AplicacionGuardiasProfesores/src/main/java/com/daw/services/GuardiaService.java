@@ -35,17 +35,6 @@ public class GuardiaService {
     }
     
     //Método para obtener el total de horas de guardia por profesor
-//    public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorProfesor() {
-//        return guardiaRepository.obtenerTotalHorasPorProfesor(); 
-//    }
-    
-//    public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorProfesor(LocalDate fechaDesde, LocalDate fechaHasta, String profesorFiltro) {
-//        if (profesorFiltro == null || profesorFiltro.trim().isEmpty() || profesorFiltro.equalsIgnoreCase("null")) {
-//            profesorFiltro = null;
-//        }
-//        return guardiaRepository.obtenerTotalHorasPorProfesorConFiltro(fechaDesde, fechaHasta, profesorFiltro);
-//    }
-    
     public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorDni(LocalDate desde, LocalDate hasta, String dniProfesor) {
         return guardiaRepository.obtenerTotalHorasPorDni(desde, hasta, dniProfesor);
     }

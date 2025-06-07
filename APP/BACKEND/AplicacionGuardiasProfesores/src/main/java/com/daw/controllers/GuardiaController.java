@@ -39,27 +39,9 @@ public class GuardiaController {
     }
     
     //Método para obtener el total de horas de guardia por profesor
-//    @GetMapping("/totalHoras")
-//    public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHoras() {
-//        return guardiaService.obtenerTotalHorasPorProfesor();
-//    }
-    
-//    @GetMapping("/totalHoras")
-//    public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHoras(
-//        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaDesde,
-//        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaHasta,
-//        @RequestParam(name = "profesorFiltro", required = false) String profesorFiltro) {
-//
-//        System.out.println("Filtro profesor recibido: '" + profesorFiltro + "'");
-//
-//        if (profesorFiltro == null || profesorFiltro.trim().isEmpty() || profesorFiltro.equalsIgnoreCase("null")) {
-//            profesorFiltro = null;
-//        }
-//        return guardiaService.obtenerTotalHorasPorProfesor(fechaDesde, fechaHasta, profesorFiltro);
-//    }
-    
     @GetMapping("/totalHoras")
     public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHoras(
+    		// ISO espera que el parámetro sea un string en formato YYYY-MM-DD y lo convierte a LocalDate automáticamente
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaDesde,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaHasta,
         @RequestParam(name = "profesorFiltro", required = false) String profesorFiltro,
