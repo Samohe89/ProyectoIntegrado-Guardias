@@ -120,6 +120,8 @@ export class ListadoGuardiasComponent implements OnInit {
     this.fechaDesde = fechaDesde;
     this.fechaHasta = fechaHasta;
  
+     // Resetear el array de tramos
+     this.tramosPorAusencia = [];
 
     this.ausenciaService.getAusenciasEntreFechas(fechaDesde, fechaHasta).subscribe({
       next: data => {
@@ -265,6 +267,7 @@ export class ListadoGuardiasComponent implements OnInit {
   abrirModalTramos(idAusencia: number, grupo: string) {
     this.modalTramos.cargarGuardias (idAusencia);
     this.modalTramos.grupo = grupo;
+    this.modalTramos.cargarProfesoresSelect();
     this.modalTramos.modalActivo = true;
   }
 

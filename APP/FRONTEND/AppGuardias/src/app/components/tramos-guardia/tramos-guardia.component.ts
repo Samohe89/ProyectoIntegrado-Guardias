@@ -50,11 +50,9 @@ export class TramosGuardiaComponent {
   // Array de profesores para mostrar en el select
   profesores: Profesor[] = [];
 
-  // Variable para controlar la visualización del modal de errores y el mensaje que muestra
-  modalErrorActivo: boolean = false;
-  mensajeError: string = '';
 
-  // Variable que se manda al padre en caso de se haya actualizado alguna guardia (creado o borrado)
+
+  // Evento que se manda al padre en caso de se haya actualizado alguna guardia (creado o borrado)
   @Output() guardiasActualizadas = new EventEmitter<void>();
 
 
@@ -135,8 +133,8 @@ export class TramosGuardiaComponent {
 
   // Almacenar el estado (checked o no) de un checkbox
   estadoCheckbox(event: Event, tramo: number): void {
-    const checked = (event.target as HTMLInputElement).checked;
-    this.checkboxMarcados[tramo] = checked;
+    this.checkboxMarcados[tramo] = (event.target as HTMLInputElement).checked;
+    console.log("estado checkbox: ", this.checkboxMarcados);
   }
 
 
@@ -164,33 +162,57 @@ export class TramosGuardiaComponent {
   }
 
 
+
   // Método para registrar guardias
-  onSubmit(form: NgForm): void {
+  registrarGuardias(form: NgForm): void {
     const guardiasRegistro: any[] = [];
 
-    let idProfesorAusente = {
+    const idProfesorAusente = {
       dniProfesor: this.ausencia.profesor.id.dniProfesor,
       cursoAcademico: this.ausencia.profesor.id.cursoAcademico
     };
 
-    let idProfesorGuardia = {
+    const idProfesorGuardia = {
       dniProfesor: '',
       cursoAcademico: ''
     };
-
-    // Guardar el usuario activo como profesor de guardia (solo en Perfil Profesor)
-    if (this.usuario.rol == 'Profesor') {
-      idProfesorGuardia = {
-        dniProfesor: this.usuario.dniProfesor,
-        cursoAcademico: this.usuario.cursoAcademico
-      }
-    }
 
     /* Verificar los checkbox de tramos que realmente se van a mandar en el registro
     (deben estar seleccionados/checked y habilitados; los deshabilitados no se mandan) */
     for (let tramo = 1; tramo <= 5; tramo++) {
       const checkboxMarcado = this.checkboxMarcados[tramo];
       if (checkboxMarcado && !this.existeTramoGuardia(tramo)) {
+
+        // Guardar el valor del profesor de guardia
+        if (this.usuario.rol == 'Profesor') {
+          idProfesorGuardia.dniProfesor = this.usuario.dniProfesor;
+          idProfesorGuardia.cursoAcademico = this.usuario.cursoAcademico;
+        } else {
+          let select = document.querySelector(`select[data-tramo="${tramo}"]`) as HTMLSelectElement;
+
+          // Verificar que se ha seleccionado un profesor en el select
+          if (!select || !select.value) {
+            this.mostrarError("Debe seleccionar un profesor para el tramo: " + tramo);
+            return;
+          }
+
+          // Aignar el profesor del array de profesores cargado
+          let nombreProfesorSelect = select.value;
+          let profesorGuardia = this.profesores.find(profesor => profesor.nombreProfesor === nombreProfesorSelect);
+          if (!profesorGuardia) {
+            this.mostrarError("No se encuentra el profesor de guardia seleccionado para el tramo: " + tramo);
+            return;
+          }
+          idProfesorGuardia.dniProfesor = profesorGuardia?.id.dniProfesor;
+          idProfesorGuardia.cursoAcademico = profesorGuardia?.id.cursoAcademico;
+        }
+
+        //Verificar que el profesor de guardia no es el mismo que el profesor de la ausencia
+        if (idProfesorGuardia.dniProfesor == idProfesorAusente.dniProfesor && idProfesorGuardia.cursoAcademico == idProfesorAusente.cursoAcademico) {
+          this.mostrarError("El profesor de guardia no puede ser el mismo que el profesor ausente.")
+          return;
+        }
+
         const guardiaDTO = {
           grupo: this.grupo,
           tramo: tramo,
@@ -203,29 +225,26 @@ export class TramosGuardiaComponent {
     //console.log("guardias que se envian: ", guardiasRegistro);
 
     if (guardiasRegistro.length == 0) {
-      this.mostrarError("Debe seleccionar algún tramo de guardia o cerrar el formulario de tramos de guardia")
-    } else {
-      //Verificar que el profesor de guardia no es el mismo que el profesor de la ausencia
-      if (idProfesorGuardia.dniProfesor == idProfesorAusente.dniProfesor && idProfesorGuardia.cursoAcademico == idProfesorAusente.cursoAcademico) {
-        this.mostrarError("El profesor de guardia no puede ser el mismo que el profesor ausente.")
-        return;
-      }
-
-      this.guardiaService.registrarGuardias(guardiasRegistro).subscribe({
-        next: (respuesta) => {
-          console.log("guardias que se han registrado: ", respuesta);
-          this.modalRegistro.mostrarModal();
-          this.cargarGuardias(this.idAusencia);
-          this.guardiasActualizadas.emit();
-          //this.cerrarModal();
-        },
-        error: (error) => {
-          console.error("Error al registrar guardias:", error);
-          this.mostrarError("Error al registrar las guardias. Inténtelo de nuevo.");
-        }
-      });
+      this.mostrarError("Debe seleccionar algún tramo de guardia o cerrar el formulario de tramos de guardia");
+      return;
     }
+
+    // Si todo está ok, se registran las guardias
+    this.guardiaService.registrarGuardias(guardiasRegistro).subscribe({
+      next: (respuesta) => {
+        console.log("guardias que se han registrado: ", respuesta);
+        this.modalRegistro.mostrarModal();
+        this.cargarGuardias(this.idAusencia);
+        this.guardiasActualizadas.emit();
+        //this.cerrarModal();
+      },
+      error: (error) => {
+        console.error("Error al registrar guardias:", error);
+        this.mostrarError("Error al registrar las guardias. Inténtelo de nuevo.");
+      }
+    });
   }
+
 
 
   eliminarGuardia() {
@@ -238,24 +257,11 @@ export class TramosGuardiaComponent {
     this.modalActivo = false;
   }
 
-  /*
-    mostrarError(mensaje: string) {
-      this.mensajeError = mensaje;
-      this.modalErrorActivo = true;
-    }
-  */
-
 
   mostrarError(mensaje: string) {
     this.modalError.mensajeError = mensaje;
     this.modalError.modalErrorActivo = true;
   }
-
-
-  cerrarModalError() {
-    this.modalErrorActivo = false;
-  }
-
 
 
 
