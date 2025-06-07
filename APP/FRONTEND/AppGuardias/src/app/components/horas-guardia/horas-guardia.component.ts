@@ -37,7 +37,7 @@ export class HorasGuardiaComponent implements OnInit{
       this.esEquipoDirectivo = this.rolUsuario.toLowerCase() === 'equipo directivo';
     }
 
-    // NO cargamos datos aquí para que la tabla esté vacía al inicio
+    // No se cargan datos aquí para que la tabla esté vacía al inicio
   }
 
   cargarDatos(fechaDesde?: string, fechaHasta?: string, profesorFiltro?: string | null): void {
@@ -45,7 +45,7 @@ export class HorasGuardiaComponent implements OnInit{
     let perfil: 'profesor' | 'directivo' = 'directivo'; // Por defecto
 
     if (this.esProfesor) {
-      // Siempre filtrar por dni del profesor logueado
+      // Siempre se filtra por dni del profesor logueado
       profesorFinal = this.dniProfesor;
       perfil = 'profesor';
     } else if (profesorFiltro && profesorFiltro.trim() !== '' && profesorFiltro.toLowerCase() !== 'null') {
@@ -71,7 +71,7 @@ export class HorasGuardiaComponent implements OnInit{
     // Forzar filtro solo para el profesor logueado
     this.cargarDatos(filtros.fechaDesde, filtros.fechaHasta, this.dniProfesor);
   } else {
-    // Para directivo o resto, usar filtro tal cual viene
+    // Para directivo se usa el filtro tal cual viene
     this.cargarDatos(filtros.fechaDesde, filtros.fechaHasta, filtros.profesorFiltro ?? null);
   }
 }
