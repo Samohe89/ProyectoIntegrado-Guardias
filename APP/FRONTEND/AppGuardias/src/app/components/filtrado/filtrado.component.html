@@ -7,7 +7,7 @@
         <span class="label-text">Fecha desde:</span>
       </label>
       <input type="date" id="fechaDesde" name="fechaDesde" class="form-control datePersonalizado"
-        [ngClass]="{ 'is-invalid': (faltanFechas && !fechaDesde) || fechasErroneas || faltanCriterios}" 
+        [ngClass]="{ 'is-invalid': (faltanFechas && !fechaDesde) || fechasErroneas || faltanCriterios}"
         [(ngModel)]="fechaDesde"
         (ngModelChange)="resetValidacion()" />
 
@@ -19,7 +19,7 @@
         <span class="label-text">Fecha hasta:</span>
       </label>
       <input type="date" id="fechaHasta" name="fechaHasta" class="form-control datePersonalizado"
-        [ngClass]="{ 'is-invalid': (faltanFechas && !fechaHasta) || fechasErroneas || faltanCriterios }" 
+        [ngClass]="{ 'is-invalid': (faltanFechas && !fechaHasta) || fechasErroneas || faltanCriterios }"
         [(ngModel)]="fechaHasta"
         (ngModelChange)="resetValidacion()" />
     </div>
@@ -27,7 +27,7 @@
     <!-- Profesor -->
     <div class="col-12 col-md-6 col-xxl-4 d-flex flex-column flex-xxl-row align-items-xxl-center">
       <label for="profesorFiltro" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">Profesor:</label>
-      <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado"  
+      <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado"
       [ngStyle]="faltanCriterios ? {'border': '2px solid red'} : {'border': '2px solid transparent'}"
       [(ngModel)]="profesorFiltro"
       (ngModelChange)="resetValidacion()">
@@ -56,7 +56,7 @@
     <p *ngIf="faltanFechas" class="error-message">
       Debe seleccionar ambas fechas de filtrado.
     </p>
-    
+
 
     <!-- Mensaje si la fecha hasta es anterior a fecha desde-->
     <p *ngIf="fechasErroneas" class="error-message">

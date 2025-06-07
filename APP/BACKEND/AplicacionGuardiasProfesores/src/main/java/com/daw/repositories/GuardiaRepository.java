@@ -18,17 +18,29 @@ public interface GuardiaRepository extends JpaRepository<Guardia, Long> {
 //			"FROM Guardia g GROUP BY g.profesor.id, g.profesor.nombreProfesor")
 //	List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorProfesor();
 	
+	//Query para DNI (perfil profesor)
 	@Query("SELECT new com.daw.dto.ProfesorTotalHorasGuardiaDTO(g.profesor.id, g.profesor.nombreProfesor, SUM(g.duracion) / 60.0) " +
 		       "FROM Guardia g " +
 		       "WHERE (:fechaDesde IS NULL OR g.ausenciasProfesor.fechaAusencia >= :fechaDesde) " +
 		       "AND (:fechaHasta IS NULL OR g.ausenciasProfesor.fechaAusencia <= :fechaHasta) " +
-		       "AND (:profesorFiltro IS NULL OR TRIM(LOWER(g.profesor.nombreProfesor)) = TRIM(LOWER(:profesorFiltro))) " +
+		       "AND (:dniProfesor IS NULL OR LOWER(TRIM(g.profesor.id.dniProfesor)) = LOWER(TRIM(:dniProfesor))) " +
 		       "GROUP BY g.profesor.id, g.profesor.nombreProfesor")
-		List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorProfesorConFiltro(
+		List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorDni(
 		    @Param("fechaDesde") LocalDate fechaDesde,
 		    @Param("fechaHasta") LocalDate fechaHasta,
-		    @Param("profesorFiltro") String profesorFiltro);
-
+		    @Param("dniProfesor") String dniProfesor);
+	
+	//Query para nombre (filtro del directivo)
+	@Query("SELECT new com.daw.dto.ProfesorTotalHorasGuardiaDTO(g.profesor.id, g.profesor.nombreProfesor, SUM(g.duracion) / 60.0) " +
+		       "FROM Guardia g " +
+		       "WHERE (:fechaDesde IS NULL OR g.ausenciasProfesor.fechaAusencia >= :fechaDesde) " +
+		       "AND (:fechaHasta IS NULL OR g.ausenciasProfesor.fechaAusencia <= :fechaHasta) " +
+		       "AND (:nombreProfesor IS NULL OR LOWER(TRIM(g.profesor.nombreProfesor)) = LOWER(TRIM(:nombreProfesor))) " +
+		       "GROUP BY g.profesor.id, g.profesor.nombreProfesor")
+		List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorNombre(
+		    @Param("fechaDesde") LocalDate fechaDesde,
+		    @Param("fechaHasta") LocalDate fechaHasta,
+		    @Param("nombreProfesor") String nombreProfesor);
 
 	@Query("SELECT g FROM Guardia g "
 			+ "WHERE g.ausenciasProfesor.id = :idAusencia "

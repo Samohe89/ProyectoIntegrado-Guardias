@@ -39,11 +39,19 @@ public class GuardiaService {
 //        return guardiaRepository.obtenerTotalHorasPorProfesor(); 
 //    }
     
-    public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorProfesor(LocalDate fechaDesde, LocalDate fechaHasta, String profesorFiltro) {
-        if (profesorFiltro == null || profesorFiltro.trim().isEmpty() || profesorFiltro.equalsIgnoreCase("null")) {
-            profesorFiltro = null;
-        }
-        return guardiaRepository.obtenerTotalHorasPorProfesorConFiltro(fechaDesde, fechaHasta, profesorFiltro);
+//    public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorProfesor(LocalDate fechaDesde, LocalDate fechaHasta, String profesorFiltro) {
+//        if (profesorFiltro == null || profesorFiltro.trim().isEmpty() || profesorFiltro.equalsIgnoreCase("null")) {
+//            profesorFiltro = null;
+//        }
+//        return guardiaRepository.obtenerTotalHorasPorProfesorConFiltro(fechaDesde, fechaHasta, profesorFiltro);
+//    }
+    
+    public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorDni(LocalDate desde, LocalDate hasta, String dniProfesor) {
+        return guardiaRepository.obtenerTotalHorasPorDni(desde, hasta, dniProfesor);
+    }
+
+    public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorNombre(LocalDate desde, LocalDate hasta, String nombreProfesor) {
+        return guardiaRepository.obtenerTotalHorasPorNombre(desde, hasta, nombreProfesor);
     }
     
    public List<Integer> getTramosPorIdAusencia(Long idAusencia) {

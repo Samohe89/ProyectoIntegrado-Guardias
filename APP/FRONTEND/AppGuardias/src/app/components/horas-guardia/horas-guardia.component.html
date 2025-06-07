@@ -27,12 +27,16 @@
         </div>
       </div>
 
-      <!-- FILTRADO -->
-      <app-filtrado (filtrosAplicados)="onFiltrosAplicados($event)"></app-filtrado>
+      <!-- FILTRADO: elegir según perfil -->
+      <ng-container *ngIf="esProfesor; else filtroDirectivo">
+        <app-filtrado-adaptado-horas-profesor (filtrosAplicados)="onFiltrosAplicados($event)"></app-filtrado-adaptado-horas-profesor>
+      </ng-container>
+      <ng-template #filtroDirectivo>
+        <app-filtrado (filtrosAplicados)="onFiltrosAplicados($event)"></app-filtrado>
+      </ng-template>
 
       <!-- TABLA -->
       <div id="divTabla" class="table-container">
-
         <table class="table shadow tablaPrincipal">
           <thead>
             <tr>
@@ -43,20 +47,11 @@
           <tbody>
             <tr *ngFor="let profesor of profesoresConHoras">
               <td>{{ profesor.nombreProfesor }}</td>
-              <td>{{ profesor.totalHoras }}</td>
+              <td>{{ profesor.totalHoras | number:'1.2-2' }}</td>
             </tr>
           </tbody>
         </table>
-
-
-
       </div>
-
-
-
-
-
-
     </div>
   </div>
 </div>

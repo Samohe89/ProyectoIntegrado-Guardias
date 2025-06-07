@@ -44,18 +44,41 @@ public class GuardiaController {
 //        return guardiaService.obtenerTotalHorasPorProfesor();
 //    }
     
+//    @GetMapping("/totalHoras")
+//    public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHoras(
+//        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaDesde,
+//        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaHasta,
+//        @RequestParam(name = "profesorFiltro", required = false) String profesorFiltro) {
+//
+//        System.out.println("Filtro profesor recibido: '" + profesorFiltro + "'");
+//
+//        if (profesorFiltro == null || profesorFiltro.trim().isEmpty() || profesorFiltro.equalsIgnoreCase("null")) {
+//            profesorFiltro = null;
+//        }
+//        return guardiaService.obtenerTotalHorasPorProfesor(fechaDesde, fechaHasta, profesorFiltro);
+//    }
+    
     @GetMapping("/totalHoras")
     public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHoras(
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaDesde,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaHasta,
-        @RequestParam(name = "profesorFiltro", required = false) String profesorFiltro) {
+        @RequestParam(name = "profesorFiltro", required = false) String profesorFiltro,
+        @RequestParam(name = "perfil", required = false) String perfil) {
 
-        System.out.println("Filtro profesor recibido: '" + profesorFiltro + "'");
-
-        if (profesorFiltro == null || profesorFiltro.trim().isEmpty() || profesorFiltro.equalsIgnoreCase("null")) {
-            profesorFiltro = null;
+        if (profesorFiltro != null) {
+            profesorFiltro = profesorFiltro.trim();
+            if (profesorFiltro.isEmpty() || profesorFiltro.equalsIgnoreCase("null")) {
+                profesorFiltro = null;
+            }
         }
-        return guardiaService.obtenerTotalHorasPorProfesor(fechaDesde, fechaHasta, profesorFiltro);
+
+        if ("profesor".equalsIgnoreCase(perfil)) {
+            // Para perfil profesor filtramos por DNI
+            return guardiaService.obtenerTotalHorasPorDni(fechaDesde, fechaHasta, profesorFiltro);
+        } else {
+            // Para directivo usamos otra query (por nombre o sin filtro)
+            return guardiaService.obtenerTotalHorasPorNombre(fechaDesde, fechaHasta, profesorFiltro);
+        }
     }
     
 }

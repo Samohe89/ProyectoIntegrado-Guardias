@@ -13,6 +13,9 @@ import { ProfesorService } from '../../services/profesor.service';
 })
 
 export class FiltradoComponent {
+  // Controla si se debe ocultar el select de profesores
+  @Input() ocultarSelectProfesor: boolean = false;
+
   // Array de profesores para mostrar en el select
   profesores: Profesor[] = [];
 
@@ -83,7 +86,7 @@ export class FiltradoComponent {
     this.profesor= '';
     */
   }
-  
+
   // Método para resetear las variables de validacion
   resetValidacion(): void {
     if (this.fechaDesde || this.fechaHasta) {

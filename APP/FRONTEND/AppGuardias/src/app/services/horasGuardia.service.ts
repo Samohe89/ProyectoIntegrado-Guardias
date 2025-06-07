@@ -19,23 +19,27 @@ export class HorasGuardiaService {
 
   constructor(private http: HttpClient) {}
 
-  // getTotalHorasPorProfesor(): Observable<ProfesorTotalHorasGuardiaDTO[]> {
-  //   return this.http.get<ProfesorTotalHorasGuardiaDTO[]>(this.apiUrl);
-  // }
+  getTotalHorasPorProfesor(
+  fechaDesde?: string,
+  fechaHasta?: string,
+  profesorFiltro?: string | null,
+  perfil?: 'profesor' | 'directivo'
+): Observable<ProfesorTotalHorasGuardiaDTO[]> {
+  let params = new HttpParams();
 
-  getTotalHorasPorProfesor(fechaDesde?: string, fechaHasta?: string, profesorFiltro?: string | null): Observable<ProfesorTotalHorasGuardiaDTO[]> {
-    let params = new HttpParams();
-
-    if (fechaDesde) {
-      params = params.set('fechaDesde', fechaDesde);
-    }
-    if (fechaHasta) {
-      params = params.set('fechaHasta', fechaHasta);
-    }
-    // Aquí evitamos enviar el string "null"
+  if (fechaDesde) {
+    params = params.set('fechaDesde', fechaDesde);
+  }
+  if (fechaHasta) {
+    params = params.set('fechaHasta', fechaHasta);
+  }
   if (profesorFiltro && profesorFiltro !== 'null') {
     params = params.set('profesorFiltro', profesorFiltro);
   }
-    return this.http.get<ProfesorTotalHorasGuardiaDTO[]>(this.apiUrl, { params });
+  if (perfil) {
+    params = params.set('perfil', perfil);
   }
+
+  return this.http.get<ProfesorTotalHorasGuardiaDTO[]>(this.apiUrl, { params });
+}
 }
