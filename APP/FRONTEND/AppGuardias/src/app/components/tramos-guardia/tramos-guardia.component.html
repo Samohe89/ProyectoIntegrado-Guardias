@@ -1,4 +1,4 @@
-<div class="modal fade" id="tramosModal" tabindex="-1" aria-labelledby="tramosModalLabel" 
+<div class="modal fade" id="tramosModal" tabindex="-1" aria-labelledby="tramosModalLabel"
   [ngClass]="{'show': modalActivo}" [style.display]="modalActivo ? 'block' : 'none'">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -17,12 +17,13 @@
                 <span class="recuadroCheck"></span>
                 Primer tramo
               </label>
-              <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(1)" class="btn-eliminar" (click)="eliminarGuardia()"><i
-                  class="bi bi-x-circle-fill"></i></button>
+              <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(1)
+              || (usuario?.rol == 'Profesor' && esProfesorDeGuardia(1))" class="btn-eliminar"
+                (click)="eliminarGuardia(1)"><i class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(1) }}</p>
-            <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[1] && !existeTramoGuardia(1)" [attr.data-tramo]="1"
-              name="profesorGuardia" class="form-select selectFiltroPersonalizado">
+            <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[1] && !existeTramoGuardia(1)"
+              [attr.data-tramo]="1" name="profesorGuardia" class="form-select selectFiltroPersonalizado">
               <option [ngValue]="null">Seleccione profesor</option>
               <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
                 {{ profesor.nombreProfesor }}
@@ -33,17 +34,18 @@
           <div>
             <div class="linea-checkbox">
               <label class="checkboxPersonalizado">
-                <input type="checkbox" id="segundoTramo" name="tramo" value="2"
-                  [checked]="existeTramoGuardia(2)" [disabled]="existeTramoGuardia(2) || existeHoraCompleta()" (change)="estadoCheckbox($event,2)">
+                <input type="checkbox" id="segundoTramo" name="tramo" value="2" [checked]="existeTramoGuardia(2)"
+                  [disabled]="existeTramoGuardia(2) || existeHoraCompleta()" (change)="estadoCheckbox($event,2)">
                 <span class="recuadroCheck"></span>
                 Segundo tramo
               </label>
-              <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(2)" class="btn-eliminar" (click)="eliminarGuardia()"><i
-                  class="bi bi-x-circle-fill"></i></button>
+              <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(2) 
+                  || (usuario?.rol == 'Profesor' && esProfesorDeGuardia(2))" class="btn-eliminar"
+                (click)="eliminarGuardia(2)"><i class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(2) }}</p>
-            <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[2] && !existeTramoGuardia(2)" [attr.data-tramo]="2"
-              name="profesorGuardia" class="form-select selectFiltroPersonalizado">
+            <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[2] && !existeTramoGuardia(2)"
+              [attr.data-tramo]="2" name="profesorGuardia" class="form-select selectFiltroPersonalizado">
               <option [ngValue]="null">Seleccione profesor</option>
               <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
                 {{ profesor.nombreProfesor }}
@@ -59,12 +61,13 @@
                 <span class="recuadroCheck"></span>
                 Tercer tramo
               </label>
-              <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(3)"
-                class="btn-eliminar" (click)="eliminarGuardia()"><i class="bi bi-x-circle-fill"></i></button>
+              <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(3) 
+              || (usuario?.rol == 'Profesor' && esProfesorDeGuardia(3))" class="btn-eliminar"
+                (click)="eliminarGuardia(3)"><i class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(3) }}</p>
-            <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[3] && !existeTramoGuardia(3)" [attr.data-tramo]="3" name="profesorGuardia"
-              class="form-select selectFiltroPersonalizado">
+            <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[3] && !existeTramoGuardia(3)"
+              [attr.data-tramo]="3" name="profesorGuardia" class="form-select selectFiltroPersonalizado">
               <option [ngValue]="null">Seleccione profesor</option>
               <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
                 {{ profesor.nombreProfesor }}
@@ -80,12 +83,13 @@
                 <span class="recuadroCheck"></span>
                 Cuarto tramo
               </label>
-              <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(4)"
-                class="btn-eliminar" (click)="eliminarGuardia()"><i class="bi bi-x-circle-fill"></i></button>
+              <button *ngIf="usuario?.rol == 'Equipo Directivo' && existeTramoGuardia(4)
+              || (usuario?.rol == 'Profesor' && esProfesorDeGuardia(4))" class="btn-eliminar"
+                (click)="eliminarGuardia(4)"><i class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(4) }}</p>
-            <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[4] && !existeTramoGuardia(4)" [attr.data-tramo]="4" name="profesorGuardia"
-              class="form-select selectFiltroPersonalizado">
+            <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[4] && !existeTramoGuardia(4)"
+              [attr.data-tramo]="4" name="profesorGuardia" class="form-select selectFiltroPersonalizado">
               <option [ngValue]="null">Seleccione profesor</option>
               <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
                 {{ profesor.nombreProfesor }}
@@ -103,12 +107,13 @@
                 <span class="recuadroCheck"></span>
                 Hora completa
               </label>
-              <button *ngIf="usuario?.rol == 'Equipo Directivo'  && existeTramoGuardia(5)" class="btn-eliminar" (click)="eliminarGuardia()"><i
-                  class="bi bi-x-circle-fill"></i></button>
+              <button *ngIf="usuario?.rol == 'Equipo Directivo'  && existeTramoGuardia(5)
+              || (usuario?.rol == 'Profesor' && esProfesorDeGuardia(5))" class="btn-eliminar"
+                (click)="eliminarGuardia(5)"><i class="bi bi-x-circle-fill"></i></button>
             </div>
             <p class="profesorGuardia">Profesor: {{ cargarProfesorPorTramo(5) }}</p>
-            <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[5] && !existeTramoGuardia(5)" [attr.data-tramo]="5" name="profesorGuardia"
-              class="form-select selectFiltroPersonalizado">
+            <select *ngIf="usuario?.rol == 'Equipo Directivo' && checkboxMarcados[5] && !existeTramoGuardia(5)"
+              [attr.data-tramo]="5" name="profesorGuardia" class="form-select selectFiltroPersonalizado">
               <option [ngValue]="null">Seleccione profesor</option>
               <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
                 {{ profesor.nombreProfesor }}

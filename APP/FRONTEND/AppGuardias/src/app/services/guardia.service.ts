@@ -24,6 +24,9 @@ export class GuardiaService {
     return this.http.post<any[]>(`${this.apiUrl}/registrar`, guardias)
   }
 
+  eliminarGuardia(idGuardia: number): Observable<any> {
+    return this.http.get<number[]>(`${this.apiUrl}/eliminar/${idGuardia}`)
+  }
 
 
 

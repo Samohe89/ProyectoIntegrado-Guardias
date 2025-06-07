@@ -232,11 +232,43 @@ export class TramosGuardiaComponent {
     // Si todo está ok, se registran las guardias
     this.guardiaService.registrarGuardias(guardiasRegistro).subscribe({
       next: (respuesta) => {
-        console.log("guardias que se han registrado: ", respuesta);
         this.modalRegistro.mostrarModal();
         this.cargarGuardias(this.idAusencia);
         this.guardiasActualizadas.emit();
-        //this.cerrarModal();
+      },
+      error: (error) => {
+        console.error("Error al registrar guardias:", error);
+        this.mostrarError("Error al registrar las guardias. Inténtelo de nuevo.");
+      }
+    });
+  }
+
+  // Método para verificar si el usuario es profesor de guardia de algun tramo
+  esProfesorDeGuardia(tramo: number): boolean {
+    const guardia = this.guardias.find(g => g.tramo === tramo);
+
+    if (!guardia) {
+      return false;
+    }
+
+    const dniProfesorGuardia = guardia.profesor.id.dniProfesor;
+    return (this.usuario.dniProfesor === dniProfesorGuardia);
+  }
+
+
+
+
+  eliminarGuardia(tramo: number): void {
+    //this.modalConfirmarEliminar.mostrarModal();
+
+    const guardia = this.guardias.find(g => g.tramo === tramo);
+    const idGuardia = guardia.idGuardia;
+
+    this.guardiaService.eliminarGuardia(idGuardia).subscribe({
+      next: (respuesta) => {
+        //this.modalConfirmarEliminar.mostrarModal();
+        this.cargarGuardias(this.idAusencia);
+        this.guardiasActualizadas.emit();
       },
       error: (error) => {
         console.error("Error al registrar guardias:", error);
@@ -247,21 +279,16 @@ export class TramosGuardiaComponent {
 
 
 
-  eliminarGuardia() {
-
-  }
-
-
-  cerrarModal() {
-    this.checkboxMarcados = {};
-    this.modalActivo = false;
-  }
+cerrarModal() {
+  this.checkboxMarcados = {};
+  this.modalActivo = false;
+}
 
 
-  mostrarError(mensaje: string) {
-    this.modalError.mensajeError = mensaje;
-    this.modalError.modalErrorActivo = true;
-  }
+mostrarError(mensaje: string) {
+  this.modalError.mensajeError = mensaje;
+  this.modalError.modalErrorActivo = true;
+}
 
 
 
