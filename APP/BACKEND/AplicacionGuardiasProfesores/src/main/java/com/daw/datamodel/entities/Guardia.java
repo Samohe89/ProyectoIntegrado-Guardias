@@ -44,6 +44,6 @@ public class Guardia {
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "IdAusencia", referencedColumnName = "id", nullable = false,
 	foreignKey = @ForeignKey(name="FK_IdAusencia"))
-	private Ausencia ausencia;
+	private Ausencia ausenciasProfesor;
 	
 }

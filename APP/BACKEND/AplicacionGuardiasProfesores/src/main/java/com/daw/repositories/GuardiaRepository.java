@@ -12,7 +12,7 @@ import com.daw.datamodel.entities.Guardia;
 public interface GuardiaRepository extends JpaRepository<Guardia, Long>{
 	
 	@Query("SELECT g FROM Guardia g "
-			+ "WHERE g.ausencia.id = :idAusencia "
+			+ "WHERE g.ausenciasProfesor.id = :idAusencia "
 			+ "ORDER BY g.tramo")
 	List<Guardia> findGuardiasPorIdAusencia(@Param("idAusencia") Long idAusencia);
 	

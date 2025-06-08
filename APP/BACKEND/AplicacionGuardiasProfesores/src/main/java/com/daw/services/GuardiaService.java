@@ -76,7 +76,7 @@ public class GuardiaService {
 				throw new AusenciasNoEncontradasException();
 			}
 
-			guardia.setAusencia(ausencia.get());
+			guardia.setAusenciasProfesor(ausencia.get());
 
 			guardias.add(guardia);
 		}
