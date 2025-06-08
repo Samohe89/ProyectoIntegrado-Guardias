@@ -5,11 +5,12 @@ import { AusenciaService } from '../../services/ausencia.service'
 import { GuardiaService } from '../../services/guardia.service';
 import { FiltradoComponent } from "../filtrado/filtrado.component";
 import { TramosGuardiaComponent } from '../tramos-guardia/tramos-guardia.component';
+import { DetallesGuardiaComponent } from "../detalles-guardia/detalles-guardia.component";
 
 
 @Component({
   selector: 'app-listado-guardias',
-  imports: [CommonModule, DatePipe, FiltradoComponent, TramosGuardiaComponent],
+  imports: [CommonModule, DatePipe, FiltradoComponent, TramosGuardiaComponent, DetallesGuardiaComponent],
   templateUrl: './listado-guardias.component.html',
   styleUrl: './listado-guardias.component.css',
   providers: [AusenciaService, GuardiaService]
@@ -20,6 +21,7 @@ export class ListadoGuardiasComponent implements OnInit {
 
   // Permite acceder al componente hijo a través de una variable
   @ViewChild('modalTramos') modalTramos!: TramosGuardiaComponent;
+  @ViewChild('modalDetalles') modalDetalles!: DetallesGuardiaComponent;
 
 
   // Variable que almacena los datos del usuario que tiene abierta la sesión
@@ -70,7 +72,7 @@ export class ListadoGuardiasComponent implements OnInit {
     } else {  // en cualquie otro caso, carga el dia siguiente
       this.diaSiguiente.setDate(this.diaActual.getDate() + 1);
     }
-   
+
     // Cargar las ausencias del día actual al inicio
     this.cargarAusencias(this.diaActual);
   }
@@ -116,9 +118,9 @@ export class ListadoGuardiasComponent implements OnInit {
     // Actualizar la fecha mostrada
     this.fechaDesde = fechaDesde;
     this.fechaHasta = fechaHasta;
- 
-     // Resetear el array de tramos
-     this.tramosPorAusencia = [];
+
+    // Resetear el array de tramos
+    this.tramosPorAusencia = [];
 
     this.ausenciaService.getAusenciasEntreFechas(fechaDesde, fechaHasta).subscribe({
       next: data => {
@@ -257,10 +259,17 @@ export class ListadoGuardiasComponent implements OnInit {
 
   // Método para abrir el modal de tramos de guardia
   abrirModalTramos(idAusencia: number, grupo: string) {
-    this.modalTramos.cargarGuardias (idAusencia);
+    this.modalTramos.cargarGuardias(idAusencia);
     this.modalTramos.grupo = grupo;
     this.modalTramos.cargarProfesoresSelect();
     this.modalTramos.modalActivo = true;
+  }
+
+  // Método para abrir el modal de detalles de guardia
+
+  abrirModalDetalles(idAusencia: number) {
+    this.modalDetalles.cargarAusencia(idAusencia);
+    this.modalDetalles.modalActivo = true;
   }
 
 

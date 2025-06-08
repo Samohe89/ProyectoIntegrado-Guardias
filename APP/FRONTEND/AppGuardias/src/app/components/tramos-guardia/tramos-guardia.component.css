@@ -30,6 +30,10 @@
     align-items: center;
   }
 
+  .checkboxPersonalizado {
+    font-weight: 500;
+  }
+
 
 
 /* Ocultar el recuadro del checkbox original */

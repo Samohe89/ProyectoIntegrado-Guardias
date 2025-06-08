@@ -98,7 +98,7 @@
                                             </div>
                                         </td>
                                         <td [attr.idAusencia]="ausencia.id">
-                                            <button class="btn-detalles"><i class="bi bi-plus-square-fill"></i></button>
+                                            <button class="btn-detalles" (click)="abrirModalDetalles(ausencia.id)"><i class="bi bi-plus-square-fill"></i></button>
                                         </td>
                                     </tr>
                                 </ng-container>
@@ -145,7 +145,7 @@
                                             </div>
                                         </td>
                                         <td [attr.idAusencia]="ausencia.id">
-                                            <button class="btn-detalles"><i class="bi bi-plus-square-fill"></i></button>
+                                            <button class="btn-detalles" (click)="abrirModalDetalles(ausencia.id)"><i class="bi bi-plus-square-fill"></i></button>
                                         </td>
                                     </tr>
                                 </ng-container>
@@ -173,4 +173,9 @@
     </div>
 </div>
 
+<!-- Modal de Tramos de Guardia -->
 <app-tramos-guardia #modalTramos (guardiasActualizadas)="recargarDatos()"></app-tramos-guardia>
+
+<!-- Modal de Detalles de Guardia -->
+
+<app-detalles-guardia #modalDetalles ></app-detalles-guardia>
