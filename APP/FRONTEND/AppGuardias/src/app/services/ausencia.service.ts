@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface ProfesorId {
@@ -58,9 +58,11 @@ export class AusenciaService {
     return this.http.get<any[]>(`${this.apiUrl}/fechas?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`);
   }
 
-  cargarFicheroTarea(idAusencia: number): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/${idAusencia}/fichero`, 
-      { responseType: 'blob' });
+  cargarFicheroTarea(idAusencia: number): Observable<HttpResponse<Blob>> {
+    return this.http.get(`${this.apiUrl}/${idAusencia}/fichero`, {
+      responseType: 'blob',
+      observe: 'response'
+    });
   }
 
   getAll(): Observable<Ausencia[]> {
@@ -82,4 +84,6 @@ export class AusenciaService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  
 }

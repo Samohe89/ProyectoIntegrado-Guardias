@@ -65,7 +65,9 @@ public class AusenciaController {
 	         * Si no consigue mostrar el fichero, lo descarga
 	         * "filename" especifica el nombre del fichero y su extensión*/ 
 	        .header(HttpHeaders.CONTENT_DISPOSITION,
-	                "inline; filename=\"tareaAsignatura-" + asignatura + ".pdf")
+	                "inline; filename=\"tarea-" + asignatura + ".pdf\"")
+	        // Permitir el acceso a la cabecera para recuperar el nombre del fichero
+	        .header("Access-Control-Expose-Headers", "Content-Disposition")
 	        .body(blob);
 	}
 	

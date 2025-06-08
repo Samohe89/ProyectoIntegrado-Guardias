@@ -26,18 +26,22 @@
 
   .div-fichero {
     display: flex;
-    justify-content: left;
-    align-items: baseline;
+    align-items: center;
     padding-left: 20px;
   }
 
   .icon-pdf {
     font-size: 25px;
     color: #3C7E66;
+    cursor: pointer;
   }
 
   .texto-fichero {
+    margin: 0;
     padding-left: 10px;
+    font-size: 15px;
+    font-weight: 300;
+    cursor: pointer;
   }
 
   button.btn-close{
