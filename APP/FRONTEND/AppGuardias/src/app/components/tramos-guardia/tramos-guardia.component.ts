@@ -7,12 +7,13 @@ import { Ausencia, AusenciaService } from '../../services/ausencia.service';
 import { ModalRegistroComponent } from '../modal-registro/modal-registro.component';
 import { ModalErrorComponent } from "../modal-error/modal-error.component";
 import { ModalEliminarComponent } from "../modal-eliminar/modal-eliminar.component";
+import { ModalBorradoComponent } from '../modal-borrado/modal-borrado.component';
 
 
 @Component({
   selector: 'app-tramos-guardia',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalRegistroComponent, ModalErrorComponent, ModalEliminarComponent],
+  imports: [CommonModule, FormsModule, ModalRegistroComponent, ModalErrorComponent, ModalEliminarComponent, ModalBorradoComponent],
   templateUrl: './tramos-guardia.component.html',
   styleUrl: './tramos-guardia.component.css',
   providers: [GuardiaService, ProfesorService, AusenciaService]
@@ -24,6 +25,7 @@ export class TramosGuardiaComponent {
   @ViewChild('modalRegistro') modalRegistro!: ModalRegistroComponent;
   @ViewChild('modalError') modalError!: ModalErrorComponent;
   @ViewChild('modalEliminar') modalEliminar!: ModalEliminarComponent;
+  @ViewChild('modalBorrado') modalBorrado!: ModalEliminarComponent;
 
   // Variable para controlar la visualización del modal y el mensaje que muestra
   modalActivo: boolean = false;
@@ -293,6 +295,9 @@ export class TramosGuardiaComponent {
 
     // Se resetea el tramo pendiente de eliminar
     this.tramoPendienteEliminar = null;
+
+    // Modal de confirmación
+    this.modalBorrado.mostrarModal();
   }
 
 

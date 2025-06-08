@@ -1,0 +1,14 @@
+<div class="modal fade" id="borradoModal" tabindex="-1" aria-labelledby="borradoModalLabel"
+  [ngClass]="{'show': modalBorradoActivo}" [style.display]="modalBorradoActivo ? 'block' : 'none'">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-center w-100" id="borradoModalLabel">Eliminación</h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Eliminado correctamente.</p>
+      </div>
+    </div>
+  </div>
+</div>
