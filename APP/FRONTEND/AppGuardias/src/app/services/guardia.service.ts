@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +11,23 @@ export class GuardiaService {
 
   constructor(private http: HttpClient) { }
 
-  
-  getTramosPorIdAusencia(idAusencia: number) {
-    return this.http.get<number[]>(`${this.apiUrl}/tramos/${idAusencia}`)
-
+  getGuardiasPorIdAusencia(idAusencia: number): Observable<any> {
+    return this.http.get<number[]>(`${this.apiUrl}/ausencia/${idAusencia}`)
   }
+
+  
+  getTramosPorIdAusencia(idAusencia: number): Observable<any> {
+    return this.http.get<number[]>(`${this.apiUrl}/tramos/${idAusencia}`)
+  }
+
+  registrarGuardias(guardias: any[]): Observable<any> {
+    return this.http.post<any[]>(`${this.apiUrl}/registrar`, guardias)
+  }
+
+  eliminarGuardia(idGuardia: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/eliminar/${idGuardia}`, { responseType: 'text' as 'json' });
+  }
+
 
 
 }

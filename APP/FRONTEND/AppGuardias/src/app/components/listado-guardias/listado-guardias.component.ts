@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, } from '@angular/core';
+import { Component, OnInit, ViewChild, } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { AusenciaService } from '../../services/ausencia.service'
@@ -17,6 +17,8 @@ import { TramosGuardiaComponent } from '../tramos-guardia/tramos-guardia.compone
 
 
 export class ListadoGuardiasComponent implements OnInit {
+
+  // Permite acceder al componente hijo a través de una variable
   @ViewChild('modalTramos') modalTramos!: TramosGuardiaComponent;
 
 
@@ -56,21 +58,21 @@ export class ListadoGuardiasComponent implements OnInit {
   mensajeTablaVacia: String = "";
 
 
-  
-
-
   constructor(private ausenciaService: AusenciaService, private guardiaService: GuardiaService) { }
 
   ngOnInit(): void {
     // Calcular el dia siguiente
-    this.diaSiguiente.setDate(this.diaActual.getDate() + 1);
-
+    const diaSemana = this.diaActual.getDay();
+    if (diaSemana === 5) {  // si hoy es viernes, carga el lunes
+      this.diaSiguiente.setDate(this.diaActual.getDate() + 3);
+    } else if (diaSemana === 6) { // si hoy es sábado, carga el lunes
+      this.diaSiguiente.setDate(this.diaActual.getDate() + 2);
+    } else {  // en cualquie otro caso, carga el dia siguiente
+      this.diaSiguiente.setDate(this.diaActual.getDate() + 1);
+    }
+   
     // Cargar las ausencias del día actual al inicio
     this.cargarAusencias(this.diaActual);
-
-    // Prueba para cargar ausencias entre fechas al inicio
-    // this.fechaDesde = new Date(this.diaActual.getFullYear(), 4, 1);
-    // this.cargarAusenciasEntreFechas(this.fechaDesde, this.diaActual);
   }
 
 
@@ -84,6 +86,7 @@ export class ListadoGuardiasComponent implements OnInit {
 
     // Formatear fecha que sen envía al backend
     const fechaFormateada = this.formatearFecha(fecha);
+    //console.log("fecha formateada: ",fechaFormateada);
     this.ausenciaService.getAusenciasPorFecha(fechaFormateada).subscribe({
       next: data => {
         this.ausencias = data;
@@ -114,6 +117,8 @@ export class ListadoGuardiasComponent implements OnInit {
     this.fechaDesde = fechaDesde;
     this.fechaHasta = fechaHasta;
  
+     // Resetear el array de tramos
+     this.tramosPorAusencia = [];
 
     this.ausenciaService.getAusenciasEntreFechas(fechaDesde, fechaHasta).subscribe({
       next: data => {
@@ -222,7 +227,7 @@ export class ListadoGuardiasComponent implements OnInit {
         this.tramosPorAusencia.push({ idAusencia, tramos: data })
       },
       error: err => {
-        console.error("Error al cargar los tramos de la ausencia: " + idAusencia, err);
+        console.error("Error al cargar los tramos de las guardias correspondientes a la ausencia: " + idAusencia, err);
       }
     });
   }
@@ -239,25 +244,34 @@ export class ListadoGuardiasComponent implements OnInit {
   }
 
 
-  // Método para aplicvar filtros a la tabla
+  // Método para aplicar filtros a la tabla
   filtrarTabla(filtros: { fechaDesde: string, fechaHasta: string, profesorFiltro: string | null }) {
     console.log('Filtros recibidos del hijo:', filtros);
     this.fechaDesde = filtros.fechaDesde;
     this.fechaHasta = filtros.fechaHasta;
 
     this.cargarAusenciasEntreFechas(this.fechaDesde, this.fechaHasta);
-    /*
-    this.fechaDesde = filtros.fechaDesde;
-    this.fechaHasta = filtros.fechaHasta;
-    const idProfesor = filtros.idProfesor;
-    */
 
   }
 
 
   // Método para abrir el modal de tramos de guardia
-  abrirModalTramos(idAusencia: number) {
-    this.modalTramos.idAusencia = idAusencia;
+  abrirModalTramos(idAusencia: number, grupo: string) {
+    this.modalTramos.cargarGuardias (idAusencia);
+    this.modalTramos.grupo = grupo;
+    this.modalTramos.cargarProfesoresSelect();
     this.modalTramos.modalActivo = true;
   }
+
+
+  // Método para recargar la vista si se han actualizado las guardias (creado o borrado)
+  recargarDatos(): void {
+    if (this.fechaDesde && this.fechaHasta) {
+      this.cargarAusenciasEntreFechas(this.fechaDesde, this.fechaHasta);
+    } else {
+      this.cargarAusencias(this.fechaUnica);
+    }
+  }
+
+
 }
