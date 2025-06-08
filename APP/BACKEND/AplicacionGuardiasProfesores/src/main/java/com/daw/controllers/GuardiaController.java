@@ -65,20 +65,7 @@ public class GuardiaController {
 		return ResponseEntity.ok().body("Guardia eliminada correctamente");
 	}
 	
-	
-
-	// MANEJO DE EXCEPCIONES
-
-	@ExceptionHandler(GuardiaNoEncontradaException.class)
-	public ResponseEntity<ApiError> handleUsuarioNoEncontrado(GuardiaNoEncontradaException ex, HttpServletRequest req) {
-		ApiError apiError = new ApiError();
-		apiError.setEstado(HttpStatus.NOT_FOUND.toString());
-		apiError.setFecha(LocalDateTime.now());
-		apiError.setMensaje(ex.getMessage());
-		apiError.setPath(req.getServletPath());
-		return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
-	}
-
+		
     
     //Método para obtener el total de horas de guardia por profesor
     @GetMapping("/totalHoras")
@@ -105,5 +92,18 @@ public class GuardiaController {
         }
     }
     
+    
+ // MANEJO DE EXCEPCIONES
+
+ 	@ExceptionHandler(GuardiaNoEncontradaException.class)
+ 	public ResponseEntity<ApiError> handleGuardiaNoEncontrada(GuardiaNoEncontradaException ex, HttpServletRequest req) {
+ 		ApiError apiError = new ApiError();
+ 		apiError.setEstado(HttpStatus.NOT_FOUND.toString());
+ 		apiError.setFecha(LocalDateTime.now());
+ 		apiError.setMensaje(ex.getMessage());
+ 		apiError.setPath(req.getServletPath());
+ 		return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+ 	}
+
 
 }
