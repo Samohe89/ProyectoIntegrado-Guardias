@@ -52,10 +52,10 @@ public class AusenciaController {
 	// Endpoint para cargar el fichero adjunto a una tarea
 		/* Especifica que se produce o envía un PDF */
 	@GetMapping(value = "/{id}/fichero", produces = MediaType.APPLICATION_PDF_VALUE)
-	public ResponseEntity<byte[]> descargarFicheroTarea(@PathVariable Long idAusencia) {
-		Ausencia ausencia = service.getAusenciaPorId(idAusencia);
+	public ResponseEntity<byte[]> descargarFicheroTarea(@PathVariable Long id) {
+		Ausencia ausencia = service.getAusenciaPorId(id);
 		String asignatura = ausencia.getHorariosProfesor().getAsignatura(); 
-	    byte[] blob = service.getFicheroTarea(idAusencia);
+	    byte[] blob = service.getFicheroTarea(id);
 
 	    // Construye la respuesta como flujo genérico de bytes
 	    return ResponseEntity.ok()

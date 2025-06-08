@@ -41,7 +41,7 @@ public class Ausencia {
 	private String tarea;
 
 	@Lob
-	@Column(name = "Fichero", nullable = true, columnDefinition = "BLOB")
+	@Column(name = "Fichero", nullable = true, columnDefinition = "MEDIUMBLOB")
 	private byte[] fichero;
 
 	@OneToMany(mappedBy = "ausenciasProfesor")

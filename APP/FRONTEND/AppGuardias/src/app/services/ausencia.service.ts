@@ -58,6 +58,11 @@ export class AusenciaService {
     return this.http.get<any[]>(`${this.apiUrl}/fechas?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`);
   }
 
+  cargarFicheroTarea(idAusencia: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${idAusencia}/fichero`, 
+      { responseType: 'blob' });
+  }
+
   getAll(): Observable<Ausencia[]> {
     return this.http.get<Ausencia[]>(this.apiUrl);
   }

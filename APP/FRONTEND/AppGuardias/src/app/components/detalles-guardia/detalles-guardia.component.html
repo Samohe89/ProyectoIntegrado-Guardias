@@ -22,8 +22,9 @@
         <div class="pb-2">
             <p class="mb-1" style="font-weight: 500;">Tarea: </p>
             <p class="mt-1 ps-3" style="font-size: 16px;"> {{ ausencia?.tarea }} </p>
-            <div>
-                PDF
+            <div *ngIf="ausencia?.fichero" class="div-fichero">
+              <i class="bi bi-filetype-pdf icon-pdf" (click)="cargarPDF()"></i>
+              <p class="texto-fichero" (click)="cargarPDF()">PDF</p>
             </div>
         </div>
 

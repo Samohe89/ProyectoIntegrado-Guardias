@@ -32,6 +32,7 @@ export class DetallesGuardiaComponent {
   cargarAusencia(idAusencia: number): void {
     this.ausenciaService.getById(idAusencia).subscribe({
       next: (data) => {
+        this.idAusencia = idAusencia;
         this.ausencia = data;
         console.log("Ausencia cargada: ", this.ausencia);
       },
@@ -41,6 +42,18 @@ export class DetallesGuardiaComponent {
     });
   }
 
+  // Cargar PDF
+  cargarPDF(): void {  
+    this.ausenciaService.cargarFicheroTarea(this.idAusencia).subscribe({
+      next: (blob: Blob) => {
+        const fileURL = URL.createObjectURL(blob);
+        window.open(fileURL, '_blank');
+      },
+      error: (err) => {
+        console.error('Error al cargar el PDF:', err);
+      }
+    });
+  }
 
 
   cerrarModal() {
