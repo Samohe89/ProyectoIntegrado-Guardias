@@ -6,12 +6,13 @@ import { GuardiaService } from '../../services/guardia.service';
 import { Ausencia, AusenciaService } from '../../services/ausencia.service';
 import { ModalRegistroComponent } from '../modal-registro/modal-registro.component';
 import { ModalErrorComponent } from "../modal-error/modal-error.component";
+import { ModalEliminarComponent } from "../modal-eliminar/modal-eliminar.component";
 
 
 @Component({
   selector: 'app-tramos-guardia',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalRegistroComponent, ModalErrorComponent],
+  imports: [CommonModule, FormsModule, ModalRegistroComponent, ModalErrorComponent, ModalEliminarComponent],
   templateUrl: './tramos-guardia.component.html',
   styleUrl: './tramos-guardia.component.css',
   providers: [GuardiaService, ProfesorService, AusenciaService]
@@ -22,7 +23,7 @@ export class TramosGuardiaComponent {
   // Permite acceder al componente hijo a través de una variable
   @ViewChild('modalRegistro') modalRegistro!: ModalRegistroComponent;
   @ViewChild('modalError') modalError!: ModalErrorComponent;
-
+  @ViewChild('modalEliminar') modalEliminar!: ModalEliminarComponent;
 
   // Variable para controlar la visualización del modal y el mensaje que muestra
   modalActivo: boolean = false;
@@ -50,6 +51,8 @@ export class TramosGuardiaComponent {
   // Array de profesores para mostrar en el select
   profesores: Profesor[] = [];
 
+  // Variable que almacena temporalmente el tramo a eliminar (hasta que se confirme o no la operación)
+  tramoPendienteEliminar: number | null = null;
 
 
   // Evento que se manda al padre en caso de se haya actualizado alguna guardia (creado o borrado)
@@ -256,10 +259,22 @@ export class TramosGuardiaComponent {
   }
 
 
+  confirmarEliminar(tramo: number): void {
+    this.tramoPendienteEliminar = tramo;
+    this.modalEliminar.mostrarModal();
+  }
 
-  eliminarGuardia(tramo: number): void {
-    //this.modalConfirmarEliminar.mostrarModal();
 
+
+  // Método asíncrono que espera la confirmación del modal para ejecutar el borrado
+  eliminarGuardia(confirmacion: boolean): void {
+    // Si no se confirma la operación desde el modal de confirmación o no se ha grabado ningun tramo pendiente de eliminar
+    if (!confirmacion || this.tramoPendienteEliminar === null) {
+      this.tramoPendienteEliminar = null;
+      return;
+    }
+    
+    const tramo = this.tramoPendienteEliminar;
     const guardia = this.guardias.find(g => g.tramo === tramo);
     const idGuardia = guardia.idGuardia;
 
@@ -275,6 +290,9 @@ export class TramosGuardiaComponent {
         this.mostrarError("Error al eliminar la guardia.");
       }
     });
+
+    // Se resetea el tramo pendiente de eliminar
+    this.tramoPendienteEliminar = null;
   }
 
 
