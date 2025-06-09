@@ -11,7 +11,7 @@ import { FiltradoAdaptadoHorasProfesorComponent } from '../filtrado-adaptado-hor
   templateUrl: './horas-guardia.component.html',
   styleUrl: './horas-guardia.component.css'
 })
-export class HorasGuardiaComponent implements OnInit{
+export class HorasGuardiaComponent implements OnInit {
 
   profesoresConHoras: ProfesorTotalHorasGuardiaDTO[] = [];
 
@@ -24,7 +24,8 @@ export class HorasGuardiaComponent implements OnInit{
   esProfesor: boolean = false;
   esEquipoDirectivo: boolean = false;
 
-  constructor(private horasGuardiaService: HorasGuardiaService) {}
+  constructor(private horasGuardiaService: HorasGuardiaService,
+  ) { }
 
   ngOnInit(): void {
     const usuarioGuardado = sessionStorage.getItem('usuarioGuardado');
@@ -37,7 +38,23 @@ export class HorasGuardiaComponent implements OnInit{
       this.esEquipoDirectivo = this.rolUsuario.toLowerCase() === 'equipo directivo';
     }
 
-    // No se cargan datos aquí para que la tabla esté vacía al inicio
+    // Calcular fechas por defecto (inicio curso hasta hoy)
+    const hoy = new Date();
+    const añoActual = hoy.getFullYear();
+    const mesActual = hoy.getMonth(); // Enero = 0, Septiembre = 8
+
+    const añoInicioCurso = mesActual >= 8 ? añoActual : añoActual - 1;
+    // Guardar como Date para mostrar en la vista
+    this.fechaDesde = new Date(añoInicioCurso, 8, 15); // 15 de septiembre
+    this.fechaHasta = hoy;
+
+    // Enviar como strings al servicio
+    const fechaDesdeStr = this.formatFecha(this.fechaDesde);
+    const fechaHastaStr = this.formatFecha(this.fechaHasta);
+
+    // Cargar datos por defecto al iniciar la vista (sin filtros de fecha)
+    const profesorFiltro = this.esProfesor ? this.dniProfesor : null;
+    this.cargarDatos(fechaDesdeStr, fechaHastaStr, profesorFiltro);
   }
 
   cargarDatos(fechaDesde?: string, fechaHasta?: string, profesorFiltro?: string | null): void {
@@ -56,8 +73,6 @@ export class HorasGuardiaComponent implements OnInit{
       .subscribe({
         next: data => {
           this.profesoresConHoras = data;
-          this.fechaDesde = fechaDesde ? new Date(fechaDesde) : null;
-          this.fechaHasta = fechaHasta ? new Date(fechaHasta) : null;
         },
         error: err => {
           console.error('Error al obtener las horas de guardia:', err);
@@ -67,12 +82,24 @@ export class HorasGuardiaComponent implements OnInit{
   }
 
   onFiltrosAplicados(filtros: { fechaDesde: string, fechaHasta: string, profesorFiltro?: string | null }): void {
-  if (this.esProfesor) {
-    // Forzar filtro solo para el profesor logueado
-    this.cargarDatos(filtros.fechaDesde, filtros.fechaHasta, this.dniProfesor);
-  } else {
-    // Para directivo se usa el filtro tal cual viene
-    this.cargarDatos(filtros.fechaDesde, filtros.fechaHasta, filtros.profesorFiltro ?? null);
+    // Actualizar las fechas para que se reflejen en la vista
+    this.fechaDesde = filtros.fechaDesde ? new Date(filtros.fechaDesde) : null;
+    this.fechaHasta = filtros.fechaHasta ? new Date(filtros.fechaHasta) : null;
+
+    if (this.esProfesor) {
+      // Forzar filtro solo para el profesor logueado
+      this.cargarDatos(filtros.fechaDesde, filtros.fechaHasta, this.dniProfesor);
+    } else {
+      // Para directivo se usa el filtro tal cual viene
+      this.cargarDatos(filtros.fechaDesde, filtros.fechaHasta, filtros.profesorFiltro ?? null);
+    }
   }
-}
+
+  // Función para formatear fecha a 'YYYY-MM-DD'
+  private formatFecha(fecha: Date): string {
+    const year = fecha.getFullYear();
+    const month = (fecha.getMonth() + 1).toString().padStart(2, '0');
+    const day = fecha.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 }

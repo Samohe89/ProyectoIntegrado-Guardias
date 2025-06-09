@@ -46,8 +46,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let profesor of profesoresConHoras">
-              <td>{{ profesor.nombreProfesor }}</td>
-              <td>{{ profesor.totalHoras | number:'1.2-2' }}</td>
+              <td class="profesor">{{ profesor.nombreProfesor }}</td>
+              <td class="totalHoras">{{ profesor.totalHoras | number:'1.2-2' }}</td>
             </tr>
           </tbody>
         </table>
