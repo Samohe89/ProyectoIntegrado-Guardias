@@ -8,7 +8,7 @@
       </label>
       <input type="date" id="fechaDesde" name="fechaDesde" class="form-control datePersonalizado"
         [ngClass]="{ 'input-invalido': (faltanFechas && !fechaDesde) || fechasErroneas || faltanCriterios}"
-        [(ngModel)]="fechaDesde"
+        [(ngModel)]="fechaDesde" [min]="fechaMin" [max]="fechaMax"
         (focus)="resetValidacion()" />
 
     </div>
@@ -20,7 +20,7 @@
       </label>
       <input type="date" id="fechaHasta" name="fechaHasta" class="form-control datePersonalizado"
         [ngClass]="{ 'input-invalido': (faltanFechas && !fechaHasta) || fechasErroneas || faltanCriterios }"
-        [(ngModel)]="fechaHasta"
+        [(ngModel)]="fechaHasta" [min]="fechaMin" [max]="fechaMax"
         (focus)="resetValidacion()" />
     </div>
 

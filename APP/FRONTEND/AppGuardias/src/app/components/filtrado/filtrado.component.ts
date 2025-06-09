@@ -13,6 +13,9 @@ import { ProfesorService } from '../../services/profesor.service';
 })
 
 export class FiltradoComponent {
+  // Variable que almacena los datos del usuario que tiene abierta la sesión
+  usuario = JSON.parse(sessionStorage.getItem('usuarioGuardado') || 'null');
+
   // Controla si se debe ocultar el select de profesores
   @Input() ocultarSelectProfesor: boolean = false;
 
@@ -24,11 +27,17 @@ export class FiltradoComponent {
   fechaHasta: string = '';
   profesorFiltro: string | null = null;
 
-
   // Variables de validación de criterios de filtrado
   faltanCriterios: boolean = false;
   faltanFechas: boolean = false;
   fechasErroneas: boolean = false;
+
+
+  // Variables límite para seleccionar fechas
+  year = parseInt(this.usuario.cursoAcademico);
+  fechaMin = `${this.year}-09-15`;
+  fechaMax = `${this.year+1}-06-20`;
+
 
 
   // Evento que se emitirá al componente padre, enviando las variables de filtrado

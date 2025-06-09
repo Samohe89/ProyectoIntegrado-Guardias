@@ -10,6 +10,8 @@ import { FormsModule, NgForm } from '@angular/forms';
   styleUrls: ['./filtrado-adaptado-horas-profesor.component.css']
 })
 export class FiltradoAdaptadoHorasProfesorComponent {
+  // Variable que almacena los datos del usuario que tiene abierta la sesión
+  usuario = JSON.parse(sessionStorage.getItem('usuarioGuardado') || 'null');
 
   // Variables del formulario de filtrado
   fechaDesde: string = '';
@@ -19,6 +21,11 @@ export class FiltradoAdaptadoHorasProfesorComponent {
   faltanCriterios: boolean = false;
   faltanFechas: boolean = false;
   fechasErroneas: boolean = false;
+
+  // Variables límite para seleccionar fechas
+  year = parseInt(this.usuario.cursoAcademico);
+  fechaMin = `${this.year}-09-15`;
+  fechaMax = `${this.year + 1}-06-20`;
 
   // Evento que se emitirá al componente padre con los filtros
   @Output() filtrosAplicados = new EventEmitter<{
