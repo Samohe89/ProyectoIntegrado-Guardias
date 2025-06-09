@@ -5,13 +5,14 @@ import { MenuComponent } from "./components/menu/menu.component";
 import { LoginComponent } from "./components/login/login.component";
 import { LoginService } from './services/login.service';
 import { PdfTestComponent } from './components/pdf-test/pdf-test.component';
+import { HorasGuardiaComponent } from './components/horas-guardia/horas-guardia.component';
 import { ListadoAusenciasComponent } from './components/listado-ausencias/listado-ausencias.component';
 
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, LoginComponent, MenuComponent, PdfTestComponent],
+  imports: [RouterOutlet, CommonModule, LoginComponent, MenuComponent, HorasGuardiaComponent, PdfTestComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -20,7 +21,7 @@ import { ListadoAusenciasComponent } from './components/listado-ausencias/listad
 export class AppComponent implements OnInit {
   title = 'AppGuardias';
 
-  // Variable que controla si el login se ha ejecutado o no
+  //Variable que controla si el login se ha ejecutado o no
   sesionActiva: boolean = false;
   //sesionActiva: boolean = true;
 

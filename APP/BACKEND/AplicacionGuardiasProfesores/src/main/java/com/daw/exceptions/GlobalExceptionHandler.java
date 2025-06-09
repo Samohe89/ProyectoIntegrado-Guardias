@@ -15,13 +15,23 @@ import com.daw.errors.ApiError;
 import jakarta.servlet.http.HttpServletRequest;
 
 
-//@RestControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 	
 
 	
 	@ExceptionHandler(AusenciasNoEncontradasException.class)
 	public ResponseEntity<ApiError> handleAusenciasNoEncontradas(AusenciasNoEncontradasException ex, HttpServletRequest req) {
+		ApiError apiError = new ApiError();
+		apiError.setEstado(HttpStatus.NOT_FOUND.toString());
+		apiError.setFecha(LocalDateTime.now());
+		apiError.setMensaje(ex.getMessage());
+		apiError.setPath(req.getServletPath());
+		return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(AusenciaNoEncontradaException.class)
+	public ResponseEntity<ApiError> handleAusenciaNoEncontrada(AusenciaNoEncontradaException ex, HttpServletRequest req) {
 		ApiError apiError = new ApiError();
 		apiError.setEstado(HttpStatus.NOT_FOUND.toString());
 		apiError.setFecha(LocalDateTime.now());

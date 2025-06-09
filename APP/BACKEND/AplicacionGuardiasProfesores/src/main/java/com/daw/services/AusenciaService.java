@@ -10,7 +10,9 @@ import com.daw.datamodel.entities.Ausencia;
 import com.daw.datamodel.entities.Horario;
 import com.daw.datamodel.entities.Profesor;
 import com.daw.dto.AusenciaDTO;
+import com.daw.exceptions.AusenciaNoEncontradaException;
 import com.daw.exceptions.AusenciasNoEncontradasException;
+import com.daw.exceptions.FicheroTareaNoEncontradoException;
 import com.daw.repositories.AusenciaRepository;
 import com.daw.repositories.HorarioRepository;
 import com.daw.repositories.ProfesorRepository;
@@ -32,7 +34,16 @@ public class AusenciaService {
     public List<Ausencia> findAll() {
         return repository.findAll();
     }
-
+    
+    public Ausencia getAusenciaPorId(Long idAusencia) {
+    	Optional<Ausencia> ausencia = repository.findById(idAusencia);
+    	if (ausencia.isEmpty()) {
+    		throw new AusenciaNoEncontradaException(idAusencia);
+    	}
+    	return ausencia.get();
+    }
+    
+    
     public Optional<Ausencia> findById(Long id) {
         return repository.findById(id);
     }
@@ -83,6 +94,20 @@ public class AusenciaService {
             throw new AusenciasNoEncontradasException();
         }
         return ausencias;
+    }
+    
+    
+    public byte[] getFicheroTarea(Long idAusencia) {
+    	Optional<Ausencia> ausencia = repository.findById(idAusencia);
+    	if (ausencia.isEmpty()) {
+    		throw new AusenciaNoEncontradaException(idAusencia);
+    	}
+    	
+        byte[] fichero = ausencia.get().getFichero();
+        if (fichero == null || fichero.length == 0) {
+            throw new FicheroTareaNoEncontradoException(idAusencia);
+        }
+        return fichero;
     }
     
     

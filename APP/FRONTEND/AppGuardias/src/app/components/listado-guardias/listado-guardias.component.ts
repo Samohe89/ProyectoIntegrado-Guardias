@@ -1,13 +1,16 @@
-import { Component, OnInit, Input, } from '@angular/core';
+import { Component, OnInit, ViewChild, } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { AusenciaService } from '../../services/ausencia.service'
 import { GuardiaService } from '../../services/guardia.service';
-import { FiltradoComponent} from "../filtrado/filtrado.component";
+import { FiltradoComponent } from "../filtrado/filtrado.component";
+import { TramosGuardiaComponent } from '../tramos-guardia/tramos-guardia.component';
+import { DetallesGuardiaComponent } from "../detalles-guardia/detalles-guardia.component";
+
 
 @Component({
   selector: 'app-listado-guardias',
-  imports: [CommonModule, DatePipe, FiltradoComponent],
+  imports: [CommonModule, DatePipe, FiltradoComponent, TramosGuardiaComponent, DetallesGuardiaComponent],
   templateUrl: './listado-guardias.component.html',
   styleUrl: './listado-guardias.component.css',
   providers: [AusenciaService, GuardiaService]
@@ -15,6 +18,12 @@ import { FiltradoComponent} from "../filtrado/filtrado.component";
 
 
 export class ListadoGuardiasComponent implements OnInit {
+
+  // Permite acceder al componente hijo a través de una variable
+  @ViewChild('modalTramos') modalTramos!: TramosGuardiaComponent;
+  @ViewChild('modalDetalles') modalDetalles!: DetallesGuardiaComponent;
+
+
   // Variable que almacena los datos del usuario que tiene abierta la sesión
   usuario = JSON.parse(sessionStorage.getItem('usuarioGuardado') || 'null');
 
@@ -24,8 +33,8 @@ export class ListadoGuardiasComponent implements OnInit {
 
   // Variable para indicar la fecha del listado que se muestra en ese momento
   fechaUnica: Date = new Date(this.diaActual);
-  fechaDesde: Date | null = null;
-  fechaHasta: Date | null = null;
+  fechaDesde: string | null = null;
+  fechaHasta: string | null = null;
 
   // Array que almacena las ausencias que envía el backend
   ausencias: any[] = [];
@@ -51,23 +60,21 @@ export class ListadoGuardiasComponent implements OnInit {
   mensajeTablaVacia: String = "";
 
 
-
-  // Variable para controlar la visualización del modal y el mensaje que muestra
-  modalActivo: boolean = false;
-  mensajeError: string = ''
-
   constructor(private ausenciaService: AusenciaService, private guardiaService: GuardiaService) { }
 
   ngOnInit(): void {
     // Calcular el dia siguiente
-    this.diaSiguiente.setDate(this.diaActual.getDate() + 1);
+    const diaSemana = this.diaActual.getDay();
+    if (diaSemana === 5) {  // si hoy es viernes, carga el lunes
+      this.diaSiguiente.setDate(this.diaActual.getDate() + 3);
+    } else if (diaSemana === 6) { // si hoy es sábado, carga el lunes
+      this.diaSiguiente.setDate(this.diaActual.getDate() + 2);
+    } else {  // en cualquie otro caso, carga el dia siguiente
+      this.diaSiguiente.setDate(this.diaActual.getDate() + 1);
+    }
 
     // Cargar las ausencias del día actual al inicio
     this.cargarAusencias(this.diaActual);
-
-    // Prueba para cargar ausencias entre fechas al inicio
-    // this.fechaDesde = new Date(this.diaActual.getFullYear(), 4, 1);
-    // this.cargarAusenciasEntreFechas(this.fechaDesde, this.diaActual);
   }
 
 
@@ -76,8 +83,12 @@ export class ListadoGuardiasComponent implements OnInit {
     // Actualizar la fecha mostrada
     this.fechaUnica = fecha;
 
+    // Resetear el array de tramos
+    this.tramosPorAusencia = [];
+
     // Formatear fecha que sen envía al backend
     const fechaFormateada = this.formatearFecha(fecha);
+    //console.log("fecha formateada: ",fechaFormateada);
     this.ausenciaService.getAusenciasPorFecha(fechaFormateada).subscribe({
       next: data => {
         this.ausencias = data;
@@ -88,6 +99,7 @@ export class ListadoGuardiasComponent implements OnInit {
         for (let ausencia of this.ausencias) {
           this.cargarTramos(ausencia.id);
         }
+        console.log("tramosPorAusencia: ", this.tramosPorAusencia);
       },
       error: err => {
         if (err.status === 404) {
@@ -95,23 +107,22 @@ export class ListadoGuardiasComponent implements OnInit {
           this.ausenciasAgrupadas = [];
           this.mensajeTablaVacia = "No existen ausencias registradas.";
         } else {
-          this.mostrarError('Error desconocido.');
+          //this.mostrarError('Error desconocido.');
         }
       }
     });
   }
 
   // Cargar las ausencias registradas en un intervalo de fechas
-  cargarAusenciasEntreFechas(fechaDesde: Date, fechaHasta: Date): void {
+  cargarAusenciasEntreFechas(fechaDesde: string, fechaHasta: string): void {
     // Actualizar la fecha mostrada
     this.fechaDesde = fechaDesde;
     this.fechaHasta = fechaHasta;
 
-    // Formatear fecha que sen envía al backend
-    const fechaDesdeFormateada = this.formatearFecha(fechaDesde);
-    const fechaHastaFormateada = this.formatearFecha(fechaHasta);
+    // Resetear el array de tramos
+    this.tramosPorAusencia = [];
 
-    this.ausenciaService.getAusenciasEntreFechas(fechaDesdeFormateada, fechaHastaFormateada).subscribe({
+    this.ausenciaService.getAusenciasEntreFechas(fechaDesde, fechaHasta).subscribe({
       next: data => {
         this.ausencias = data;
         console.log("Ausencias devueltas por backend: ", this.ausencias);
@@ -121,6 +132,7 @@ export class ListadoGuardiasComponent implements OnInit {
         for (let ausencia of this.ausencias) {
           this.cargarTramos(ausencia.id);
         }
+        console.log("tramosPorAusencia: ", [...this.tramosPorAusencia]);
       },
       error: err => {
         if (err.status === 404) {
@@ -128,13 +140,13 @@ export class ListadoGuardiasComponent implements OnInit {
           this.ausenciasAgrupadas = [];
           this.mensajeTablaVacia = "No existen ausencias registradas.";
         } else {
-          this.mostrarError('Error desconocido.');
+          //this.mostrarError('Error desconocido.');
         }
       }
     });
   }
 
-
+  // Método para verificar la equivalencia de fechas
   esMismaFecha(fecha1: Date, fecha2: Date): boolean {
     if (fecha1.toDateString() === fecha2.toDateString()) {
       return true;
@@ -143,10 +155,12 @@ export class ListadoGuardiasComponent implements OnInit {
     };
   }
 
+  // Método para dar formato a la fecha que se envía desde el frontend
   formatearFecha(fecha: Date): string {
     return fecha.toISOString().split('T')[0]; // Se queda solo con la fecha 'YYYY-MM-DD'
   }
 
+  // Método que agrupa las ausencias por fecha y hora
   agruparAusencias(ausencias: any[]): void {
     //Resetear el array de ausencias agrupadas 
     this.ausenciasAgrupadas = [];
@@ -215,7 +229,7 @@ export class ListadoGuardiasComponent implements OnInit {
         this.tramosPorAusencia.push({ idAusencia, tramos: data })
       },
       error: err => {
-        console.error("Error al cargar los tramos de la ausencia: " + idAusencia, err);
+        console.error("Error al cargar los tramos de las guardias correspondientes a la ausencia: " + idAusencia, err);
       }
     });
   }
@@ -223,18 +237,50 @@ export class ListadoGuardiasComponent implements OnInit {
   // Cargar tramos por idAusencia
   cargarTramosPorIdAusencia(idAusencia: number): number[] {
     const registro = this.tramosPorAusencia.find(ausencia => ausencia.idAusencia === idAusencia);
-    return registro!.tramos;
+
+    if (registro) {
+      return registro.tramos;
+    } else {
+      return [];
+    }
   }
 
 
+  // Método para aplicar filtros a la tabla
+  filtrarTabla(filtros: { fechaDesde: string, fechaHasta: string, profesorFiltro: string | null }) {
+    console.log('Filtros recibidos del hijo:', filtros);
+    this.fechaDesde = filtros.fechaDesde;
+    this.fechaHasta = filtros.fechaHasta;
 
-  mostrarError(mensaje: string) {
-    this.mensajeError = mensaje;
-    this.modalActivo = true;
+    this.cargarAusenciasEntreFechas(this.fechaDesde, this.fechaHasta);
+
   }
 
-  cerrarModal() {
-    this.modalActivo = false;
+
+  // Método para abrir el modal de tramos de guardia
+  abrirModalTramos(idAusencia: number, grupo: string) {
+    this.modalTramos.cargarGuardias(idAusencia);
+    this.modalTramos.grupo = grupo;
+    this.modalTramos.cargarProfesoresSelect();
+    this.modalTramos.modalActivo = true;
   }
+
+  // Método para abrir el modal de detalles de guardia
+
+  abrirModalDetalles(idAusencia: number) {
+    this.modalDetalles.cargarAusencia(idAusencia);
+    this.modalDetalles.modalActivo = true;
+  }
+
+
+  // Método para recargar la vista si se han actualizado las guardias (creado o borrado)
+  recargarDatos(): void {
+    if (this.fechaDesde && this.fechaHasta) {
+      this.cargarAusenciasEntreFechas(this.fechaDesde, this.fechaHasta);
+    } else {
+      this.cargarAusencias(this.fechaUnica);
+    }
+  }
+
 
 }
