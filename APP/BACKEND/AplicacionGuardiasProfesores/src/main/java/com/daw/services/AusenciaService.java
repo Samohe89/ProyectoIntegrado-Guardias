@@ -97,6 +97,26 @@ public class AusenciaService {
     }
     
     
+    public List<Ausencia> getAusenciasFiltradasOrdenadasPorFechaYHora(LocalDate fechaDesde, LocalDate fechaHasta, String profesorGuardia) {
+    	List<Ausencia> ausencias;
+    	
+    	boolean recibeFechas = (fechaDesde != null && fechaHasta != null);
+    	boolean recibeProfesor = (profesorGuardia != null && !profesorGuardia.isEmpty());
+    	
+    	if (recibeFechas && recibeProfesor) {
+    		ausencias = repository.findByFechasYProfesorGuardiaOrdenPorFechaYHora(fechaDesde, fechaHasta, profesorGuardia);
+    	} else if (recibeFechas) {
+    		ausencias = repository.findByFechasOrdenPorFechaYHora(fechaDesde, fechaHasta);
+    	} else {
+    		ausencias = repository.findByProfesorGuardiaOrdenPorFechaYHora(profesorGuardia);
+    	}
+    	if (ausencias.isEmpty()) {
+            throw new AusenciasNoEncontradasException();
+        }
+        return ausencias;
+    }
+    
+    
     public byte[] getFicheroTarea(Long idAusencia) {
     	Optional<Ausencia> ausencia = repository.findById(idAusencia);
     	if (ausencia.isEmpty()) {

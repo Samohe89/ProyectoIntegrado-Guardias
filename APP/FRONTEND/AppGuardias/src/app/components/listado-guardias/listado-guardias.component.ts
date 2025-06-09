@@ -36,6 +36,8 @@ export class ListadoGuardiasComponent implements OnInit {
   fechaDesde: string | null = null;
   fechaHasta: string | null = null;
 
+  // Variable que almacena el profesor asignado en el filtro
+  profesorFiltro: string | null = null;
   // Array que almacena las ausencias que envía el backend
   ausencias: any[] = [];
 
@@ -56,6 +58,7 @@ export class ListadoGuardiasComponent implements OnInit {
     tramos: number[]
   }[] = [];
 
+  
   // Mensaje en caso de que no existan ausencias
   mensajeTablaVacia: String = "";
 
@@ -145,6 +148,63 @@ export class ListadoGuardiasComponent implements OnInit {
       }
     });
   }
+
+
+// Método para cargar las ausencias por los filtros seleccionados
+cargarAusenciasFiltradas(fechaDesde?: string, fechaHasta?: string, profesorFiltro?: string | null): void {
+// Resetear el array de tramos
+this.tramosPorAusencia = [];
+
+// Guardar criterios aplicados
+if (fechaDesde !== null && fechaDesde !== undefined) {
+  this.fechaDesde = fechaDesde;
+} else {
+  this.fechaDesde = '';
+}
+if (fechaHasta !== null && fechaHasta !== undefined) {
+  this.fechaHasta = fechaHasta;
+} else {
+  this.fechaHasta = '';
+}
+if (profesorFiltro !== null && profesorFiltro !== undefined) {
+  this.profesorFiltro = profesorFiltro;
+} else {
+  this.profesorFiltro = '';
+}
+
+  // Filtro por fechas y por profesor
+  this.ausenciaService.getAusenciasEntreFechasPorProfesorGuardia(this.fechaDesde, this.fechaHasta, this.profesorFiltro).subscribe({
+    next: data => {
+      this.ausencias = data;
+      console.log("Ausencias devueltas por backend: ", this.ausencias);
+      
+      //Si no se ha filtrado por fechas, se debe extraer fechaDesde y fechaHasta de la respuesta del backend (que ordena las ausencias por fecha ascendente)
+      if (!fechaDesde && !fechaHasta && this.ausencias.length > 0) {
+        this.fechaDesde = this.ausencias[0].fechaAusencia;
+        this.fechaHasta = this.ausencias[this.ausencias.length - 1].fechaAusencia;
+      }
+
+      this.agruparAusencias(this.ausencias);
+      console.log("Ausencias agrupadas: ", this.ausenciasAgrupadas);
+
+      for (let ausencia of this.ausencias) {
+        this.cargarTramos(ausencia.id);
+      }
+      console.log("tramosPorAusencia: ", [...this.tramosPorAusencia]);
+    },
+
+    error: err => {
+      if (err.status === 404) {
+        this.ausencias = [];
+        this.ausenciasAgrupadas = [];
+        this.mensajeTablaVacia = "No existen ausencias registradas.";
+      } else {
+        //this.mostrarError('Error desconocido.');
+      }
+    }
+  });
+}
+
 
   // Método para verificar la equivalencia de fechas
   esMismaFecha(fecha1: Date, fecha2: Date): boolean {
@@ -251,9 +311,10 @@ export class ListadoGuardiasComponent implements OnInit {
     console.log('Filtros recibidos del hijo:', filtros);
     this.fechaDesde = filtros.fechaDesde;
     this.fechaHasta = filtros.fechaHasta;
+    this.profesorFiltro = filtros.profesorFiltro;
 
-    this.cargarAusenciasEntreFechas(this.fechaDesde, this.fechaHasta);
-
+    //this.cargarAusenciasEntreFechas(this.fechaDesde, this.fechaHasta);
+    this.cargarAusenciasFiltradas(this.fechaDesde, this.fechaHasta, this.profesorFiltro)
   }
 
 
