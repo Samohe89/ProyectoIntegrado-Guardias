@@ -11,20 +11,20 @@ export class PdfTestComponent {
   constructor(private pdfService: PdfGeneratorService) { }
 
   generarPdf() {
-    const titulo = 'Informe de Guardias';
+    const titulo = 'AUSENCIAS Y GUARDIAS';
+    const subtitulo = 'TOTAL DE HORAS DE GUARDIA';
     const filtros = {
-      'Fecha desde': '2025-01-01',
-      'Fecha hasta': '2025-06-01',
-      'Profesor': 'Todos'
+      'Fecha desde': 'dd/mm/yyyy',
+      'Fecha hasta': 'dd/mm/yyyy',
     };
     const headers = ['Profesor', 'Total Horas'];
     const data = [
-      ['Juan Pérez', 12],
-      ['Ana López', 8],
-      ['Luis Martínez'],
+      ['Juan Pérez', 12.00],
+      ['Ana López', 8.00],
+      ['Luis Martínez', 10.50],
     ];
     const nombreArchivo = 'guardias.pdf';
 
-    this.pdfService.generarPdfTabla(titulo, filtros, headers, data, nombreArchivo);
+    this.pdfService.generarPdfTabla(subtitulo, filtros, headers, data, nombreArchivo);
   }
 }

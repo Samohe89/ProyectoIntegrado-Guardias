@@ -10,7 +10,7 @@
 
         <!-- BOTÓN IMPRIMIR -->
         <div id="botonesListado">
-          <button class="btn btn-green">
+          <button class="btn btn-green" (click)="imprimirPDF()">
             <i class="bi bi-printer-fill"></i>
             Imprimir PDF
           </button>
@@ -29,7 +29,8 @@
 
       <!-- FILTRADO: elegir según perfil -->
       <ng-container *ngIf="esProfesor; else filtroDirectivo">
-        <app-filtrado-adaptado-horas-profesor (filtrosAplicados)="onFiltrosAplicados($event)"></app-filtrado-adaptado-horas-profesor>
+        <app-filtrado-adaptado-horas-profesor
+          (filtrosAplicados)="onFiltrosAplicados($event)"></app-filtrado-adaptado-horas-profesor>
       </ng-container>
       <ng-template #filtroDirectivo>
         <app-filtrado (filtrosAplicados)="onFiltrosAplicados($event)"></app-filtrado>

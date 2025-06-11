@@ -3,11 +3,14 @@ import { CommonModule } from '@angular/common';
 import { HorasGuardiaService, ProfesorTotalHorasGuardiaDTO } from '../../services/horasGuardia.service';
 import { FiltradoComponent } from '../filtrado/filtrado.component';
 import { FiltradoAdaptadoHorasProfesorComponent } from '../filtrado-adaptado-horas-profesor/filtrado-adaptado-horas-profesor.component';
+import { PdfGeneratorService } from '../../services/pdf-generator.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-horas-guardia',
   standalone: true,
   imports: [CommonModule, FiltradoComponent, FiltradoAdaptadoHorasProfesorComponent],
+  providers: [DatePipe],
   templateUrl: './horas-guardia.component.html',
   styleUrl: './horas-guardia.component.css'
 })
@@ -25,6 +28,8 @@ export class HorasGuardiaComponent implements OnInit {
   esEquipoDirectivo: boolean = false;
 
   constructor(private horasGuardiaService: HorasGuardiaService,
+    private pdfGenerator: PdfGeneratorService,
+    private datePipe: DatePipe,
   ) { }
 
   ngOnInit(): void {
@@ -97,9 +102,36 @@ export class HorasGuardiaComponent implements OnInit {
 
   // Función para formatear fecha a 'YYYY-MM-DD'
   private formatFecha(fecha: Date): string {
+    // Obtener el año completo
     const year = fecha.getFullYear();
+    // Obtener el mes (de 0 a 11)
+    // Convertirlo a string y añadir un 0 delante si es necesario
     const month = (fecha.getMonth() + 1).toString().padStart(2, '0');
+    // Obtener el día del mes (de 1 a 31)
     const day = fecha.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  // Método para generar el PDF
+  imprimirPDF(): void {
+    const headers = ['Profesor', 'Total Horas'];
+
+    const data = this.profesoresConHoras.map(item => [
+      item.nombreProfesor,
+      Number(item.totalHoras).toFixed(2) // Formatear a 2 decimales
+    ]);
+
+    const filtros = {
+      'Fecha desde': this.fechaDesde ? this.datePipe.transform(this.fechaDesde, 'dd/MM/yyyy') ?? '' : '',
+      'Fecha hasta': this.fechaHasta ? this.datePipe.transform(this.fechaHasta, 'dd/MM/yyyy') ?? '' : '',
+    };
+
+    this.pdfGenerator.generarPdfTabla(
+      'TOTAL DE HORAS DE GUARDIA',
+      filtros,
+      headers,
+      data,
+      'informe-guardias.pdf'
+    );
   }
 }

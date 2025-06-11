@@ -8,7 +8,7 @@ import autoTable, { UserOptions } from 'jspdf-autotable';
 export class PdfGeneratorService {
 
   async generarPdfTabla(
-    titulo: string,
+    subtitulo: string,
     filtros: { [key: string]: string },
     headers: string[],
     data: (string | number)[][],
@@ -16,61 +16,78 @@ export class PdfGeneratorService {
   ) {
     const doc = new jsPDF();
 
-    const logoUrl = 'https://www.iesalmudeyne.es/wp-content/uploads/2023/03/logo-ies-almudeyne-black.png';
-    let startY = 15;
+    //const logoUrl = 'https://www.iesalmudeyne.es/wp-content/uploads/2023/03/logo-ies-almudeyne-black.png';
+    //let startY = 15;
 
     try {
-      const base64Logo = await this.getBase64ImageFromURL(logoUrl);
-      doc.addImage(base64Logo, 'PNG', 14, 10, 20, 20); // Logo en la esquina superior izquierda
+      const base64Logo = await this.getBase64ImageFromURL('/images/logo.png');
+      doc.addImage(base64Logo, 'PNG', 14, 5, 25, 25); // Logo en la esquina superior izquierda
     } catch (error) {
       console.warn('No se pudo cargar el logo:', error);
     }
 
     // Título general centrado arriba
-    doc.setFontSize(12);
-    doc.setFont('Poppins-Medium', 'normal');
-    doc.text('AUSENCIAS Y GUARDIAS', 105, 20, { align: 'center' });
+    doc.setFontSize(16);
+    doc.setFont('Helvetica', 'normal');
+    doc.text('AUSENCIAS Y GUARDIAS', 105, 25, { align: 'center' });
 
     // Línea horizontal
     doc.setDrawColor(195, 201, 198); // Color #C3C9C6
     doc.setLineWidth(0.5); // Grosor
-    doc.line(14, 25, 195, 25);
+    doc.line(14, 35, 195, 35);
 
     // Subtítulo
-    doc.setFontSize(10);
-    doc.setFont('Poppins-Medium', 'normal');
-    doc.text('TOTAL DE HORAS DE GUARDIA', 14, 33);
+    doc.setFontSize(12);
+    doc.setFont('Helvetica', 'normal');
+    doc.text(subtitulo, 14, 43);
 
     // Filtros (formato alineado)
-    doc.setFont('Poppins-Medium', 'normal');
-    doc.setFontSize(10);
-    let filtrosTextY = 39;
-    Object.entries(filtros).forEach(([clave, valor]) => {
-      doc.text(`${clave}:  ${valor}`, 14, filtrosTextY);
-      filtrosTextY += 6;
-    });
+    doc.setFont('Helvetica', 'normal');
+    doc.setFontSize(12);
+    let filtrosTextY = 45;
+
+    doc.text(`Fecha desde: ${filtros['Fecha desde'] || ''}`, 14, 50);
+    doc.text(`Fecha hasta: ${filtros['Fecha hasta'] || ''}`, 80, 50);
 
     // Salto antes de la tabla
-    const startTableY = filtrosTextY + 2;
+    const startTableY = filtrosTextY + 15;
 
     const tableOptions: UserOptions = {
       head: [headers],
       body: data,
       startY: startTableY,
+      margin: { left: 30, right: 30 },
       theme: 'grid',
+      styles: {
+        font: 'Helvetica', // 👈 Asegúrate de que esté registrada
+        fontSize: 10,
+        halign: 'center',
+        valign: 'middle',
+        cellPadding: 3,
+        lineColor: [195, 201, 198], // Gris claro C3C9C6
+        lineWidth: 0.5
+      },
       headStyles: {
         fillColor: [22, 96, 78],  // Verde 16604E
         textColor: 255,
+        fontStyle: 'bold',
         halign: 'center',
       },
+      // alternateRowStyles: {
+      //   fillColor: [237, 241, 239] // Efecto 'striped' EDF1EF
+      // },
       bodyStyles: {
         halign: 'center'
       },
-      styles: {
-        fontSize: 10,
-        cellPadding: 3,
-        lineColor: [195, 201, 198], // Gris claro C3C9C6
-        lineWidth: 0.2
+      didParseCell: (data) => {
+        if (data.section === 'body') {
+          // Pintar filas impares con verde claro, filas pares en blanco
+          if (data.row.index % 2 === 1) {
+            data.cell.styles.fillColor = [237, 241, 239]; // Efecto 'striped' EDF1EF
+          } else {
+            data.cell.styles.fillColor = [255, 255, 255]; // Sin color, blanco
+          }
+        }
       },
       didDrawPage: (dataArg) => {
         // Pie de página
@@ -89,34 +106,29 @@ export class PdfGeneratorService {
 
     autoTable(doc, tableOptions);
 
-    //doc.save(nombreArchivo);
+    // Guardar el PDF en un archivo
+    //doc.save(nombreArchivo || 'informe-guardias.pdf');
 
+    // Abrir el pdf en una nueva ventana
     doc.output('dataurlnewwindow');
   }
 
-  private getBase64ImageFromURL(url: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
+  private async getBase64ImageFromURL(url: string): Promise<string> {
+    const res = await fetch(url, { mode: 'cors' });   // o 'no-cors' si el servidor no responde CORS
+    const blob = await res.blob();
 
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-          reject('No se pudo obtener el contexto del canvas.');
-          return;
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const dataUrl = reader.result as string;
+        if (dataUrl) {
+          resolve(dataUrl);
+        } else {
+          reject('No se pudo convertir la imagen a base64');
         }
-
-        ctx.drawImage(img, 0, 0);
-        const dataURL = canvas.toDataURL('image/png');
-        resolve(dataURL);
       };
-
-      img.onerror = (error) => reject(error);
-      img.src = url;
+      reader.onerror = () => reject('Error leyendo el blob de la imagen');
+      reader.readAsDataURL(blob);
     });
   }
 }
