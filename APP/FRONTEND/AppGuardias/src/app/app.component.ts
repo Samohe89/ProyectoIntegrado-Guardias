@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { MenuComponent } from "./components/menu/menu.component";
 import { LoginComponent } from "./components/login/login.component";
 import { LoginService } from './services/login.service';
-import { PdfTestComponent } from './components/pdf-test/pdf-test.component';
 import { HorasGuardiaComponent } from './components/horas-guardia/horas-guardia.component';
 import { ListadoAusenciasComponent } from './components/listado-ausencias/listado-ausencias.component';
 
@@ -12,7 +11,7 @@ import { ListadoAusenciasComponent } from './components/listado-ausencias/listad
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, LoginComponent, MenuComponent, HorasGuardiaComponent, PdfTestComponent],
+  imports: [RouterOutlet, CommonModule, LoginComponent, MenuComponent, HorasGuardiaComponent, ListadoAusenciasComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
