@@ -42,6 +42,7 @@ public class Ausencia {
 
 	@Lob
 	@Column(name = "Fichero", nullable = true, columnDefinition = "MEDIUMBLOB")
+	@JsonIgnore
 	private byte[] fichero;
 
 	@OneToMany(mappedBy = "ausenciasProfesor")

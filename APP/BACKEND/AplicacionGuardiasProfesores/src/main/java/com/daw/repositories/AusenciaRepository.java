@@ -36,4 +36,37 @@ public interface AusenciaRepository extends JpaRepository<Ausencia, Long> {
 			@Param("fechaHasta") LocalDate fechaHasta);
 
 
+	/* 
+	Consultar ausencias por profesor, ordenadas por fecha, como primer criterio,
+	por hora de clase, como segundo criterio  por grupo, como tercer criterio
+	*/	
+	@Query("SELECT DISTINCT a FROM Ausencia a " +
+	           "JOIN a.guardiasProfesores g " +
+	           "JOIN g.profesor p " +
+	           "WHERE p.nombreProfesor = :nombreProfesorGuardia " +
+	           "ORDER BY a.fechaAusencia ASC, " +
+	           "a.horariosProfesor.hora ASC, " +
+	           "a.horariosProfesor.grupo ASC")
+	List<Ausencia> findByProfesorGuardiaOrdenPorFechaYHora(
+	    	@Param("nombreProfesorGuardia") String nombreProfesorGuardia);
+	
+
+	/* 
+	Consultar ausencias por profesor y entre fechas, ordenadas por fecha, como primer criterio,
+	por hora de clase, como segundo criterio  por grupo, como tercer criterio
+	*/	
+    @Query("SELECT DISTINCT a FROM Ausencia a " +
+           "JOIN a.guardiasProfesores g " +
+           "JOIN g.profesor p " +
+           "WHERE a.fechaAusencia BETWEEN :fechaDesde AND :fechaHasta " +
+           "AND p.nombreProfesor = :nombreProfesorGuardia " +
+           "ORDER BY a.fechaAusencia ASC, " +
+           "a.horariosProfesor.hora ASC, " +
+           "a.horariosProfesor.grupo ASC")
+    List<Ausencia> findByFechasYProfesorGuardiaOrdenPorFechaYHora(
+            @Param("fechaDesde") LocalDate fechaDesde,
+            @Param("fechaHasta") LocalDate fechaHasta,
+            @Param("nombreProfesorGuardia") String nombreProfesorGuardia);
 }
+	
+
