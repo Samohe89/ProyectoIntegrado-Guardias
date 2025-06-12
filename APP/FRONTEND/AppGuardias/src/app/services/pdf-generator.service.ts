@@ -16,9 +16,6 @@ export class PdfGeneratorService {
   ) {
     const doc = new jsPDF();
 
-    //const logoUrl = 'https://www.iesalmudeyne.es/wp-content/uploads/2023/03/logo-ies-almudeyne-black.png';
-    //let startY = 15;
-
     try {
       const base64Logo = await this.getBase64ImageFromURL('/images/logo.png');
       doc.addImage(base64Logo, 'PNG', 14, 5, 25, 25); // Logo en la esquina superior izquierda
@@ -52,6 +49,7 @@ export class PdfGeneratorService {
     // Salto antes de la tabla
     const startTableY = filtrosTextY + 15;
 
+    // Tabla
     const tableOptions: UserOptions = {
       head: [headers],
       body: data,
@@ -59,7 +57,7 @@ export class PdfGeneratorService {
       margin: { left: 30, right: 30 },
       theme: 'grid',
       styles: {
-        font: 'Helvetica', // 👈 Asegúrate de que esté registrada
+        font: 'Helvetica',
         fontSize: 10,
         halign: 'center',
         valign: 'middle',
@@ -73,9 +71,6 @@ export class PdfGeneratorService {
         fontStyle: 'bold',
         halign: 'center',
       },
-      // alternateRowStyles: {
-      //   fillColor: [237, 241, 239] // Efecto 'striped' EDF1EF
-      // },
       bodyStyles: {
         halign: 'center'
       },
@@ -92,7 +87,7 @@ export class PdfGeneratorService {
       didDrawPage: (dataArg) => {
         // Pie de página
         const pageCount = doc.getNumberOfPages();
-        const pageCurrent = (doc as any)._autoTable?.pageNumber || 1;
+        const pageCurrent = doc.getCurrentPageInfo().pageNumber;
 
         doc.setFontSize(9);
         doc.text(
@@ -114,7 +109,7 @@ export class PdfGeneratorService {
   }
 
   private async getBase64ImageFromURL(url: string): Promise<string> {
-    const res = await fetch(url, { mode: 'cors' });   // o 'no-cors' si el servidor no responde CORS
+    const res = await fetch(url, { mode: 'cors' });
     const blob = await res.blob();
 
     return new Promise<string>((resolve, reject) => {

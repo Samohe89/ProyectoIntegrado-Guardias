@@ -118,7 +118,8 @@ export class HorasGuardiaComponent implements OnInit {
 
     const data = this.profesoresConHoras.map(item => [
       item.nombreProfesor,
-      Number(item.totalHoras).toFixed(2) // Formatear a 2 decimales
+      // Formatear a 2 decimales
+      Number(item.totalHoras).toFixed(2)
     ]);
 
     const filtros = {
