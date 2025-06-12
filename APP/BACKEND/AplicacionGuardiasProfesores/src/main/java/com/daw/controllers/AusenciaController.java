@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.daw.datamodel.entities.Ausencia;
 import com.daw.dto.AusenciaDTO;
 import com.daw.services.AusenciaService;
-import com.daw.services.HorarioService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -64,6 +63,8 @@ public class AusenciaController {
 	        Ausencia nuevaAusencia = service.crearRegistroAusencia(ausenciaDTO);
 	        return ResponseEntity.ok(nuevaAusencia);
 
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la ausencia: " + e.getMessage());
 	    }
