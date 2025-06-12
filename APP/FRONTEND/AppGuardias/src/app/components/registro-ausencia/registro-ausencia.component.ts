@@ -4,7 +4,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { ProfesorService, Profesor } from '../../services/profesor.service';
 import { AusenciaService } from '../../services/ausencia.service';
 import { HorarioService } from '../../services/horario.service';
-import { ModalRegistroComponent } from '../../modal-registro/modal-registro.component';
+import { ModalRegistroComponent } from '../modal-registro/modal-registro.component';
 
 @Component({
   selector: 'app-registro-ausencia',

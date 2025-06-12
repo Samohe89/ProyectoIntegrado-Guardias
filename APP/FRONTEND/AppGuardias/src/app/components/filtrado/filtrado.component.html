@@ -1,0 +1,66 @@
+<div id="divFiltrado" class="filtrado-container">
+  <form #formFiltrado="ngForm" class="row gy-3" (ngSubmit)="onSubmit(formFiltrado)">
+
+    <!-- Fecha desde -->
+    <div class="col-12 col-md-6 col-xxl-3 d-flex flex-column flex-xxl-row align-items-xxl-center">
+      <label for="fechaDesde" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">
+        <span class="label-text">Fecha desde:</span>
+      </label>
+      <input type="date" id="fechaDesde" name="fechaDesde" class="form-control datePersonalizado"
+        [ngClass]="{ 'input-invalido': (faltanFechas && !fechaDesde) || fechasErroneas || faltanCriterios}"
+        [(ngModel)]="fechaDesde" [min]="fechaMin" [max]="fechaMax"
+        (focus)="resetValidacion()" />
+
+    </div>
+
+    <!-- Fecha hasta -->
+    <div class="col-12 col-md-6 col-xxl-3 d-flex flex-column flex-xxl-row align-items-xxl-center">
+      <label for="fechaHasta" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">
+        <span class="label-text">Fecha hasta:</span>
+      </label>
+      <input type="date" id="fechaHasta" name="fechaHasta" class="form-control datePersonalizado"
+        [ngClass]="{ 'input-invalido': (faltanFechas && !fechaHasta) || fechasErroneas || faltanCriterios }"
+        [(ngModel)]="fechaHasta" [min]="fechaMin" [max]="fechaMax"
+        (focus)="resetValidacion()" />
+    </div>
+
+    <!-- Profesor -->
+    <div class="col-12 col-md-6 col-xxl-4 d-flex flex-column flex-xxl-row align-items-xxl-center">
+      <label for="profesorFiltro" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0 label-text">Profesor:</label>
+      <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado"
+      [ngClass]="{ 'input-invalido': faltanCriterios }"
+      [(ngModel)]="profesorFiltro"
+      (focus)="resetValidacion()">
+        <option [ngValue]="null">Seleccione profesor</option>
+        <option *ngFor="let profesor of profesores" [value]="profesor.nombreProfesor">
+          {{ profesor.nombreProfesor }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Botón buscar -->
+    <div class="col-12 col-md-6 col-xxl-2 d-flex justify-content-md-end align-items-md-end mt-4 mt-md-0">
+      <button type="submit" class="btn btn-green">
+        <i class="bi bi-search"></i>
+        Buscar
+      </button>
+    </div>
+
+
+    <!-- Mensaje si no se introduce ningún criterio de filtrado-->
+    <p *ngIf="faltanCriterios" class="error-message">
+      Debe introducir un criterio de filtrado: por fechas, por profesor o por ambos.
+    </p>
+
+    <!-- Mensaje si no se introduce una de las fechas-->
+    <p *ngIf="faltanFechas" class="error-message">
+      Debe seleccionar ambas fechas de filtrado.
+    </p>
+
+
+    <!-- Mensaje si la fecha hasta es anterior a fecha desde-->
+    <p *ngIf="fechasErroneas" class="error-message">
+      "Fecha hasta" debe ser posterior a "Fecha desde".
+    </p>
+  </form>
+</div>

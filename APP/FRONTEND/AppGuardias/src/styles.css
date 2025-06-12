@@ -43,7 +43,8 @@ h2 {
 }
 
 .btn {
-    min-width: 130px;
+  height: 45px;
+  min-width: 130px;
 }
 
 .btn-green {
@@ -65,3 +66,4 @@ h2 {
   border: 2px solid #3c7e66;
   color: #3c7e66;
 }
+

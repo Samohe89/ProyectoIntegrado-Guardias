@@ -30,7 +30,7 @@ public class Profesor {
 	@Column(name = "ClaveProfesor", nullable = false, length = 25)
 	private String claveProfesor;
 	
-	@Column(name = "Alias", unique = false)
+	@Column(name = "Alias", unique = true, length = 5)
 	private String alias;
 	
 	@Column(name = "NombreDepartamento", nullable = false, length = 50)

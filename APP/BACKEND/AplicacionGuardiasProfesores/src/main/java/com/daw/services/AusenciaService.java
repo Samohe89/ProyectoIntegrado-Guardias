@@ -10,13 +10,18 @@ import com.daw.datamodel.entities.Ausencia;
 import com.daw.datamodel.entities.Horario;
 import com.daw.datamodel.entities.Profesor;
 import com.daw.dto.AusenciaDTO;
+import com.daw.exceptions.AusenciaNoEncontradaException;
+import com.daw.exceptions.AusenciasNoEncontradasException;
+import com.daw.exceptions.FicheroTareaNoEncontradoException;
 import com.daw.repositories.AusenciaRepository;
 import com.daw.repositories.HorarioRepository;
 import com.daw.repositories.ProfesorRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AusenciaService {
 
@@ -26,21 +31,83 @@ public class AusenciaService {
 
 	private final ProfesorRepository profesorRepository;
 
-	public List<Ausencia> findAll() {
-		return repository.findAll();
-	}
-
-	public Optional<Ausencia> findById(Long id) {
-		return repository.findById(id);
-	}
+    public List<Ausencia> findAll() {
+        return repository.findAll();
+    }
+    
+    public Ausencia getAusenciaPorId(Long idAusencia) {
+    	Optional<Ausencia> ausencia = repository.findById(idAusencia);
+    	if (ausencia.isEmpty()) {
+    		throw new AusenciaNoEncontradaException(idAusencia);
+    	}
+    	return ausencia.get();
+    }
+    
+    
+    public Optional<Ausencia> findById(Long id) {
+        return repository.findById(id);
+    }
 
 	public Ausencia save(Ausencia ausencia) {
 		return repository.save(ausencia);
 	}
 
-	public void deleteById(Long id) {
-		repository.deleteById(id);
-	}
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
+    
+       
+    public List<Ausencia> getAusenciasPorFechaOrdenadasPorHora(LocalDate fecha) {
+    	List<Ausencia> ausencias = repository.findByFechaOrdenPorHora(fecha);
+        if (ausencias.isEmpty()) {
+            throw new AusenciasNoEncontradasException();
+        }
+        return ausencias;
+    }
+    
+    public List<Ausencia> getAusenciasPorFechaOrdenadasPorHora(LocalDate fechaDesde, LocalDate fechaHasta) {
+    	List<Ausencia> ausencias = repository.findByFechasOrdenPorFechaYHora(fechaDesde, fechaHasta);
+        if (ausencias.isEmpty()) {
+            throw new AusenciasNoEncontradasException();
+        }
+        return ausencias;
+    }
+    
+    
+    public List<Ausencia> getAusenciasFiltradasOrdenadasPorFechaYHora(LocalDate fechaDesde, LocalDate fechaHasta, String profesorGuardia) {
+    	List<Ausencia> ausencias;
+    	
+    	boolean recibeFechas = (fechaDesde != null && fechaHasta != null);
+    	boolean recibeProfesor = (profesorGuardia != null && !profesorGuardia.isEmpty());
+    	
+    	if (recibeFechas && recibeProfesor) {
+    		ausencias = repository.findByFechasYProfesorGuardiaOrdenPorFechaYHora(fechaDesde, fechaHasta, profesorGuardia);
+    	} else if (recibeFechas) {
+    		ausencias = repository.findByFechasOrdenPorFechaYHora(fechaDesde, fechaHasta);
+    	} else {
+    		ausencias = repository.findByProfesorGuardiaOrdenPorFechaYHora(profesorGuardia);
+    	}
+    	if (ausencias.isEmpty()) {
+            throw new AusenciasNoEncontradasException();
+        }
+        return ausencias;
+    }
+    
+    
+    public byte[] getFicheroTarea(Long idAusencia) {
+    	Optional<Ausencia> ausencia = repository.findById(idAusencia);
+    	if (ausencia.isEmpty()) {
+    		throw new AusenciaNoEncontradaException(idAusencia);
+    	}
+    	
+        byte[] fichero = ausencia.get().getFichero();
+        if (fichero == null || fichero.length == 0) {
+            throw new FicheroTareaNoEncontradoException(idAusencia);
+        }
+        return fichero;
+    }
+    
+    
 
 	public Ausencia crearRegistroAusencia(AusenciaDTO ausenciaDTO) {
 
