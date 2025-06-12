@@ -11,7 +11,7 @@ import { ListadoAusenciasComponent } from './components/listado-ausencias/listad
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, LoginComponent, MenuComponent, HorasGuardiaComponent, ListadoAusenciasComponent],
+  imports: [RouterOutlet, CommonModule, LoginComponent, MenuComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
