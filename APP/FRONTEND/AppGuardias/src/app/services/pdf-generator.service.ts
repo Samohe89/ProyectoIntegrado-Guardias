@@ -102,7 +102,7 @@ export class PdfGeneratorService {
     autoTable(doc, tableOptions);
 
     // Guardar el PDF en un archivo
-    //doc.save(nombreArchivo || 'informe-guardias.pdf');
+    doc.save(nombreArchivo || 'informe-guardias.pdf');
 
     // Abrir el pdf en una nueva ventana
     doc.output('dataurlnewwindow');

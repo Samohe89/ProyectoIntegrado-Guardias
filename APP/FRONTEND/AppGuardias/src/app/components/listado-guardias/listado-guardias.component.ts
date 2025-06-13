@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild, } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { AusenciaService } from '../../services/ausencia.service'
 import { GuardiaService } from '../../services/guardia.service';
 import { FiltradoComponent } from "../filtrado/filtrado.component";
 import { TramosGuardiaComponent } from '../tramos-guardia/tramos-guardia.component';
 import { DetallesGuardiaComponent } from "../detalles-guardia/detalles-guardia.component";
+import { PdfGeneratorService } from '../../services/pdf-generator.service';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -13,7 +15,7 @@ import { DetallesGuardiaComponent } from "../detalles-guardia/detalles-guardia.c
   imports: [CommonModule, DatePipe, FiltradoComponent, TramosGuardiaComponent, DetallesGuardiaComponent],
   templateUrl: './listado-guardias.component.html',
   styleUrl: './listado-guardias.component.css',
-  providers: [AusenciaService, GuardiaService]
+  providers: [AusenciaService, GuardiaService, DatePipe]
 })
 
 
@@ -63,7 +65,12 @@ export class ListadoGuardiasComponent implements OnInit {
   mensajeTablaVacia: String = "";
 
 
-  constructor(private ausenciaService: AusenciaService, private guardiaService: GuardiaService) { }
+
+  constructor(
+    private ausenciaService: AusenciaService,
+    private guardiaService: GuardiaService,
+    private pdfGenerator: PdfGeneratorService,
+    private datePipe: DatePipe) { }
 
   ngOnInit(): void {
     // Calcular el dia siguiente
@@ -89,7 +96,7 @@ export class ListadoGuardiasComponent implements OnInit {
     // Resetear el array de tramos
     this.tramosPorAusencia = [];
 
-    // Formatear fecha que sen envía al backend
+    // Formatear fecha que se envía al backend
     const fechaFormateada = this.formatearFecha(fecha);
     //console.log("fecha formateada: ",fechaFormateada);
     this.ausenciaService.getAusenciasPorFecha(fechaFormateada).subscribe({
@@ -268,7 +275,7 @@ export class ListadoGuardiasComponent implements OnInit {
   }
 
 
-  // Método para aplicar filtros a la tabla
+  // Aplicar filtros a la tabla
   filtrarTabla(filtros: { fechaDesde: string, fechaHasta: string, profesorFiltro: string | null }) {
     console.log('Filtros recibidos del hijo:', filtros);
     this.fechaDesde = filtros.fechaDesde;
@@ -280,7 +287,7 @@ export class ListadoGuardiasComponent implements OnInit {
   }
 
 
-  // Método para abrir el modal de tramos de guardia
+  // Abrir el modal de tramos de guardia
   abrirModalTramos(idAusencia: number, grupo: string) {
     this.modalTramos.cargarGuardias(idAusencia);
     this.modalTramos.grupo = grupo;
@@ -288,15 +295,15 @@ export class ListadoGuardiasComponent implements OnInit {
     this.modalTramos.modalActivo = true;
   }
 
-  // Método para abrir el modal de detalles de guardia
 
+  // Abrir el modal de detalles de guardia
   abrirModalDetalles(idAusencia: number) {
     this.modalDetalles.cargarAusencia(idAusencia);
     this.modalDetalles.modalActivo = true;
   }
 
 
-  // Método para recargar la vista si se han actualizado las guardias (creado o borrado)
+  // Recargar la vista si se han actualizado las guardias (creado o borrado)
   recargarDatos(): void {
     if (this.fechaDesde && this.fechaHasta) {
       this.cargarAusenciasFiltradas(this.fechaDesde, this.fechaHasta, this.profesorFiltro);
@@ -304,6 +311,69 @@ export class ListadoGuardiasComponent implements OnInit {
       this.cargarAusencias(this.fechaUnica);
     }
   }
+
+  // Generar el PDF
+  async imprimirPDF(): Promise<void> {
+    const subtitulo = 'LISTADO DE AUSENCIAS Y GUARDIAS';
+
+    console.log("fechaUnica: " + this.fechaUnica + "; Fecha desde: " + this.fechaDesde + "; Fecha hasta: " + this.fechaHasta);
+
+    const filtros: any = {};
+    if (this.fechaDesde === null || this.fechaHasta === null) {
+      filtros['Fecha desde'] = this.fechaUnica ? this.datePipe.transform(this.fechaUnica, 'dd/MM/yyyy') ?? '' : '';
+      filtros['Fecha hasta'] = this.fechaUnica ? this.datePipe.transform(this.fechaUnica, 'dd/MM/yyyy') ?? '' : '';
+    } else {
+      filtros['Fecha desde'] = this.fechaDesde ? this.datePipe.transform(this.fechaDesde, 'dd/MM/yyyy') ?? '' : '';
+      filtros['Fecha hasta'] = this.fechaHasta ? this.datePipe.transform(this.fechaHasta, 'dd/MM/yyyy') ?? '' : '';
+    }
+
+    const headers = ['Fecha', 'Hora', 'Grupo', 'Profesor Ausente', 'Tramo', 'Profesor de Guardia'];
+
+    const data: (string | number)[][] = [];
+
+    for (const agrupacion of this.ausenciasAgrupadas) {
+      for (const hora of agrupacion.horas) {
+        for (const ausencia of hora.ausencias) {
+          try {
+            const guardias = await firstValueFrom(this.guardiaService.getGuardiasPorIdAusencia(ausencia.id));
+
+            if (guardias.length > 0) {
+              for (const guardia of guardias) {
+                data.push([
+                  this.datePipe.transform(ausencia.fechaAusencia, 'dd/MM/yyyy') ?? '',
+                  ausencia.horariosProfesor.hora + "ª Hora",
+                  ausencia.horariosProfesor.grupo,
+                  ausencia.horariosProfesor.profesor.nombreProfesor,
+                  guardia.tramo,
+                  guardia.profesor.nombreProfesor
+                ]);
+              }
+            } else {
+              data.push([
+                this.datePipe.transform(ausencia.fechaAusencia, 'dd/MM/yyyy') ?? '',
+                ausencia.horariosProfesor.hora + "ª Hora",
+                ausencia.horariosProfesor.grupo,
+                ausencia.horariosProfesor.profesor.nombreProfesor,
+                '-',
+                '-'
+              ]);
+            }
+          } catch (err) {
+            console.error('Error al obtener guardias para la ausencia ID', ausencia.id, err);
+          }
+        }
+      }
+    }
+
+    this.pdfGenerator.generarPdfTabla(
+      subtitulo,
+      filtros,
+      headers,
+      data,
+      'informe-guardias.pdf'
+    );
+  }
+
 
 
 }
