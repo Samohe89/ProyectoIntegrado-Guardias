@@ -24,11 +24,11 @@
         </div>
 
         <!-- Indicador de fecha -->
-        <ng-container *ngIf="fechaDesde == null">
+        <ng-container *ngIf="!fechaDesde && !fechaHasta">
           <p class="fw-semibold m-0">Ausencias del día {{ fechaUnica | date : "dd/MM/yyyy" }}
           </p>
         </ng-container>
-        <ng-container *ngIf="fechaDesde !== null">
+        <ng-container *ngIf="fechaDesde || fechaHasta">
           <p class="fw-semibold m-0">
             Ausencias desde {{ fechaDesde | date : "dd/MM/yyyy" }} hasta
             {{ fechaHasta | date : "dd/MM/yyyy" }}
@@ -66,12 +66,12 @@
               <td>{{ ausencia.horariosProfesor.asignatura }}</td>
               <td>
                 <button class="btn-detalles">
-                  <i class="bi bi-plus-lg"></i>
+                  <i class="bi bi-plus-square-fill"></i>
                 </button>
               </td>
               <td>
                 <button class="btn-eliminar" (click)="abrirModal(ausencia)">
-                  <i class="bi bi-trash-fill"></i>
+                  <i class="bi bi-trash"></i>
                 </button>
               </td>
             </tr>
@@ -115,19 +115,7 @@
 </div>
 
 <!-- Modal de confirmación -->
-<div class="modal-container" *ngIf="mostrarModal">
-  <div class="modal-content shadow mx-3 mx-xxl-0">
-    <div class="modal-header">
-      <h1>Eliminar</h1>
-    </div>
-    <div class="modal-body">
-      <p><strong>¿Desea Eliminar?</strong></p>
-      <button class="btn modal-btn-green" (click)="confirmarEliminacion()">
-        <i class="bi bi-check-circle-fill"></i>
-      </button>
-      <button class="btn modal-btn-red" (click)="cancelarEliminacion()">
-        <i class="bi bi-x-circle-fill"></i>
-      </button>
-    </div>
-  </div>
-</div>
+<app-modal-eliminar
+  #modalEliminar
+  (eliminar)="manejarEliminacion($event)">
+</app-modal-eliminar>

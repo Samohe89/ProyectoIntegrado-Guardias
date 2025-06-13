@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild, viewChild } from '@angular/core';
 import {
   Ausencia,
   AusenciaService,
@@ -8,15 +8,23 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfesorService } from '../../services/profesor.service';
 import { FiltradoComponent } from '../filtrado/filtrado.component';
+import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.component';
 
 @Component({
   selector: 'app-listado-ausencias',
   standalone: true,
-  imports: [CommonModule, FormsModule, FiltradoComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    FiltradoComponent,
+    ModalEliminarComponent,
+  ],
   templateUrl: './listado-ausencias.component.html',
   styleUrl: './listado-ausencias.component.css',
 })
 export class ListadoAusenciasComponent implements OnInit {
+   @ViewChild('modalEliminar', { static: false }) modalEliminar!: ModalEliminarComponent;
+
   ausencias: Ausencia[] = [];
   todasLasAusencias: Ausencia[] = [];
   ausenciasFiltro: Ausencia[] = [];
@@ -196,28 +204,25 @@ export class ListadoAusenciasComponent implements OnInit {
   }
 
   //Lógica para eliminar una ausencia
-
   abrirModal(ausencia: Ausencia) {
     this.ausenciaSeleccionada = ausencia;
-    this.mostrarModal = true;
+    this.modalEliminar.mostrarModal();
   }
 
-  cancelarEliminacion() {
-    this.ausenciaSeleccionada = null;
-    this.mostrarModal = false;
-  }
-
-  confirmarEliminacion() {
-    if (this.ausenciaSeleccionada?.id) {
-      this.ausenciaService
-        .delete(this.ausenciaSeleccionada.id)
-        .subscribe(() => {
-          // Quitar del array local
+  manejarEliminacion(confirmado: boolean): void {
+    if (confirmado && this.ausenciaSeleccionada) {
+      this.ausenciaService.delete(this.ausenciaSeleccionada.id!).subscribe({
+        next: () => {
           this.ausencias = this.ausencias.filter(
-            (ausencia) => ausencia.id !== this.ausenciaSeleccionada?.id
+            (a) => a.id !== this.ausenciaSeleccionada?.id
           );
-          this.cancelarEliminacion(); // Cierra modal
-        });
+          this.ausenciaSeleccionada = null;
+        },
+        error: (err) => {
+          console.error('Error al eliminar:', err);
+        },
+      });
     }
+    this.ausenciaSeleccionada = null;
   }
 }
