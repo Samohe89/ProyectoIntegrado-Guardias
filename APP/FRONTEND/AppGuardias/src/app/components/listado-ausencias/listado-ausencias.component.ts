@@ -36,6 +36,10 @@ export class ListadoAusenciasComponent implements OnInit {
   fechaHasta: string = '';
   profesorFiltro: string = '';
 
+  fechaUnica: Date = new Date(); // Fecha mostrada como "Guardias del día ..."
+  diaActual: Date = new Date(); // Hoy
+  diaSiguiente: Date = new Date(); // Mañana
+
   constructor(
     private ausenciaService: AusenciaService,
     private profesorService: ProfesorService
@@ -68,6 +72,10 @@ export class ListadoAusenciasComponent implements OnInit {
       // Normalizamos la fecha actual a medianoche (00:00:00)
       const hoy = new Date();
       hoy.setHours(0, 0, 0, 0);
+      this.diaActual = new Date(hoy);
+      this.fechaUnica = new Date(hoy);
+      this.diaSiguiente = new Date(hoy);
+      this.diaSiguiente.setDate(hoy.getDate() + 1);
 
       this.ausenciaService.getAll().subscribe((data) => {
         this.todasLasAusencias = data;
@@ -109,38 +117,81 @@ export class ListadoAusenciasComponent implements OnInit {
     } else {
       console.log('No hay usuario para esta sesión');
     }
+    this.fechaDesde = '';
+    this.fechaHasta = '';
   }
 
-   aplicarFiltrosDesdeComponente(event: {
+  cargarAusencias(dia: Date) {
+    this.fechaDesde = '';
+    this.fechaHasta = '';
+    const fechaSeleccionada = new Date(dia);
+    fechaSeleccionada.setHours(0, 0, 0, 0);
+
+    // Actualiza fecha mostrada
+    this.fechaUnica = new Date(fechaSeleccionada);
+
+    // Filtra las ausencias para el profesor y la fecha seleccionada
+    if (this.usuario?.rol === 'Profesor') {
+      this.ausencias = this.todasLasAusencias.filter((ausencia) => {
+        const esProfesor =
+          ausencia.profesor?.id?.dniProfesor === this.dniProfesorLogueado;
+
+        const fechaAusencia = new Date(ausencia.fechaAusencia);
+        fechaAusencia.setHours(0, 0, 0, 0);
+
+        return (
+          esProfesor && fechaAusencia.getTime() === fechaSeleccionada.getTime()
+        );
+      });
+    }
+  }
+
+  // Método para verificar la equivalencia de fechas
+  esMismaFecha(fecha1: Date, fecha2: Date): boolean {
+    if (fecha1.toDateString() === fecha2.toDateString()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  aplicarFiltrosDesdeComponente(event: {
     fechaDesde: string;
     fechaHasta: string;
-    profesor: string;
+    profesorFiltro: string | null;
   }) {
     let filtradas = this.todasLasAusencias;
 
-    let fechaDesde = event.fechaDesde || new Date().toISOString().split('T')[0];
-    const desde = new Date(fechaDesde);
+    // 1. Convertir y normalizar fechaDesde
+    const desde = new Date(event.fechaDesde);
     desde.setHours(0, 0, 0, 0);
 
-    filtradas = filtradas.filter(
-      (ausencia) => new Date(ausencia.fechaAusencia) >= desde
-    );
+    // 2. Convertir y normalizar fechaHasta si existe
+    const hasta = event.fechaHasta ? new Date(event.fechaHasta) : null;
+    if (hasta) hasta.setHours(23, 59, 59, 999);
 
-    if (event.fechaHasta) {
-      const hasta = new Date(event.fechaHasta);
-      hasta.setHours(23, 59, 59, 999);
-      filtradas = filtradas.filter(
-        (ausencia) => new Date(ausencia.fechaAusencia) <= hasta
-      );
-    }
+    // 3. Filtrar por rango de fechas
+    filtradas = filtradas.filter((ausencia) => {
+      const fechaAusencia = new Date(ausencia.fechaAusencia); // <-- CONVERSIÓN AQUÍ
+      fechaAusencia.setHours(0, 0, 0, 0);
 
-    if (event.profesor) {
-      const nombre = event.profesor.toLowerCase();
+      const dentroDeDesde = fechaAusencia >= desde;
+      const dentroDeHasta = hasta ? fechaAusencia <= hasta : true;
+
+      return dentroDeDesde && dentroDeHasta;
+    });
+
+    // 4. Filtrar por profesor (si hay)
+    if (event.profesorFiltro) {
+      const nombre = event.profesorFiltro.toLowerCase();
       filtradas = filtradas.filter((ausencia) =>
         ausencia.profesor?.nombreProfesor?.toLowerCase().includes(nombre)
       );
     }
 
+    // 5. Actualizar fechas y ausencias para mostrar
+    this.fechaDesde = event.fechaDesde;
+    this.fechaHasta = event.fechaHasta;
     this.ausencias = filtradas;
   }
 
