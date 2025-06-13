@@ -7,11 +7,12 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfesorService } from '../../services/profesor.service';
+import { FiltradoComponent } from '../filtrado/filtrado.component';
 
 @Component({
   selector: 'app-listado-ausencias',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FiltradoComponent],
   templateUrl: './listado-ausencias.component.html',
   styleUrl: './listado-ausencias.component.css',
 })
@@ -110,32 +111,31 @@ export class ListadoAusenciasComponent implements OnInit {
     }
   }
 
-  aplicarFiltros() {
+   aplicarFiltrosDesdeComponente(event: {
+    fechaDesde: string;
+    fechaHasta: string;
+    profesor: string;
+  }) {
     let filtradas = this.todasLasAusencias;
 
-    let fechaDesde = this.fechaDesde;
-    if (!fechaDesde) {
-      const hoy = new Date();
-      hoy.setHours(0, 0, 0, 0);
-      fechaDesde = hoy.toISOString().split('T')[0]; // "YYYY-MM-DD"
-    }
-
+    let fechaDesde = event.fechaDesde || new Date().toISOString().split('T')[0];
     const desde = new Date(fechaDesde);
     desde.setHours(0, 0, 0, 0);
+
     filtradas = filtradas.filter(
       (ausencia) => new Date(ausencia.fechaAusencia) >= desde
     );
 
-    if (this.fechaHasta) {
-      const hasta = new Date(this.fechaHasta);
+    if (event.fechaHasta) {
+      const hasta = new Date(event.fechaHasta);
       hasta.setHours(23, 59, 59, 999);
       filtradas = filtradas.filter(
         (ausencia) => new Date(ausencia.fechaAusencia) <= hasta
       );
     }
 
-    if (this.profesorFiltro) {
-      const nombre = this.profesorFiltro.toLowerCase();
+    if (event.profesor) {
+      const nombre = event.profesor.toLowerCase();
       filtradas = filtradas.filter((ausencia) =>
         ausencia.profesor?.nombreProfesor?.toLowerCase().includes(nombre)
       );

@@ -1,0 +1,49 @@
+<div id="divFiltrado" class="filtrado-container">
+  <form #formFiltrado="ngForm" class="row gy-3" (ngSubmit)="onSubmit(formFiltrado)">
+
+    <div class="row gx-3 gy-3 d-flex flex-wrap align-items-center">
+      <!-- Fecha desde -->
+      <div class="col-12 col-md-6 col-xxl d-flex flex-column flex-xxl-row align-items-xxl-center flex-grow-1">
+        <label for="fechaDesde" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">
+          <span class="label-text">Fecha desde:</span>
+        </label>
+        <input type="date" id="fechaDesde" name="fechaDesde" class="form-control datePersonalizado flex-grow-1"
+          [ngClass]="{ 'is-invalid': (faltanFechas && !fechaDesde) || fechasErroneas || faltanCriterios}"
+          [(ngModel)]="fechaDesde" (ngModelChange)="resetValidacion()" />
+      </div>
+
+      <!-- Fecha hasta -->
+      <div class="col-12 col-md-6 col-xxl d-flex flex-column flex-xxl-row align-items-xxl-center flex-grow-1">
+        <label for="fechaHasta" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">
+          <span class="label-text">Fecha hasta:</span>
+        </label>
+        <input type="date" id="fechaHasta" name="fechaHasta" class="form-control datePersonalizado flex-grow-1"
+          [ngClass]="{ 'is-invalid': (faltanFechas && !fechaHasta) || fechasErroneas || faltanCriterios }"
+          [(ngModel)]="fechaHasta" (ngModelChange)="resetValidacion()" />
+      </div>
+
+      <!-- Botón buscar -->
+      <div class="col-12 col-md-auto d-flex justify-content-md-end align-items-center">
+        <button type="submit" class="btn btn-green">
+          <i class="bi bi-search"></i>
+          Buscar
+        </button>
+      </div>
+    </div>
+
+    <!-- Mensaje si no se introduce ningún criterio de filtrado-->
+    <p *ngIf="faltanCriterios" class="error-message">
+      Debe introducir un criterio de filtrado: por fechas.
+    </p>
+
+    <!-- Mensaje si no se introduce una de las fechas-->
+    <p *ngIf="faltanFechas" class="error-message">
+      Debe seleccionar ambas fechas de filtrado.
+    </p>
+
+    <!-- Mensaje si la fecha hasta es anterior a fecha desde-->
+    <p *ngIf="fechasErroneas" class="error-message">
+      "Fecha hasta" debe ser posterior a "Fecha desde".
+    </p>
+  </form>
+</div>

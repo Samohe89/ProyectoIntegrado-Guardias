@@ -11,14 +11,14 @@ import { CommonModule } from '@angular/common';
 export class ModalRegistroComponent {
 
   // Variable para controlar la visualización del modal
-  modalActivo: boolean = false;
+  modalRegistroActivo: boolean = false;
 
   mostrarModal() {
-    this.modalActivo = true;
+    this.modalRegistroActivo = true;
   }
 
   cerrarModal() {
-    this.modalActivo = false;
+    this.modalRegistroActivo = false;
   }
 
 }
