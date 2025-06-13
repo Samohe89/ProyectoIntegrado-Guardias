@@ -1,27 +1,51 @@
-<ng-container *ngIf="usuario">
-  <div class="main-container">
-    <div class="view-container shadow mx-3 mx-xxl-0">
-      <div class="view-title">
-        <h1>
-          {{
-            usuario.rol === "Profesor" ? "Mis Ausencias" : "Todas las Ausencias"
-          }}
-        </h1>
-      </div>
-      <div>
-        <div>
-          <div *ngIf="usuario?.rol === 'Equipo Directivo'">
-            <!-- <app-filtrado
-              [profesores]="profesores"
-              (filtrosAplicados)="aplicarFiltrosDesdeComponente($event)"
-            ></app-filtrado>
-          -->
-          </div>
+<div class="main-container">
+  <div class="view-container shadow mx-3 mx-xxl-0">
+    <div class="view-title">
+      <h1>Ausencias</h1>
+    </div>
+
+    <div class="view-body">
+      <div id="opcionesListado" class="d-flex justify-content-between align-items-center">
+        <div id="botonesListado">
+          <!-- Botón Imprimir PDF -->
+          <button class="btn btn-green">
+            <i class="bi bi-printer-fill"></i>
+            Imprimir PDF
+          </button>
+          <ng-container *ngIf="usuario?.rol == 'Profesor'">
+            <!-- Botón Día siguiente -->
+            <button *ngIf="esMismaFecha(fechaUnica, diaActual)" class="btn btn-green ms-3"
+              (click)="cargarAusencias(diaSiguiente)">
+              <i class="bi bi-chevron-double-right"></i>
+              Día siguiente
+            </button>
+            <!-- Botón Día actual -->
+            <button *ngIf="!esMismaFecha(fechaUnica, diaActual)" class="btn btn-green ms-3"
+              (click)="cargarAusencias(diaActual)">
+              <i class="bi bi-chevron-double-left"></i>
+              Día actual
+            </button>
+          </ng-container>
         </div>
-        <table
-          class="tabla-ausencias"
-          *ngIf="ausencias.length > 0; else noDatos"
-        >
+
+        <!-- Indicador de fecha -->
+        <ng-container *ngIf="fechaDesde == null">
+          <p class="fw-semibold m-0">Ausencias del día {{ fechaUnica | date : "dd/MM/yyyy" }}
+          </p>
+        </ng-container>
+        <ng-container *ngIf="fechaDesde !== null">
+          <p class="fw-semibold m-0">
+            Ausencias desde {{ fechaDesde | date : "dd/MM/yyyy" }} hasta
+            {{ fechaHasta | date : "dd/MM/yyyy" }}
+          </p>
+        </ng-container>
+      </div>
+      
+      <app-filtrado *ngIf="usuario?.rol == 'Equipo Directivo'"
+        (filtrosAplicados)="aplicarFiltrosDesdeComponente($event)"></app-filtrado>
+
+      <div id="divTabla" class="table-container">
+        <table class="table shadow tabla-ausencias">
           <thead>
             <tr>
               <!-- Condicional: Mostrar columna 'Profesor' si el rol es Equipo Directivo -->
@@ -56,47 +80,44 @@
                 </button>
               </td>
             </tr>
+            <!-- Si no hay ausencias, mostramos un mensaje -->
+            <tr *ngIf="ausencias.length === 0">
+              <td colspan="7" class="text-center">
+                No hay ausencias disponibles.
+              </td>
+            </tr>
           </tbody>
         </table>
-        <div
-          class="responsive-cards"
-          *ngIf="ausencias.length > 0 && isMobile()"
-        >
-          <div class="ausencia-card" *ngFor="let ausencia of ausencias">
-            <div class="card-header">{{ ausencia.fechaAusencia }}</div>
-            <div>
-              <strong>Grupo:</strong> {{ ausencia.horariosProfesor.grupo }}
-            </div>
-            <div>
-              <strong>Hora:</strong> {{ ausencia.horariosProfesor.hora }}
-            </div>
-            <div *ngIf="usuario?.rol === 'Equipo Directivo'">
-              <strong>Profesor:</strong> {{ ausencia.profesor.nombreProfesor }}
-            </div>
-            <div>
-              <strong>Asignatura:</strong>
-              {{ ausencia.horariosProfesor.asignatura }}
-            </div>
+      </div>
 
-            <div class="card-actions">
-              <button class="btn-detalles">
-                <i class="bi bi-plus-lg"></i>
-              </button>
-              <button class="btn-eliminar" (click)="abrirModal(ausencia)">
-                <i class="bi bi-trash-fill"></i>
-              </button>
-            </div>
+      <div class="responsive-cards" *ngIf="ausencias.length > 0 && isMobile()">
+        <div class="ausencia-card" *ngFor="let ausencia of ausencias">
+          <div class="card-header">{{ ausencia.fechaAusencia }}</div>
+          <div>
+            <strong>Grupo:</strong> {{ ausencia.horariosProfesor.grupo }}
+          </div>
+          <div><strong>Hora:</strong> {{ ausencia.horariosProfesor.hora }}</div>
+          <div *ngIf="usuario?.rol === 'Equipo Directivo'">
+            <strong>Profesor:</strong> {{ ausencia.profesor.nombreProfesor }}
+          </div>
+          <div>
+            <strong>Asignatura:</strong>
+            {{ ausencia.horariosProfesor.asignatura }}
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-detalles">
+              <i class="bi bi-plus-lg"></i>
+            </button>
+            <button class="btn-eliminar" (click)="abrirModal(ausencia)">
+              <i class="bi bi-trash-fill"></i>
+            </button>
           </div>
         </div>
-
-        <!-- Mensaje si no hay datos -->
-        <ng-template #noDatos>
-          <p class="text-muted">No hay ausencias disponibles.</p>
-        </ng-template>
       </div>
     </div>
   </div>
-</ng-container>
+</div>
 
 <!-- Modal de confirmación -->
 <div class="modal-container" *ngIf="mostrarModal">
