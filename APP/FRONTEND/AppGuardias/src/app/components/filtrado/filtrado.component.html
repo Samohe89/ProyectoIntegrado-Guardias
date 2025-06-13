@@ -7,8 +7,8 @@
         <span class="label-text">Fecha desde:</span>
       </label>
       <input type="date" id="fechaDesde" name="fechaDesde" class="form-control datePersonalizado"
-        [ngClass]="{ 'input-invalido': (faltanFechas && !fechaDesde) || fechasErroneas || faltanCriterios}" 
-        [(ngModel)]="fechaDesde"
+        [ngClass]="{ 'input-invalido': (faltanFechas && !fechaDesde) || fechasErroneas || faltanCriterios}"
+        [(ngModel)]="fechaDesde" [min]="fechaMin" [max]="fechaMax"
         (focus)="resetValidacion()" />
 
     </div>
@@ -19,15 +19,15 @@
         <span class="label-text">Fecha hasta:</span>
       </label>
       <input type="date" id="fechaHasta" name="fechaHasta" class="form-control datePersonalizado"
-        [ngClass]="{ 'input-invalido': (faltanFechas && !fechaHasta) || fechasErroneas || faltanCriterios }" 
-        [(ngModel)]="fechaHasta"
+        [ngClass]="{ 'input-invalido': (faltanFechas && !fechaHasta) || fechasErroneas || faltanCriterios }"
+        [(ngModel)]="fechaHasta" [min]="fechaMin" [max]="fechaMax"
         (focus)="resetValidacion()" />
     </div>
 
     <!-- Profesor -->
     <div class="col-12 col-md-6 col-xxl-4 d-flex flex-column flex-xxl-row align-items-xxl-center">
-      <label for="profesorFiltro" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0">Profesor:</label>
-      <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado"  
+      <label for="profesorFiltro" class="me-xxl-2 mb-1 mb-xxl-0 flex-shrink-0 label-text">Profesor:</label>
+      <select id="profesorFiltro" name="profesorFiltro" class="form-select selectFiltroPersonalizado"
       [ngClass]="{ 'input-invalido': faltanCriterios }"
       [(ngModel)]="profesorFiltro"
       (focus)="resetValidacion()">
@@ -56,7 +56,7 @@
     <p *ngIf="faltanFechas" class="error-message">
       Debe seleccionar ambas fechas de filtrado.
     </p>
-    
+
 
     <!-- Mensaje si la fecha hasta es anterior a fecha desde-->
     <p *ngIf="fechasErroneas" class="error-message">

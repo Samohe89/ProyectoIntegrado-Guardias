@@ -1,36 +1,150 @@
 .modal-dialog {
     padding: 0;
-    width: 425px;
-    border-radius: 10px;
+    max-width: 425px;
+    
   }
   
   .modal-header {
     padding: 0 25px;
     height: 50px;
-    background-color: #3C7E66;
+    background-color: #16604E;
     color: white;
   }
   
   .modal-content {
-    height: 165px;
     width: 425px;
     border-radius: 10px;
     background-color: #EDF1EF;
-    text-align: center;
+    border: 2px solid #16604E;
   }
   
   .modal-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 25px;
-    height: 115px;
+    padding: 50px;
+    padding-top: 35px;
     font-size: 18px;
   }
+
+  .linea-checkbox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .checkboxPersonalizado {
+    font-weight: 500;
+  }
+
+
+
+/* Ocultar el recuadro del checkbox original */
+.checkboxPersonalizado input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Recuadro de checkbox personalizado */
+.recuadroCheck {
+  display: inline-block;
+  width: 24px;  
+  height: 24px; 
+  background-color: #ffffff;
+  border-radius: 10px; 
+  border: 2px solid #999999;
+  vertical-align: text-bottom;
+  margin-right: 15px;
+  position: relative;
+}
+
+/* Fondo del recuadro cuando el checkbox está seleccionado */
+input:checked + .recuadroCheck {
+  background-color: #51A687;
+}
+
+
+/* Fondo del recuadro cuando el checkbox está deshabilitado */
+input:disabled + .recuadroCheck {
+  background-color: #C3C9C6;
+}
+
+/* Fondo del recuadro cuando el checkbox está seleccionado y deshabilitado */
+input:checked:disabled + .recuadroCheck {
+  background-color: #C3C9C6;
+}
+
+
+
+/* Posibilita establecer la marca de "check" en el recuadro */
+.recuadroCheck:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Marca de "check" cuando el checkbox está seleccionado */
+input:checked + .recuadroCheck:after {
+  display: block;
+  left: 7px;
+  top: 3px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+/* Marca de "check" cuando el checkbox está seleccionado y deshabilitado */
+input:checked:disabled + .recuadroCheck::after {
+  display: block;
+  left: 7px;
+  top: 3px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+
+.profesorGuardia {
+  margin-bottom: 10px;
+  padding-left: 50px;
+  font-size: 14px;
+}
+
+
+
+.selectFiltroPersonalizado {
+  margin-bottom: 20px;
+  height: 40px;
+  background-color: white;
+  color: gray;
+  border: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708'/%3E%3C/svg%3E"),
+  linear-gradient(to left, #3C7E66 2.5rem, transparent 2.5rem);
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center, right center;
+  background-size: 25px 25px, 2.5rem 100%;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+
+
+
+.botonForm{
+  display: flex;
+  justify-content: end;
+  margin-top: 35px;
+}
+
   
   button.btn-close{
     padding: 0;
-    font-size: 20px;
+    font-size: 24px;
     color: white;
   }
   
@@ -42,4 +156,21 @@
   
   .btn-close:hover{
     opacity: 0.6;
+  }
+
+ 
+  .btn-eliminar {
+    border: none;
+    background-color: none;
+  }
+  
+  
+  .btn-eliminar i {
+    color: #D74E58;
+    font-size: 24px;
+    transition: color 0.2s; 
+  }
+  
+  .btn-eliminar i:hover {
+    opacity: 0.75;
   }

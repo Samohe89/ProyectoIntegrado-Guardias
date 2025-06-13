@@ -1,0 +1,23 @@
+<div class="modal fade" id="eliminarModal" tabindex="-1" aria-labelledby="eliminarModalLabel"
+    [ngClass]="{'show': modalEliminarActivo}" [style.display]="modalEliminarActivo ? 'block' : 'none'">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center w-100" id="eliminarModalLabel">Eliminar</h5>
+                <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">¿Desea eliminar?</p>
+
+                <div class="div-botones">
+                    <button type="button" class="btn-confirmar" (click)="confirmarEliminar()">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </button>
+                    <button type="button" class="btn-cancelar" (click)="cancelarEliminar()">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
