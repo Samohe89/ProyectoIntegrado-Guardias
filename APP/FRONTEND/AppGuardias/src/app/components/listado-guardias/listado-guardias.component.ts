@@ -40,6 +40,7 @@ export class ListadoGuardiasComponent implements OnInit {
 
   // Variable que almacena el profesor asignado en el filtro
   profesorFiltro: string | null = null;
+
   // Array que almacena las ausencias que envía el backend
   ausencias: any[] = [];
 
@@ -312,11 +313,10 @@ export class ListadoGuardiasComponent implements OnInit {
     }
   }
 
-  // Generar el PDF
-  async imprimirPDF(): Promise<void> {
-    const subtitulo = 'LISTADO DE AUSENCIAS Y GUARDIAS';
 
-    console.log("fechaUnica: " + this.fechaUnica + "; Fecha desde: " + this.fechaDesde + "; Fecha hasta: " + this.fechaHasta);
+  // Generar el informe PDF
+  async imprimirPDF(): Promise<void> {
+    const subtitulo = 'LISTADO DE GUARDIAS';
 
     const filtros: any = {};
     if (this.fechaDesde === null || this.fechaHasta === null) {
@@ -337,8 +337,10 @@ export class ListadoGuardiasComponent implements OnInit {
           try {
             const guardias = await firstValueFrom(this.guardiaService.getGuardiasPorIdAusencia(ausencia.id));
 
-            if (guardias.length > 0) {
-              for (const guardia of guardias) {
+            const guardiasFiltradas = this.profesorFiltro ? guardias.filter((g:any) => g.profesor.nombreProfesor === this.profesorFiltro) : guardias;
+
+            if (guardiasFiltradas.length > 0) {
+              for (const guardia of guardiasFiltradas) {
                 data.push([
                   this.datePipe.transform(ausencia.fechaAusencia, 'dd/MM/yyyy') ?? '',
                   ausencia.horariosProfesor.hora + "ª Hora",
@@ -348,7 +350,7 @@ export class ListadoGuardiasComponent implements OnInit {
                   guardia.profesor.nombreProfesor
                 ]);
               }
-            } else {
+            } else if (!this.profesorFiltro) {
               data.push([
                 this.datePipe.transform(ausencia.fechaAusencia, 'dd/MM/yyyy') ?? '',
                 ausencia.horariosProfesor.hora + "ª Hora",
@@ -370,7 +372,11 @@ export class ListadoGuardiasComponent implements OnInit {
       filtros,
       headers,
       data,
-      'informe-guardias.pdf'
+      'informe-guardias.pdf',
+      { profesorFiltrado: this.profesorFiltro || '',
+        margin: { left: 15, right: 15 }
+       }   
+         
     );
   }
 
