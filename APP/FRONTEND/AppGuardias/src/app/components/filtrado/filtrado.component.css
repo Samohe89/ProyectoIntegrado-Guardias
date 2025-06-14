@@ -54,3 +54,10 @@
 .input-invalido {
   border: 2px solid red;
 }
+
+@media (max-width: 768px) {
+  .filtrado-container {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}

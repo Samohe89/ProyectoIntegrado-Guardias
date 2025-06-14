@@ -1,5 +1,5 @@
 <div class="main-container">
-    <div class="view-container shadow mx-3 mx-xxl-0">
+    <div class="view-container shadow mx-4 mx-xxl-0">
         <div class="view-title">
             <h1>Guardias</h1>
         </div>
@@ -34,8 +34,14 @@
                     <p class="fw-semibold m-0">Guardias del día {{ fechaUnica | date: 'dd/MM/yyyy' }}</p>
                 </ng-container>
                 <ng-container *ngIf="fechaDesde != null">
-                    <p class="fw-semibold m-0">Guardias desde {{ fechaDesde | date: 'dd/MM/yyyy' }} hasta {{ fechaHasta
-                        | date: 'dd/MM/yyyy' }}</p>
+                    <p class="fw-semibold m-0">
+                        <span class="d-block d-md-inline">
+                            Desde {{ fechaDesde | date:'dd/MM/yyyy' }}
+                        </span>
+                        <span class="d-block d-md-inline">
+                            hasta {{ fechaHasta | date:'dd/MM/yyyy' }}
+                        </span>
+                    </p>
                 </ng-container>
 
             </div>

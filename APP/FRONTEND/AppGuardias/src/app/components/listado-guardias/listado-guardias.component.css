@@ -87,8 +87,8 @@ button[data-guardia="false"] {
 .cards-container {
   border-radius: 10px;
   border: 1px solid black;
-
   overflow: hidden;
+
 }
 
 .card-body {
