@@ -43,6 +43,10 @@ export class HorasGuardiaComponent implements OnInit {
       this.esEquipoDirectivo = this.rolUsuario.toLowerCase() === 'equipo directivo';
     }
 
+    this.inicializarFechasPorDefecto();
+  }
+
+  private inicializarFechasPorDefecto(): void {
     // Calcular fechas por defecto (inicio curso hasta hoy)
     const hoy = new Date();
     const añoActual = hoy.getFullYear();
@@ -87,18 +91,29 @@ export class HorasGuardiaComponent implements OnInit {
   }
 
   onFiltrosAplicados(filtros: { fechaDesde: string, fechaHasta: string, profesorFiltro?: string | null }): void {
-    // Actualizar las fechas para que se reflejen en la vista
-    this.fechaDesde = filtros.fechaDesde ? new Date(filtros.fechaDesde) : null;
-    this.fechaHasta = filtros.fechaHasta ? new Date(filtros.fechaHasta) : null;
+  // Calcular fechas si no vienen en filtros
+  const hoy = new Date();
+  const añoActual = hoy.getFullYear();
+  const mesActual = hoy.getMonth(); // Enero = 0
+  const añoInicioCurso = mesActual >= 8 ? añoActual : añoActual - 1;
+  const inicioCurso = new Date(añoInicioCurso, 8, 15);
 
-    if (this.esProfesor) {
-      // Forzar filtro solo para el profesor logueado
-      this.cargarDatos(filtros.fechaDesde, filtros.fechaHasta, this.dniProfesor);
-    } else {
-      // Para directivo se usa el filtro tal cual viene
-      this.cargarDatos(filtros.fechaDesde, filtros.fechaHasta, filtros.profesorFiltro ?? null);
-    }
+  // Si no hay fechas en filtros, usamos por defecto
+  this.fechaDesde = filtros.fechaDesde ? new Date(filtros.fechaDesde) : inicioCurso;
+  this.fechaHasta = filtros.fechaHasta ? new Date(filtros.fechaHasta) : hoy;
+
+  // Convertir a string para el servicio
+  const fechaDesdeStr = this.formatFecha(this.fechaDesde);
+  const fechaHastaStr = this.formatFecha(this.fechaHasta);
+
+  if (this.esProfesor) {
+    this.cargarDatos(fechaDesdeStr, fechaHastaStr, this.dniProfesor);
+  } else {
+    // Si no hay profesorFiltro, se pasa null
+    const profesor = filtros.profesorFiltro && filtros.profesorFiltro.trim() !== '' ? filtros.profesorFiltro.trim() : null;
+    this.cargarDatos(fechaDesdeStr, fechaHastaStr, profesor);
   }
+}
 
   // Función para formatear fecha a 'YYYY-MM-DD'
   private formatFecha(fecha: Date): string {
