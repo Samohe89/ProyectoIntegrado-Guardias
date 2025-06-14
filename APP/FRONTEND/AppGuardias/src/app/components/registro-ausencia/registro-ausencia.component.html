@@ -4,28 +4,29 @@
       <h1>Registrar ausencia</h1>
     </div>
 
-      <form #formRegistro="ngForm" (ngSubmit)="onSubmit(formRegistro)" class="form-container">
+    <form #formRegistro="ngForm" (ngSubmit)="onSubmit(formRegistro)" class="form-container">
 
-        <!--Select profesor sólo para equipo directivo-->
-        <div class="input-group" *ngIf="usuario?.rol === 'Equipo Directivo'">
-          <label for="tramo" class="registroProfesor">Seleccione profesor</label>
-          <select name="id" id="regProfesor" class="selectRegPersonalizado" [(ngModel)]="ausencia.id" (change)="onProfesorChange()"  required >
-            <option [ngValue]="null" disabled>Seleccione profesor</option>
-            <!--LÓGICA SELECT DINÁMICO MUESTRA TODOS LOS PROFESORES-->
-            <option *ngFor="let profesor of profesores" [ngValue]="{ dniProfesor: profesor.id.dniProfesor, cursoAcademico: profesor.id.cursoAcademico }"
-            >
-              {{ profesor.nombreProfesor }}
-            </option>
+      <!--Select profesor sólo para equipo directivo-->
+      <div class="input-group" *ngIf="usuario?.rol === 'Equipo Directivo'">
+        <label for="tramo" class="registroProfesor">Seleccione profesor</label>
+        <select name="id" id="regProfesor" class="selectRegPersonalizado" [(ngModel)]="ausencia.id"
+          (change)="onProfesorChange()" required>
+          <option [ngValue]="null" disabled>Seleccione profesor</option>
+          <!--LÓGICA SELECT DINÁMICO MUESTRA TODOS LOS PROFESORES-->
+          <option *ngFor="let profesor of profesores"
+            [ngValue]="{ dniProfesor: profesor.id.dniProfesor, cursoAcademico: profesor.id.cursoAcademico }">
+            {{ profesor.nombreProfesor }}
+          </option>
 
-          </select>
+        </select>
 
-          <!-- Mensaje si no selecciona profesor -->
+        <!-- Mensaje si no selecciona profesor -->
         <p class="error-message" *ngIf="formRegistro.submitted && formRegistro.controls['id']?.invalid">
           Debe seleccionar un profesor.
         </p>
-        </div>
+      </div>
 
-        <!--Día de ausencia-->
+      <!--Día de ausencia-->
       <div class="input-group">
         <label class="fechaAusencia" for="fechaAusencia">Dia de ausencia</label>
         <input type="date" class="datePersonalizado" name="fechaAusencia" id="fechaAusencia"
@@ -37,10 +38,11 @@
         </p>
       </div>
 
-        <!--Tramo horario-->
+      <!--Tramo horario-->
       <div class="input-group">
         <label for="tramo">Seleccione tramo horario</label>
-        <select id="tramo" name="tramo" [(ngModel)]="ausencia.tramoSeleccionado" [disabled]="selectTramoDisabled" required>
+        <select class="selectRegPersonalizado" id="tramo" name="tramo" [(ngModel)]="ausencia.tramoSeleccionado" [disabled]="selectTramoDisabled"
+          required>
           <option *ngFor="let tramo of tramosDisponibles" [value]="tramo.value">{{ tramo.label }}</option>
         </select>
 
@@ -76,5 +78,8 @@
   </div>
 </div>
 
+<!-- Modal de registro correcto -->
 <app-modal-registro #modalRegistro></app-modal-registro>
 
+<!-- Modal de errores -->
+<app-modal-error #modalError (modalCerrado)="onCerrarModalError()"></app-modal-error>
