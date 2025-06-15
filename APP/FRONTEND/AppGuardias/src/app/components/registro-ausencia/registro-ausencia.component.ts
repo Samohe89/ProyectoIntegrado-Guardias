@@ -45,6 +45,14 @@ export class RegistroAusenciaComponent implements OnInit {
   tramosDisponibles = [{ value: '', label: 'Seleccione un tramo' }];
   selectTramoDisabled = true;
 
+// Variables límite para seleccionar fechas
+  year!: number;
+  diaActual: Date = new Date();  
+  fechaMin!: string;
+  fechaMax!: string;
+ 
+   
+
   constructor(
     private ausenciaService: AusenciaService,
     private profesorService: ProfesorService,
@@ -57,6 +65,11 @@ export class RegistroAusenciaComponent implements OnInit {
       const usuario = JSON.parse(usuarioGuardado);
 
       this.usuario = usuario;
+
+      // Rango de fechas para registrar ausencias
+      this.year = parseInt(usuario.cursoAcademico);
+      this.fechaMin = this.formatearFecha(this.diaActual);
+      this.fechaMax = `${this.year+1}-06-20`;
 
       // Al iniciar el componente, si el rol es Profesor, asignamos el id de ausencia con los datos del usuario autenticado y cargamos sus horarios
       if (usuario.rol === 'Profesor' && usuarioGuardado) {
@@ -257,5 +270,13 @@ export class RegistroAusenciaComponent implements OnInit {
       this.ausencia.id = null;
     }
   }
+
+
+
+  // Método para dar formato a la fecha 
+  formatearFecha(fecha: Date): string {
+    return fecha.toISOString().split('T')[0]; // Se queda solo con la fecha 'YYYY-MM-DD'
+  }
+
 
 }

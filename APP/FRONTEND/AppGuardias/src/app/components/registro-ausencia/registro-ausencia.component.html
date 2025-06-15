@@ -30,6 +30,7 @@
       <div class="input-group">
         <label class="fechaAusencia" for="fechaAusencia">Dia de ausencia</label>
         <input type="date" class="datePersonalizado" name="fechaAusencia" id="fechaAusencia"
+        [min]="fechaMin" [max]="fechaMax"
           [(ngModel)]="ausencia.fechaAusencia" required (change)="onFechaCambio()">
 
         <!-- Mensaje si no selecciona fecha -->
