@@ -31,11 +31,15 @@ input {
   padding-top: 35px;
 }
 
+#regProfesor {
+  border-radius: 5px;
+}
+
 #fechaAusencia {
   border-radius: 5px;
 }
 
-#tramoRegistro {
+#tramo {
   border-radius: 5px;
 }
 
