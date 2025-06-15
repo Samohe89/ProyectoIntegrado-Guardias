@@ -1,9 +1,26 @@
-#errorModal .modal-dialog {
-  padding: 0;
-  height: 165px;
-  max-width: 400px;
-  border-radius: 10px;
+#errorModal.modal.show {
   margin: auto;
+  width: 100vw;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+#errorModal .modal-dialog {
+  margin: auto;
+  padding: 0;
+  max-width: 425px;
+  box-sizing: border-box;
+}
+
+#errorModal .modal-content {
+  margin: auto;
+  max-width: 400px;
+  min-height: 165px;
+  border-radius: 10px;
+  background-color: #edf1ef;
+  border: 2px solid #16604e;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .modal-header {
@@ -13,22 +30,12 @@
   color: white;
 }
 
-#errorModal .modal-content {
-  min-height: 165px;
-  width: 90%;
-  border-radius: 10px;
-  border: 1px solid #3c7e66;
-  background-color: #edf1ef;
-  text-align: center;
-  margin: auto;
-}
-
 .modal-body {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 25px;
-  height: 115px;
+  min-height: 115px;
   font-size: 16px;
 }
 
@@ -46,4 +53,13 @@ button.btn-close {
 
 .btn-close:hover {
   opacity: 0.6;
+}
+
+@media (max-width: 475px) {
+  #errorModal .modal-dialog {
+    max-width: calc(100% - 36px);
+  }
+  #errorModal .modal-content {
+    max-width: calc(100% - 36px);
+  }
 }

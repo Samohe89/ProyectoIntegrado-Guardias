@@ -1,24 +1,33 @@
-.modal-dialog {
+#regModal.modal.show {
+  margin: auto;
+  width: 100vw;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+#regModal .modal-dialog {
+  margin: auto;
   padding: 0;
-  height: 165px;
+  max-width: 425px;
+  box-sizing: border-box;
+}
+
+#regModal .modal-content {
+  margin: auto;
   max-width: 400px;
+  min-height: 165px;
   border-radius: 10px;
+  background-color: #edf1ef;
+  border: 2px solid #16604e;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .modal-header {
   padding: 0 25px;
   height: 50px;
-  background-color: #3C7E66;
+  background-color: #3c7e66;
   color: white;
-}
-
-.modal-content {
-  height: 165px;
-  max-width: 400px;
-  border-radius: 10px;
-  border: 1px solid #3C7E66;
-  background-color: #EDF1EF;
-  text-align: center;
 }
 
 .modal-body {
@@ -26,7 +35,7 @@
   justify-content: center;
   align-items: center;
   padding: 25px;
-  height: 115px;
+  min-height: 115px;
   font-size: 18px;
 }
 
@@ -44,4 +53,13 @@ button.btn-close{
 
 .btn-close:hover{
   opacity: 0.6;
+}
+
+@media (max-width: 475px) {
+  #regModal .modal-dialog {
+    max-width: calc(100% - 36px);
+  }
+  #regModal .modal-content {
+    max-width: calc(100% - 36px);
+  }
 }
