@@ -26,14 +26,17 @@ export class RegistroAusenciaComponent implements OnInit {
   // Variable para controlar la visualización del modal y el mensaje que muestra
   modalActivo: boolean = false;
 
+  // Datos del usuario autenticado
   usuario: { rol: string, dniProfesor: string, cursoAcademico: string } | null = null;
 
-  //Lista de profesores para Equipo Directivo
+  // Lista de profesores para Equipo Directivo
   profesores: Profesor[] = [];
   //Horarios del profesor seleccionado
   horarios: any[] = [];
+  // Fecha mínima permitida
+  hoy: string = '';
 
-  //Ausencia que se va a registrar
+  // Datos de la ausencia que se va a registrar
   ausencia = {
     id: null as { dniProfesor: string, cursoAcademico: string } | null,
     fechaAusencia: '',
@@ -52,17 +55,20 @@ export class RegistroAusenciaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Establece la fecha actual
+    const fechaActual = new Date();
+    this.hoy = fechaActual.toISOString().split('T')[0];
+
+    // Carga el usuario guardado en sesión
     const usuarioGuardado = sessionStorage.getItem('usuarioGuardado');
     if (usuarioGuardado) {
       const usuario = JSON.parse(usuarioGuardado);
-
       this.usuario = usuario;
 
       // Al iniciar el componente, si el rol es Profesor, asignamos el id de ausencia con los datos del usuario autenticado y cargamos sus horarios
       if (usuario.rol === 'Profesor' && usuarioGuardado) {
         this.setProfesor(usuario.dniProfesor, usuario.cursoAcademico);
       }
-
       // Si el rol es Equipo Directivo, cargamos la lista completa de profesores
       if (usuario.rol === 'Equipo Directivo') {
         this.profesorService.getProfesores().subscribe({
@@ -124,7 +130,15 @@ export class RegistroAusenciaComponent implements OnInit {
     // Si es sábado (6) o domingo (0), no se pueden registrar tramos
     const fecha = new Date(this.ausencia.fechaAusencia);
     const diaSemana = fecha.getDay();
+
     if (diaSemana === 0 || diaSemana === 6) {
+      this.resetTramos();
+      return;
+    }
+
+    // Validación de rango de fechas del curso
+    if (!this.fechaDentroDelCurso(this.ausencia.fechaAusencia)) {
+      this.mostrarError('La fecha seleccionada está fuera del rango del curso académico.');
       this.resetTramos();
       return;
     }
@@ -153,6 +167,19 @@ export class RegistroAusenciaComponent implements OnInit {
     this.selectTramoDisabled = false;
   }
 
+  fechaDentroDelCurso(fechaStr: string): boolean {
+    if (!this.ausencia.id) return false;
+    const fecha = new Date(fechaStr);
+    const [anioInicioStr] = this.ausencia.id.cursoAcademico.split('/');
+    const anioInicio = parseInt(anioInicioStr, 10);
+    const anioFin = anioInicio + 1;
+
+    const fechaInicioCurso = new Date(anioInicio, 8, 15); // 15 septiembre
+    const fechaFinCurso = new Date(anioFin, 5, 21); // 20 junio
+
+    return fecha >= fechaInicioCurso && fecha <= fechaFinCurso;
+  }
+
   // Se ejecuta cuando cambia el profesor seleccionado (en equipo directivo)
   onProfesorChange(): void {
     if (!this.ausencia.id) {
@@ -175,6 +202,10 @@ export class RegistroAusenciaComponent implements OnInit {
   async onSubmit(formRegistro: NgForm): Promise<void> {
     if (formRegistro.invalid) {
       return;
+    }
+
+    if (!this.fechaDentroDelCurso(this.ausencia.fechaAusencia)) {
+      return this.mostrarError('La fecha seleccionada está fuera del rango del curso académico.');
     }
 
     const diaSemana = new Date(this.ausencia.fechaAusencia).getDay();
