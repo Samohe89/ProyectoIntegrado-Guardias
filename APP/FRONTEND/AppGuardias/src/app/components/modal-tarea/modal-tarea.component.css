@@ -1,0 +1,141 @@
+#tareaModal.modal.show {
+  margin: auto;
+  width: 100vw;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+#tareaModal .modal-dialog {
+  margin: auto;
+  padding: 0;
+  max-width: 500px;
+  box-sizing: border-box;
+}
+
+#tareaModal .modal-content {
+  margin: auto;
+  max-width: 480px;
+  border-radius: 10px;
+  background-color: #edf1ef;
+  border: 2px solid #16604e;
+  box-sizing: border-box;
+}
+
+.modal-header {
+  padding: 0 25px;
+  height: 50px;
+  background-color: #3c7e66;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 10px 10px 0 0;
+}
+
+.modal-body {
+  padding: 25px;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-body label {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.modal-body textarea {
+  width: 100%;
+  height: 100px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  padding: 10px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.archivo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 5px;
+  word-break: break-word;
+}
+
+.archivo-container i {
+  color: #d9534f;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.div-botones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.div-botones button {
+  flex: 1 1 calc(25% - 10px);
+  min-width: 90px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s;
+}
+
+.btn-eliminar {
+  background-color: #d9534f;
+}
+
+.btn-editar {
+  background-color: #3c7e66;
+}
+
+.btn-adjuntar {
+  background-color: #3c7e66;
+  cursor: pointer;
+}
+
+.btn-confirmar {
+  background-color: #4caf50;
+}
+
+button.btn-close {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' fill='%23ffffff' class='bi bi-x-circle-fill' viewBox='0 0 16 16'%3E%3Cpath d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+@media (max-width: 475px) {
+  #tareaModal .modal-dialog {
+    max-width: calc(100% - 36px);
+  }
+
+  #tareaModal .modal-content {
+    max-width: calc(100% - 36px);
+  }
+
+  .div-botones {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .div-botones button {
+    width: 100%;
+  }
+}

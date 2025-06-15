@@ -1,0 +1,35 @@
+<div *ngIf="mostrarModalDetalles" class="modal-container">
+  <div class="modal-header">
+    <h2>Detalles Ausencia</h2>
+    <button class="close-btn" (click)="cancelarModal()">✖️</button>
+  </div>
+
+  <div class="modal-body">
+    <label for="tarea">Tarea</label>
+    <textarea
+      id="tarea"
+      [(ngModel)]="tareaTexto"
+      placeholder="Descripción de la tarea"
+      rows="4"
+    ></textarea>
+
+    <!-- Archivo adjunto (si existe) -->
+    <div *ngIf="archivoAdjunto" class="archivo-container">
+      <button class="btn-icon" (click)="eliminarArchivo()">❌</button>
+      <span>{{ archivoAdjunto.name }}</span>
+    </div>
+
+    <!-- Botones -->
+    <div class="acciones">
+      <button class="btn rojo" (click)="eliminarTareaTexto()">❌ Eliminar</button>
+      <button class="btn editar" (click)="modificarTarea()">📝 Modificar</button>
+
+      <label class="btn adjuntar">
+        📎 Adjuntar
+        <input type="file" hidden (change)="adjuntarArchivo($event)" />
+      </label>
+
+      <button class="btn confirmar" (click)="confirmarTarea()">✅ Confirmar</button>
+    </div>
+  </div>
+</div>

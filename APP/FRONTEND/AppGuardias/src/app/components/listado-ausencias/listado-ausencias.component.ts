@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfesorService } from '../../services/profesor.service';
 import { FiltradoComponent } from '../filtrado/filtrado.component';
+import { ModalTareaComponent } from '../modal-tarea/modal-tarea.component';
 import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.component';
 
 @Component({
@@ -24,6 +25,7 @@ import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.compone
     FormsModule,
     FiltradoComponent,
     ModalEliminarComponent,
+    ModalTareaComponent,
   ],
   templateUrl: './listado-ausencias.component.html',
   styleUrl: './listado-ausencias.component.css',
@@ -31,6 +33,9 @@ import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.compone
 export class ListadoAusenciasComponent implements OnInit {
   @ViewChild('modalEliminar', { static: false })
   modalEliminar!: ModalEliminarComponent;
+
+  @ViewChild('modalTarea', { static: false })
+  modalTarea!: ModalTareaComponent;
 
   ausencias: Ausencia[] = [];
   todasLasAusencias: Ausencia[] = [];
@@ -240,5 +245,17 @@ export class ListadoAusenciasComponent implements OnInit {
       });
     }
     this.ausenciaSeleccionada = null;
+  }
+
+  abrirModalTarea(ausencia: Ausencia) {
+    this.modalTarea.abrirModalDetalles(ausencia);
+  }
+
+  guardaTarea(ausencia: Ausencia) {
+    // Actualiza el array o recarga las ausencias
+    const index = this.ausencias.findIndex((a) => a.id === ausencia.id);
+    if (index !== -1) {
+      this.ausencias[index].tarea = ausencia.tarea;
+    }
   }
 }

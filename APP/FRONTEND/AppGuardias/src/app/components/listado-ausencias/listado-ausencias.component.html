@@ -35,7 +35,7 @@
           </p>
         </ng-container>
       </div>
-      
+
       <app-filtrado *ngIf="usuario?.rol == 'Equipo Directivo'"
         (filtrosAplicados)="aplicarFiltrosDesdeComponente($event)"></app-filtrado>
 
@@ -64,6 +64,7 @@
                 {{ ausencia.profesor.nombreProfesor }}
               </td>
               <td>{{ ausencia.horariosProfesor.asignatura }}</td>
+
               <td>
                 <button class="btn-detalles">
                   <i class="bi bi-plus-square-fill"></i>
@@ -83,6 +84,7 @@
             </tr>
           </tbody>
         </table>
+        <app-modal-tarea #modalTarea (tareaGuardada)="guardaTarea($event)"></app-modal-tarea>
       </div>
 
       <div class="responsive-cards" *ngIf="ausencias.length > 0 && isMobile()">
@@ -115,7 +117,5 @@
 </div>
 
 <!-- Modal de confirmación -->
-<app-modal-eliminar
-  #modalEliminar
-  (eliminar)="manejarEliminacion($event)">
+<app-modal-eliminar #modalEliminar (eliminar)="manejarEliminacion($event)">
 </app-modal-eliminar>
