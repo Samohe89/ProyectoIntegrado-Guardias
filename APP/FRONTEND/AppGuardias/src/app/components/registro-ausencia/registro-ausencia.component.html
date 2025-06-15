@@ -30,7 +30,7 @@
       <div class="input-group">
         <label class="fechaAusencia" for="fechaAusencia">Dia de ausencia</label>
         <input type="date" class="datePersonalizado" name="fechaAusencia" id="fechaAusencia"
-          [(ngModel)]="ausencia.fechaAusencia" required (change)="onFechaCambio()">
+          [(ngModel)]="ausencia.fechaAusencia" required (change)="onFechaCambio()" [min]="hoy">
 
         <!-- Mensaje si no selecciona fecha -->
         <p class="error-message" *ngIf="formRegistro.submitted && formRegistro.controls['fechaAusencia']?.invalid">
