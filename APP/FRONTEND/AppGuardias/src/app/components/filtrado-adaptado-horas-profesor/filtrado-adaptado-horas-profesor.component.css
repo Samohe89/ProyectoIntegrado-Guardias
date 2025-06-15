@@ -7,6 +7,8 @@
 }
 
 .datePersonalizado {
+  position: relative;
+  padding-right: 3rem; /* espacio para icono */
   height: 45px;
   background-color: white;
   color: gray;
@@ -21,6 +23,18 @@
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+}
+
+.datePersonalizado::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  width: 2.5rem;
+  height: 100%;
+  cursor: pointer;
+  z-index: 2;
 }
 
 /* Oculta el icono nativo del calendario */
