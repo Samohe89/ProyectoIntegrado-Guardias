@@ -1,4 +1,10 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnInit,
+  ViewChild,
+  viewChild,
+} from '@angular/core';
 import {
   Ausencia,
   AusenciaService,
@@ -8,15 +14,24 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfesorService } from '../../services/profesor.service';
 import { FiltradoComponent } from '../filtrado/filtrado.component';
+import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.component';
 
 @Component({
   selector: 'app-listado-ausencias',
   standalone: true,
-  imports: [CommonModule, FormsModule, FiltradoComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    FiltradoComponent,
+    ModalEliminarComponent,
+  ],
   templateUrl: './listado-ausencias.component.html',
   styleUrl: './listado-ausencias.component.css',
 })
 export class ListadoAusenciasComponent implements OnInit {
+  @ViewChild('modalEliminar', { static: false })
+  modalEliminar!: ModalEliminarComponent;
+
   ausencias: Ausencia[] = [];
   todasLasAusencias: Ausencia[] = [];
   ausenciasFiltro: Ausencia[] = [];
@@ -162,24 +177,35 @@ export class ListadoAusenciasComponent implements OnInit {
   }) {
     let filtradas = this.todasLasAusencias;
 
-    // 1. Convertir y normalizar fechaDesde
-    const desde = new Date(event.fechaDesde);
-    desde.setHours(0, 0, 0, 0);
+    const tieneFechaDesde = !!event.fechaDesde;
+    const tieneFechaHasta = !!event.fechaHasta;
 
-    // 2. Convertir y normalizar fechaHasta si existe
-    const hasta = event.fechaHasta ? new Date(event.fechaHasta) : null;
-    if (hasta) hasta.setHours(23, 59, 59, 999);
+    // Si hay fechas, filtra por fechas
+    if (tieneFechaDesde) {
+      const desde = new Date(event.fechaDesde);
+      desde.setHours(0, 0, 0, 0);
 
-    // 3. Filtrar por rango de fechas
-    filtradas = filtradas.filter((ausencia) => {
-      const fechaAusencia = new Date(ausencia.fechaAusencia); // <-- CONVERSIÓN AQUÍ
-      fechaAusencia.setHours(0, 0, 0, 0);
+      const hasta = tieneFechaHasta ? new Date(event.fechaHasta) : null;
+      if (hasta) hasta.setHours(23, 59, 59, 999);
 
-      const dentroDeDesde = fechaAusencia >= desde;
-      const dentroDeHasta = hasta ? fechaAusencia <= hasta : true;
+      filtradas = filtradas.filter((ausencia) => {
+        const fechaAusencia = new Date(ausencia.fechaAusencia);
+        fechaAusencia.setHours(0, 0, 0, 0);
 
-      return dentroDeDesde && dentroDeHasta;
-    });
+        const dentroDeDesde = fechaAusencia >= desde;
+        const dentroDeHasta = hasta ? fechaAusencia <= hasta : true;
+
+        return dentroDeDesde && dentroDeHasta;
+      });
+
+      // Guardar fechas solo si se usan
+      this.fechaDesde = event.fechaDesde;
+      this.fechaHasta = event.fechaHasta;
+    } else {
+      // Si no hay fechas, vaciamos el texto de los rangos mostrados
+      this.fechaDesde = '';
+      this.fechaHasta = '';
+    }
 
     // 4. Filtrar por profesor (si hay)
     if (event.profesorFiltro) {
@@ -190,34 +216,29 @@ export class ListadoAusenciasComponent implements OnInit {
     }
 
     // 5. Actualizar fechas y ausencias para mostrar
-    this.fechaDesde = event.fechaDesde;
-    this.fechaHasta = event.fechaHasta;
     this.ausencias = filtradas;
   }
 
   //Lógica para eliminar una ausencia
-
   abrirModal(ausencia: Ausencia) {
     this.ausenciaSeleccionada = ausencia;
-    this.mostrarModal = true;
+    this.modalEliminar.mostrarModal();
   }
 
-  cancelarEliminacion() {
-    this.ausenciaSeleccionada = null;
-    this.mostrarModal = false;
-  }
-
-  confirmarEliminacion() {
-    if (this.ausenciaSeleccionada?.id) {
-      this.ausenciaService
-        .delete(this.ausenciaSeleccionada.id)
-        .subscribe(() => {
-          // Quitar del array local
+  manejarEliminacion(confirmado: boolean): void {
+    if (confirmado && this.ausenciaSeleccionada) {
+      this.ausenciaService.delete(this.ausenciaSeleccionada.id!).subscribe({
+        next: () => {
           this.ausencias = this.ausencias.filter(
-            (ausencia) => ausencia.id !== this.ausenciaSeleccionada?.id
+            (a) => a.id !== this.ausenciaSeleccionada?.id
           );
-          this.cancelarEliminacion(); // Cierra modal
-        });
+          this.ausenciaSeleccionada = null;
+        },
+        error: (err) => {
+          console.error('Error al eliminar:', err);
+        },
+      });
     }
+    this.ausenciaSeleccionada = null;
   }
 }

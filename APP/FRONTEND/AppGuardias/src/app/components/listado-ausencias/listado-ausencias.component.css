@@ -48,7 +48,7 @@ td {
   vertical-align: middle;
 }
 
-/* Botones */
+/* Botones estilo Figma */
 button i {
   font-size: 20px;
 }
@@ -58,52 +58,31 @@ button i {
   background-color: white;
 }
 
-
 .btn-detalles i {
   color: #3c7e66;
-  font-size: 25px;
-  transition: color 0.2s; 
+  font-size: 30px;
+  transition: color 0.2s;
 }
 
 .btn-detalles i:hover {
-    color: #51a687;
+  color: #51a687;
 }
 
 .btn-eliminar {
-  background-color: #d74e58;
+  background-color: #d74e58; 
   border: none;
+  border-radius: 5px; /* o un valor más alto como 12px o 50% para circular */
 }
 
-.btn-eliminar i{
-  color: #d74e58;
-  font-size: 25px;
-  transition: color 0.2s; 
-}
-
-.btn-eliminar i:hover {
-  color:  #D74E58;
-}
-
-/* Ajusta padding para dejar espacio al ícono */
-.campo-con-icono {
-  padding-right: 40px;
-}
-
-/* Ícono dentro de cuadro verde */
-.icono-input {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #3C7E66;
+.btn-eliminar i {
+  font-size: 20px;
   color: white;
-  padding: 5px;
-  border-radius: 4px;
-  pointer-events: none;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: color 0.2s;
+   font-weight: 100;
+}
+
+.btn-eliminar:hover {
+  color: #b34048; /* Un rojo más oscuro para hover */
 }
 
 @media screen and (max-width: 768px) {
