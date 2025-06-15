@@ -11,6 +11,13 @@ import com.daw.datamodel.entities.Ausencia;
 
 public interface AusenciaRepository extends JpaRepository<Ausencia, Long> {
 	
+	//Método para comprobar si existe una ausencia para un profesor, fecha y registro
+	boolean existsByProfesorIdDniProfesorAndProfesorIdCursoAcademicoAndFechaAusenciaAndHorariosProfesorNumRegistro(
+		    String dniProfesor,
+		    String cursoAcademico,
+		    LocalDate fechaAusencia,
+		    Integer numRegistro
+		);
 	/* 
 	Consultar ausencias por fecha, ordenadas por hora de clase, como primer criterio
 	y por grupo, como segundo criterio

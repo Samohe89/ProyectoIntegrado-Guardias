@@ -113,10 +113,11 @@ public class AusenciaController {
 			Ausencia nuevaAusencia = service.crearRegistroAusencia(ausenciaDTO);
 			return ResponseEntity.ok(nuevaAusencia);
 
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error al procesar la ausencia: " + e.getMessage());
-		}
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la ausencia: " + e.getMessage());
+	    }
 	}
 
 	@PutMapping("/{id}")
