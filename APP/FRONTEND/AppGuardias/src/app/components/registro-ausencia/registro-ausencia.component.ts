@@ -5,16 +5,26 @@ import { ProfesorService, Profesor } from '../../services/profesor.service';
 import { AusenciaService } from '../../services/ausencia.service';
 import { HorarioService } from '../../services/horario.service';
 import { ModalRegistroComponent } from '../modal-registro/modal-registro.component';
+import { ModalErrorComponent } from '../modal-error/modal-error.component';
 
 @Component({
   selector: 'app-registro-ausencia',
   standalone: true,
-  imports: [FormsModule, CommonModule, ModalRegistroComponent],
+  imports: [FormsModule, CommonModule, ModalRegistroComponent, ModalErrorComponent],
   templateUrl: '../registro-ausencia/registro-ausencia.component.html',
   styleUrls: ['../registro-ausencia/registro-ausencia.component.css']
 })
 export class RegistroAusenciaComponent implements OnInit {
+
+  // Para acceder al componente hijo
+  @ViewChild('formRegistro') formRegistro!: NgForm;
+
+  // Permite acceder al componente hijo a través de una variable
   @ViewChild('modalRegistro') modalRegistro!: ModalRegistroComponent;
+  @ViewChild('modalError') modalError!: ModalErrorComponent;
+
+  // Variable para controlar la visualización del modal y el mensaje que muestra
+  modalActivo: boolean = false;
 
   usuario: { rol: string, dniProfesor: string, cursoAcademico: string } | null = null;
 
@@ -43,26 +53,26 @@ export class RegistroAusenciaComponent implements OnInit {
 
   ngOnInit(): void {
     const usuarioGuardado = sessionStorage.getItem('usuarioGuardado');
-    if ( usuarioGuardado ){
-    const usuario = JSON.parse(usuarioGuardado);
+    if (usuarioGuardado) {
+      const usuario = JSON.parse(usuarioGuardado);
 
-    this.usuario = usuario;
+      this.usuario = usuario;
 
-    // Al iniciar el componente, si el rol es Profesor, asignamos el id de ausencia con los datos del usuario autenticado y cargamos sus horarios
-    if (usuario.rol === 'Profesor' && usuarioGuardado) {
-      this.setProfesor(usuario.dniProfesor, usuario.cursoAcademico);
+      // Al iniciar el componente, si el rol es Profesor, asignamos el id de ausencia con los datos del usuario autenticado y cargamos sus horarios
+      if (usuario.rol === 'Profesor' && usuarioGuardado) {
+        this.setProfesor(usuario.dniProfesor, usuario.cursoAcademico);
+      }
+
+      // Si el rol es Equipo Directivo, cargamos la lista completa de profesores
+      if (usuario.rol === 'Equipo Directivo') {
+        this.profesorService.getProfesores().subscribe({
+          next: profesores => this.profesores = profesores,
+          error: err => console.error('Error al cargar profesores:', err)
+        });
+      }
+      console.log('Rol usuario:', usuario.rol);
     }
-
-    // Si el rol es Equipo Directivo, cargamos la lista completa de profesores
-    if (usuario.rol === 'Equipo Directivo') {
-      this.profesorService.getProfesores().subscribe({
-        next: profesores => this.profesores = profesores,
-        error: err => console.error('Error al cargar profesores:', err)
-      });
-    }
-    console.log('Rol usuario:', usuario.rol);
   }
-}
 
   // Método privado para fijar el profesor y cargar sus horarios
   private setProfesor(dni: string, curso: string): void {
@@ -170,7 +180,7 @@ export class RegistroAusenciaComponent implements OnInit {
     const diaSemana = new Date(this.ausencia.fechaAusencia).getDay();
 
     // No permite registrar ausencias en fines de semana
-    if (diaSemana === 0 || diaSemana === 6) return alert('No se pueden registrar ausencias en fines de semana.');
+    if (diaSemana === 0 || diaSemana === 6) return this.mostrarError('No se pueden registrar ausencias en fines de semana.');
 
     let horasAfectadas: number[] = [];
     if (this.ausencia.tramoSeleccionado === 'diaCompleto') {
@@ -183,7 +193,7 @@ export class RegistroAusenciaComponent implements OnInit {
     // Filtra los horarios que coinciden con el día y tramo seleccionado
     const horariosSeleccionados = this.horarios.filter(h => h.dia === diaSemana && horasAfectadas.includes(h.hora));
 
-    if (horariosSeleccionados.length === 0) return alert('El tramo seleccionado no corresponde a ninguna hora de clase.');
+    if (horariosSeleccionados.length === 0) return this.mostrarError('El tramo seleccionado no corresponde a ninguna hora de clase.');
 
     // Mapea cada horario a una promesa de creación de ausencia
     const registros = horariosSeleccionados.map(horario => {
@@ -201,27 +211,51 @@ export class RegistroAusenciaComponent implements OnInit {
       await Promise.all(registros);
       this.modalRegistro.mostrarModal();
       this.limpiarFormulario(formRegistro);
-    } catch (err) {
-      console.error('Error registrando ausencia:', err);
-      alert('Error al registrar la ausencia. Inténtalo de nuevo.');
+    } catch (err: any) {
+      if (err.status === 409) {
+        this.mostrarError('Ya existe una ausencia registrada para ese día y tramo horario.');
+      } else {
+        this.mostrarError('Error al registrar la ausencia. Inténtalo de nuevo.');
+      }
     }
   }
 
   // Limpia y resetea el formulario de ausencia
   limpiarFormulario(form: NgForm): void {
     const usuarioGuardado = sessionStorage.getItem('usuarioGuardado');
-    if ( usuarioGuardado ){
-    const usuario = JSON.parse(usuarioGuardado);
-    form.resetForm();
-    // Si es profesor, mantiene la selección fija
-    if (usuario.rol === 'Profesor' && usuarioGuardado) {
-      this.setProfesor(usuario.dniProfesor, usuario.cursoAcademico);
+    if (usuarioGuardado) {
+      const usuario = JSON.parse(usuarioGuardado);
+      form.resetForm();
+      // Si es profesor, mantiene la selección fija
+      if (usuario.rol === 'Profesor' && usuarioGuardado) {
+        this.setProfesor(usuario.dniProfesor, usuario.cursoAcademico);
+      } else {
+        this.ausencia.id = null;
+      }
+      this.horarios = [];
+      this.resetTramos();
+    }
+  }
+
+  // Variable para controlar el modal error
+  modalErrorActivo: boolean = false;
+
+  mostrarError(mensaje: string) {
+    this.modalError.mensajeError = mensaje;
+    this.modalError.modalErrorActivo = true;
+  }
+
+  onCerrarModalError(): void {
+    if (this.formRegistro) {
+      this.formRegistro.resetForm();
+    }
+    this.resetTramos();
+    this.horarios = [];
+    if (this.usuario?.rol === 'Profesor') {
+      this.setProfesor(this.usuario.dniProfesor, this.usuario.cursoAcademico);
     } else {
       this.ausencia.id = null;
     }
-    this.horarios = [];
-    this.resetTramos();
   }
-}
 
 }

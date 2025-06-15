@@ -54,10 +54,6 @@ export class AusenciaService {
     return this.http.get<any[]>(`${this.apiUrl}/fecha?fecha=${fecha}`);
   }
 
-  getAusenciasEntreFechas(fechaDesde: string, fechaHasta: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/fechas?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`);
-  }
-
   getAusenciasEntreFechasPorProfesorGuardia(fechaDesde: string, fechaHasta: string, profesorGuardia: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/filtroGuardias?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}&profesorGuardia=${profesorGuardia}`);
   }
@@ -77,6 +73,7 @@ export class AusenciaService {
     return this.http.get<Ausencia>(`${this.apiUrl}/${id}`);
   }
 
+  /*
   create(ausencia: Ausencia): Observable<Ausencia> {
     return this.http.post<Ausencia>(this.apiUrl, ausencia);
   }
@@ -84,6 +81,7 @@ export class AusenciaService {
   update(id: number, ausencia: Ausencia): Observable<Ausencia> {
     return this.http.put<Ausencia>(`${this.apiUrl}/${id}`, ausencia);
   }
+*/
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);

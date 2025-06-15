@@ -76,14 +76,7 @@ public class AusenciaController {
 		return ResponseEntity.ok(ausencias);
 	}
 
-	@GetMapping("/fechas")
-	public ResponseEntity<List<Ausencia>> getAusenciasEntreFechas(
-			@RequestParam("fechaDesde") LocalDate fechaDesde,
-			@RequestParam("fechaHasta") LocalDate fechaHasta) {
-		List<Ausencia> ausencias = service.getAusenciasPorFechaOrdenadasPorHora(fechaDesde, fechaHasta);
-		return ResponseEntity.ok(ausencias);
-	}
-
+	
 	@GetMapping("/filtroGuardias")
 	public ResponseEntity<List<Ausencia>> getAusenciasFiltradas(
 			@RequestParam(required = false) LocalDate fechaDesde,
@@ -93,13 +86,6 @@ public class AusenciaController {
 		return ResponseEntity.ok(ausencias);
 	}
 
-	/*
-	 * getAusenciasEntreFechasPorProfesorGuardia(fechaDesde: string, fechaHasta:
-	 * string, idProfesorGuardia: string): Observable<any[]> { return
-	 * this.http.get<any[]>(`${this.apiUrl}/filtroGuardias?fechaDesde=${fechaDesde}&
-	 * fechaHasta=${fechaHasta}&idProfesorGuardia=${fechaHasta}`); }
-	 * 
-	 */
 
 	@PostMapping
 	public Ausencia create(@RequestBody Ausencia ausencia) {
@@ -127,10 +113,11 @@ public class AusenciaController {
 			Ausencia nuevaAusencia = service.crearRegistroAusencia(ausenciaDTO);
 			return ResponseEntity.ok(nuevaAusencia);
 
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error al procesar la ausencia: " + e.getMessage());
-		}
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la ausencia: " + e.getMessage());
+	    }
 	}
 
 	@PutMapping("/{id}")

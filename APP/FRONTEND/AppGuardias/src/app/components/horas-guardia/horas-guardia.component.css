@@ -36,3 +36,8 @@ button i {
   font-size: 20px;
 }
 
+@media (max-width: 768px) {
+  .view-body {
+    margin: 35px 15px 0;
+  }
+}

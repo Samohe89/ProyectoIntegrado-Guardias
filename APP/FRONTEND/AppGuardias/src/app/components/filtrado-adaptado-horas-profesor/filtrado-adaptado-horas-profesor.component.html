@@ -9,7 +9,8 @@
         </label>
         <input type="date" id="fechaDesde" name="fechaDesde" class="form-control datePersonalizado flex-grow-1"
           [ngClass]="{ 'is-invalid': (faltanFechas && !fechaDesde) || fechasErroneas || faltanCriterios}"
-          [(ngModel)]="fechaDesde" (ngModelChange)="resetValidacion()" />
+          [(ngModel)]="fechaDesde" (ngModelChange)="resetValidacion()" 
+          [min]="fechaMin" [max]="fechaMax"/>
       </div>
 
       <!-- Fecha hasta -->

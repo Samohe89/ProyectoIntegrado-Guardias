@@ -7,6 +7,8 @@
 }
 
 .datePersonalizado {
+  position: relative;
+  padding-right: 3rem; /* espacio para icono */
   height: 45px;
   background-color: white;
   color: gray;
@@ -23,6 +25,18 @@
   -moz-appearance: none;
 }
 
+.datePersonalizado::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  width: 2.5rem;
+  height: 100%;
+  cursor: pointer;
+  z-index: 2;
+}
+
 /* Oculta el icono nativo del calendario */
 .datePersonalizado::-webkit-calendar-picker-indicator {
   opacity: 0;
@@ -36,4 +50,11 @@
 
 .is-invalid {
   border: 2px solid red;
+}
+
+@media (max-width: 768px) {
+  .filtrado-container {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
 }

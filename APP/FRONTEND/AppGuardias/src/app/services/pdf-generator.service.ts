@@ -12,7 +12,11 @@ export class PdfGeneratorService {
     filtros: { [key: string]: string },
     headers: string[],
     data: (string | number)[][],
-    nombreArchivo: string
+    nombreArchivo: string,
+    opcionesExtra?: {
+      profesorFiltrado?: string,
+      margin?: { left: number, right: number }
+    }
   ) {
     const doc = new jsPDF();
 
@@ -41,20 +45,29 @@ export class PdfGeneratorService {
     // Filtros (formato alineado)
     doc.setFont('Helvetica', 'normal');
     doc.setFontSize(12);
-    let filtrosTextY = 45;
+    let filtrosTextY = 50;
 
     doc.text(`Fecha desde: ${filtros['Fecha desde'] || ''}`, 14, 50);
     doc.text(`Fecha hasta: ${filtros['Fecha hasta'] || ''}`, 80, 50);
+
+    // Si se ha pasado profesorFiltrado, se muestra debajo
+    if (opcionesExtra?.profesorFiltrado) {
+      filtrosTextY += 7;  // Ajusta salto de línea
+      doc.text(`Profesor filtrado: ${opcionesExtra.profesorFiltrado}`, 14, filtrosTextY);
+    }
 
     // Salto antes de la tabla
     const startTableY = filtrosTextY + 15;
 
     // Tabla
+    const defaultMargin = { left: 40, right: 40 };
+    const margin = opcionesExtra?.margin || defaultMargin;
+
     const tableOptions: UserOptions = {
       head: [headers],
       body: data,
       startY: startTableY,
-      margin: { left: 30, right: 30 },
+      margin: margin,
       theme: 'grid',
       styles: {
         font: 'Helvetica',
@@ -102,7 +115,7 @@ export class PdfGeneratorService {
     autoTable(doc, tableOptions);
 
     // Guardar el PDF en un archivo
-    //doc.save(nombreArchivo || 'informe-guardias.pdf');
+    doc.save(nombreArchivo || 'informe-guardias.pdf');
 
     // Abrir el pdf en una nueva ventana
     doc.output('dataurlnewwindow');

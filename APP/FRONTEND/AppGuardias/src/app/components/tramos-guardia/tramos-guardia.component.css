@@ -1,40 +1,48 @@
+.modal.show {
+  margin: auto;
+  width: 100vw;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 .modal-dialog {
-    padding: 0;
-    max-width: 425px;
-    
-  }
-  
-  .modal-header {
-    padding: 0 25px;
-    height: 50px;
-    background-color: #16604E;
-    color: white;
-  }
-  
-  .modal-content {
-    width: 425px;
-    border-radius: 10px;
-    background-color: #EDF1EF;
-    border: 2px solid #16604E;
-  }
-  
-  .modal-body {
-    padding: 50px;
-    padding-top: 35px;
-    font-size: 18px;
-  }
+  margin: auto;
+  padding: 0;
+  max-width: 425px;
+  box-sizing: border-box;
+}
 
-  .linea-checkbox {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+.modal-content {
+  margin: auto;
+  max-width: 425px;
+  border-radius: 10px;
+  background-color: #edf1ef;
+  border: 2px solid #16604e;
+  box-sizing: border-box;
+}
 
-  .checkboxPersonalizado {
-    font-weight: 500;
-  }
+.modal-header {
+  padding: 0 25px;
+  height: 50px;
+  background-color: #16604e;
+  color: white;
+}
 
+.modal-body {
+  padding: 50px;
+  padding-top: 35px;
+  font-size: 18px;
+}
 
+.linea-checkbox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkboxPersonalizado {
+  font-weight: 500;
+}
 
 /* Ocultar el recuadro del checkbox original */
 .checkboxPersonalizado input[type="checkbox"] {
@@ -46,10 +54,10 @@
 /* Recuadro de checkbox personalizado */
 .recuadroCheck {
   display: inline-block;
-  width: 24px;  
-  height: 24px; 
+  width: 24px;
+  height: 24px;
   background-color: #ffffff;
-  border-radius: 10px; 
+  border-radius: 10px;
   border: 2px solid #999999;
   vertical-align: text-bottom;
   margin-right: 15px;
@@ -58,21 +66,18 @@
 
 /* Fondo del recuadro cuando el checkbox está seleccionado */
 input:checked + .recuadroCheck {
-  background-color: #51A687;
+  background-color: #51a687;
 }
-
 
 /* Fondo del recuadro cuando el checkbox está deshabilitado */
 input:disabled + .recuadroCheck {
-  background-color: #C3C9C6;
+  background-color: #c3c9c6;
 }
 
 /* Fondo del recuadro cuando el checkbox está seleccionado y deshabilitado */
 input:checked:disabled + .recuadroCheck {
-  background-color: #C3C9C6;
+  background-color: #c3c9c6;
 }
-
-
 
 /* Posibilita establecer la marca de "check" en el recuadro */
 .recuadroCheck:after {
@@ -105,14 +110,11 @@ input:checked:disabled + .recuadroCheck::after {
   transform: rotate(45deg);
 }
 
-
 .profesorGuardia {
   margin-bottom: 10px;
   padding-left: 50px;
   font-size: 14px;
 }
-
-
 
 .selectFiltroPersonalizado {
   margin-bottom: 20px;
@@ -122,7 +124,7 @@ input:checked:disabled + .recuadroCheck::after {
   border: none;
 
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708'/%3E%3C/svg%3E"),
-  linear-gradient(to left, #3C7E66 2.5rem, transparent 2.5rem);
+    linear-gradient(to left, #3c7e66 2.5rem, transparent 2.5rem);
   background-repeat: no-repeat;
   background-position: right 0.5rem center, right center;
   background-size: 25px 25px, 2.5rem 100%;
@@ -132,45 +134,52 @@ input:checked:disabled + .recuadroCheck::after {
   -moz-appearance: none;
 }
 
-
-
-
-.botonForm{
+.botonForm {
   display: flex;
   justify-content: end;
   margin-top: 35px;
 }
 
-  
-  button.btn-close{
-    padding: 0;
-    font-size: 24px;
-    color: white;
-  }
-  
-  .btn-close{
-    margin: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' fill='%23ffffff' class='bi bi-x-circle-fill' viewBox='0 0 16 16'%3E%3Cpath d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z'/%3E%3C/svg%3E");
-    opacity: 1;
-  }
-  
-  .btn-close:hover{
-    opacity: 0.6;
-  }
+button.btn-close {
+  padding: 0;
+  font-size: 24px;
+  color: white;
+}
 
- 
-  .btn-eliminar {
-    border: none;
-    background-color: none;
+.btn-close {
+  margin: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' fill='%23ffffff' class='bi bi-x-circle-fill' viewBox='0 0 16 16'%3E%3Cpath d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z'/%3E%3C/svg%3E");
+  opacity: 1;
+}
+
+.btn-close:hover {
+  opacity: 0.6;
+}
+
+.btn-eliminar {
+  border: none;
+  background-color: none;
+}
+
+.btn-eliminar i {
+  color: #d74e58;
+  font-size: 24px;
+  transition: color 0.2s;
+}
+
+.btn-eliminar i:hover {
+  opacity: 0.75;
+}
+
+@media (max-width: 475px) {
+  .modal-dialog {
+    max-width: calc(100% - 24px);
   }
-  
-  
-  .btn-eliminar i {
-    color: #D74E58;
-    font-size: 24px;
-    transition: color 0.2s; 
+  .modal-content {
+    max-width: calc(100% - 24px);
   }
-  
-  .btn-eliminar i:hover {
-    opacity: 0.75;
+  .modal-body {
+    padding: 35px;
+    font-size: 17px;
   }
+}
