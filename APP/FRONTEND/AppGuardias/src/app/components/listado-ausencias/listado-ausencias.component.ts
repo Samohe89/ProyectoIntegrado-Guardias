@@ -234,17 +234,17 @@ export class ListadoAusenciasComponent implements OnInit {
     if (confirmado && this.ausenciaSeleccionada) {
       this.ausenciaService.delete(this.ausenciaSeleccionada.id!).subscribe({
         next: () => {
-          this.ausencias = this.ausencias.filter(
-            (a) => a.id !== this.ausenciaSeleccionada?.id
+          const idEliminado = this.ausenciaSeleccionada?.id;
+
+          this.ausencias = this.ausencias.filter((a) => a.id !== idEliminado);
+          this.ausenciasFiltro = this.ausenciasFiltro.filter(
+            (a) => a.id !== idEliminado
           );
+
           this.ausenciaSeleccionada = null;
-        },
-        error: (err) => {
-          console.error('Error al eliminar:', err);
         },
       });
     }
-    this.ausenciaSeleccionada = null;
   }
 
   abrirModalTarea(ausencia: Ausencia) {

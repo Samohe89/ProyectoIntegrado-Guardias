@@ -6,22 +6,6 @@
 
     <div class="view-body">
       <div id="opcionesListado" class="d-flex justify-content-between align-items-center">
-        <div id="botonesListado">
-          <ng-container *ngIf="usuario?.rol == 'Profesor'">
-            <!-- Botón Día siguiente -->
-            <button *ngIf="esMismaFecha(fechaUnica, diaActual)" class="btn btn-green ms-3"
-              (click)="cargarAusencias(diaSiguiente)">
-              <i class="bi bi-chevron-double-right"></i>
-              Día siguiente
-            </button>
-            <!-- Botón Día actual -->
-            <button *ngIf="!esMismaFecha(fechaUnica, diaActual)" class="btn btn-green ms-3"
-              (click)="cargarAusencias(diaActual)">
-              <i class="bi bi-chevron-double-left"></i>
-              Día actual
-            </button>
-          </ng-container>
-        </div>
 
         <!-- Indicador de fecha -->
         <ng-container *ngIf="!fechaDesde && !fechaHasta">
@@ -78,7 +62,7 @@
             </tr>
             <!-- Si no hay ausencias, mostramos un mensaje -->
             <tr *ngIf="ausencias.length === 0">
-              <td colspan="7" class="text-center">
+              <td [attr.colspan]="usuario?.rol === 'Equipo Directivo' ? 7 : 6" class="text-center">
                 No hay ausencias disponibles.
               </td>
             </tr>
