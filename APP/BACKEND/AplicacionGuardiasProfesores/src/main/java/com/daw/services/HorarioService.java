@@ -34,7 +34,7 @@ public class HorarioService {
     }
     
     public List<Horario> obtenerHorariosPorProfesorYCurso(String dniProfesor, String cursoAcademico) {
-        return repository.findByProfesor_Id_DniProfesorAndProfesor_Id_CursoAcademico(dniProfesor, cursoAcademico);
+        return repository.findByProfesorIdDniProfesorAndProfesorIdCursoAcademico(dniProfesor, cursoAcademico);
     }
 }
 

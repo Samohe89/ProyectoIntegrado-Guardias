@@ -87,10 +87,10 @@ public class AusenciaController {
 	}
 
 
-	@PostMapping
-	public Ausencia create(@RequestBody Ausencia ausencia) {
-		return service.save(ausencia);
-	}
+//	@PostMapping
+//	public Ausencia create(@RequestBody Ausencia ausencia) {
+//		return service.save(ausencia);
+//	}
 
 //	@PostMapping("/registroAusencia")
 //	public ResponseEntity<Ausencia> crearRegistroAusencia(@RequestBody AusenciaDTO ausenciaDTO) {
@@ -120,21 +120,21 @@ public class AusenciaController {
 	    }
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<Ausencia> update(@PathVariable Long id, @RequestBody Ausencia updated) {
-		return service.findById(id).map(existing -> {
-			updated.setId(id);
-			return ResponseEntity.ok(service.save(updated));
-		}).orElse(ResponseEntity.notFound().build());
-	}
-
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Object> delete(@PathVariable Long id) {
-		return service.findById(id).map(existing -> {
-			service.deleteById(id);
-			return ResponseEntity.noContent().build();
-		}).orElse(ResponseEntity.notFound().build());
-	}
+//	@PutMapping("/{id}")
+//	public ResponseEntity<Ausencia> update(@PathVariable Long id, @RequestBody Ausencia updated) {
+//		return service.findById(id).map(existing -> {
+//			updated.setId(id);
+//			return ResponseEntity.ok(service.save(updated));
+//		}).orElse(ResponseEntity.notFound().build());
+//	}
+//
+//	@DeleteMapping("/{id}")
+//	public ResponseEntity<Object> delete(@PathVariable Long id) {
+//		return service.findById(id).map(existing -> {
+//			service.deleteById(id);
+//			return ResponseEntity.noContent().build();
+//		}).orElse(ResponseEntity.notFound().build());
+//	}
 
 	// MANEJO DE EXCEPCIONES
 
