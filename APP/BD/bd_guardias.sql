@@ -1,5 +1,8 @@
 -- CREACIÓN DE BASE DE DATOS
-CREATE DATABASE IF NOT EXISTS app_guardias;
+CREATE DATABASE IF NOT EXISTS app_guardias
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+  
 USE app_guardias;
 
 -- CREACIÓN DE TABLAS
