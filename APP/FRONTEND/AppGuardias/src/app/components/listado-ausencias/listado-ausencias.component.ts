@@ -248,7 +248,9 @@ export class ListadoAusenciasComponent implements OnInit {
   }
 
   abrirModalTarea(ausencia: Ausencia) {
-    this.modalTarea.abrirModalDetalles(ausencia);
+    this.ausenciaSeleccionada = ausencia;
+    this.modalTarea.ausencia = ausencia;
+    this.modalTarea.mostrarModal();
   }
 
   guardaTarea(ausencia: Ausencia) {
