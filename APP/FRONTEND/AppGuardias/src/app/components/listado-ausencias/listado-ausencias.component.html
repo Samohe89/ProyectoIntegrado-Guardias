@@ -24,7 +24,7 @@
         (filtrosAplicados)="aplicarFiltrosDesdeComponente($event)"></app-filtrado>
 
       <div id="divTabla" class="table-container">
-        <table class="table shadow tabla-ausencias">
+        <table class="table shadow tabla-ausencias d-none d-md-table">
           <thead>
             <tr>
               <!-- Condicional: Mostrar columna 'Profesor' si el rol es Equipo Directivo -->
@@ -48,8 +48,9 @@
                 {{ ausencia.profesor.nombreProfesor }}
               </td>
               <td>{{ ausencia.horariosProfesor.asignatura }}</td>
+
               <td>
-                <button class="btn-detalles">
+                <button class="btn-detalles" (click)="abrirModalTarea(ausencia)">
                   <i class="bi bi-plus-square-fill"></i>
                 </button>
               </td>
@@ -69,29 +70,58 @@
         </table>
       </div>
 
-      <div class="responsive-cards" *ngIf="ausencias.length > 0 && isMobile()">
-        <div class="ausencia-card" *ngFor="let ausencia of ausencias">
-          <div class="card-header">{{ ausencia.fechaAusencia }}</div>
-          <div>
-            <strong>Grupo:</strong> {{ ausencia.horariosProfesor.grupo }}
-          </div>
-          <div><strong>Hora:</strong> {{ ausencia.horariosProfesor.hora }}</div>
-          <div *ngIf="usuario?.rol === 'Equipo Directivo'">
-            <strong>Profesor:</strong> {{ ausencia.profesor.nombreProfesor }}
-          </div>
-          <div>
-            <strong>Asignatura:</strong>
-            {{ ausencia.horariosProfesor.asignatura }}
-          </div>
+      <!-- Vista Card Responsive - Móvil -->
+      <div class="cards-container d-block d-md-none">
+        <ng-container *ngFor="let ausencia of ausencias">
+          <div class="card-body">
+            <!-- Fecha -->
+             <div class="card-header"><strong>{{ ausencia.fechaAusencia | date: 'dd/MM/yyyy' }}</strong></div>
 
-          <div class="card-actions">
-            <button class="btn-detalles">
-              <i class="bi bi-plus-lg"></i>
-            </button>
-            <button class="btn-eliminar" (click)="abrirModal(ausencia)">
-              <i class="bi bi-trash-fill"></i>
-            </button>
+            <!-- Grupo -->
+            <div class="card-row">
+              <div class="card-row-title">Grupo:</div>
+              <div class="card-row-content">{{ ausencia.horariosProfesor.grupo }}</div>
+            </div>
+
+            <!-- Hora -->
+            <div class="card-row">
+              <div class="card-row-title">Hora:</div>
+              <div class="card-row-content">{{ ausencia.horariosProfesor.hora }}ª</div>
+            </div>
+
+            <!-- Asignatura -->
+            <div class="card-row">
+              <div class="card-row-title">Asignatura:</div>
+              <div class="card-row-content">{{ ausencia.horariosProfesor.asignatura }}</div>
+            </div>
+
+            <!-- Profesor (solo para Equipo Directivo) -->
+            <div class="card-row" *ngIf="usuario?.rol === 'Equipo Directivo'">
+              <div class="card-row-title">Profesor:</div>
+              <div class="card-row-content">{{ ausencia.profesor.nombreProfesor }}</div>
+            </div>
+
+            <!-- Botones -->
+            <div class="card-row">
+              
+              <div class="card-row-content">
+              <button class="btn-detalles" (click)="abrirModalTarea(ausencia)">
+                <i class="bi bi-plus-square-fill"></i>
+              </button>
+              </div>
+              
+              <div class="card-row-content">
+              <button class="btn-eliminar" (click)="abrirModal(ausencia)">
+                <i class="bi bi-trash"></i>
+              </button>
+              </div>
+            </div>
           </div>
+        </ng-container>
+
+        <!-- Card vacío -->
+        <div class="card-body text-center" *ngIf="ausencias.length === 0">
+          <p>No hay ausencias disponibles.</p>
         </div>
       </div>
     </div>
@@ -101,3 +131,4 @@
 <!-- Modal de confirmación -->
 <app-modal-eliminar #modalEliminar (eliminar)="manejarEliminacion($event)">
 </app-modal-eliminar>
+<app-modal-tarea #modalTarea (tareaGuardada)="guardaTarea($event)"></app-modal-tarea>
