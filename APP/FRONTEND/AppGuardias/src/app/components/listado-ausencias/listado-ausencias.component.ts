@@ -166,6 +166,18 @@ export class ListadoAusenciasComponent implements OnInit {
     this.fechaHasta = '';
   }
 
+  get primeraFechaAusencia(): Date | null {
+    if (!this.ausencias || this.ausencias.length === 0) return null;
+    const fechas = this.ausencias.map(a => new Date(a.fechaAusencia));
+    return new Date(Math.min(...fechas.map(f => f.getTime())));
+  }
+
+  get ultimaFechaAusencia(): Date | null {
+    if (!this.ausencias || this.ausencias.length === 0) return null;
+    const fechas = this.ausencias.map(a => new Date(a.fechaAusencia));
+    return new Date(Math.max(...fechas.map(f => f.getTime())));
+  }
+
   cargarAusencias(dia: Date) {
     this.fechaDesde = '';
     this.fechaHasta = '';
