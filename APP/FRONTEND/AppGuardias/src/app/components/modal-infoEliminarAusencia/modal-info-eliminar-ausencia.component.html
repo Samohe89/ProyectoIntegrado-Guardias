@@ -1,0 +1,15 @@
+<!-- Modal de información de error al eliminar Ausencia -->
+<div class="modal fade" id="infoEliminarAusenciaModal" tabindex="-1" aria-labelledby="infoEliminarAusenciaModalLabel"
+  [ngClass]="{'show': modalInfoEliminarAusenciaActivo}" [style.display]="modalInfoEliminarAusenciaActivo ? 'block' : 'none'">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-center w-100" id="infoEliminarAusenciaModalLabel">Información</h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>La ausencia tiene una guardia ya asignada, no se puede eliminar.</p>
+      </div>
+    </div>
+  </div>
+</div>

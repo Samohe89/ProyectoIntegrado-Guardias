@@ -1,21 +1,18 @@
-import {
-  Component,
-  HostListener,
-  OnInit,
-  ViewChild,
-  viewChild,
-} from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import {
   Ausencia,
   AusenciaService,
   Profesor,
 } from '../../services/ausencia.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfesorService } from '../../services/profesor.service';
 import { FiltradoComponent } from '../filtrado/filtrado.component';
 import { ModalTareaComponent } from '../modal-tarea/modal-tarea.component';
 import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.component';
+import { ModalBorradoComponent } from '../modal-borrado/modal-borrado.component';
+import { ModalInfoEliminarAusenciaComponent } from '../modal-infoEliminarAusencia/modal-info-eliminar-ausencia.component';
+import { PdfGeneratorService } from '../../services/pdf-generator.service';
 
 @Component({
   selector: 'app-listado-ausencias',
@@ -26,7 +23,11 @@ import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.compone
     FiltradoComponent,
     ModalEliminarComponent,
     ModalTareaComponent,
+    ModalBorradoComponent,
+    ModalInfoEliminarAusenciaComponent,
+    DatePipe,
   ],
+  providers: [DatePipe],
   templateUrl: './listado-ausencias.component.html',
   styleUrl: './listado-ausencias.component.css',
 })
@@ -36,6 +37,12 @@ export class ListadoAusenciasComponent implements OnInit {
 
   @ViewChild('modalTarea', { static: false })
   modalTarea!: ModalTareaComponent;
+
+  @ViewChild('modalBorrado', { static: false })
+  modalBorrado!: ModalBorradoComponent;
+
+  @ViewChild('modalInfoEliminarAusencia', { static: false })
+  modalInfoEliminarAusencia!: ModalInfoEliminarAusenciaComponent;
 
   ausencias: Ausencia[] = [];
   todasLasAusencias: Ausencia[] = [];
@@ -62,7 +69,9 @@ export class ListadoAusenciasComponent implements OnInit {
 
   constructor(
     private ausenciaService: AusenciaService,
-    private profesorService: ProfesorService
+    private profesorService: ProfesorService,
+    private pdfGeneratorService: PdfGeneratorService,
+    private datePipe: DatePipe
   ) {}
 
   isMobileView: boolean = window.innerWidth <= 768;
@@ -118,7 +127,15 @@ export class ListadoAusenciasComponent implements OnInit {
             const esHoy = fechaAusencia >= hoy;
             return esProfesor && esHoy;
           });
-          this.ausenciasFiltro = ausenciasFiltradas;
+          this.ausenciasFiltro = ausenciasFiltradas.sort(
+            (a, b) =>
+              new Date(a.fechaAusencia).getTime() -
+                new Date(b.fechaAusencia).getTime() ||
+              (a.horariosProfesor?.hora !== undefined &&
+              b.horariosProfesor?.hora !== undefined
+                ? a.horariosProfesor.hora - b.horariosProfesor.hora
+                : 0)
+          );
           this.ausencias = [...this.ausenciasFiltro];
         }
 
@@ -130,7 +147,15 @@ export class ListadoAusenciasComponent implements OnInit {
             fechaAusencia.setHours(0, 0, 0, 0);
             return fechaAusencia >= hoy;
           });
-          this.ausenciasFiltro = ausenciasFiltradas;
+          this.ausenciasFiltro = ausenciasFiltradas.sort(
+            (a, b) =>
+              new Date(a.fechaAusencia).getTime() -
+                new Date(b.fechaAusencia).getTime() ||
+              (a.horariosProfesor?.hora !== undefined &&
+              b.horariosProfesor?.hora !== undefined
+                ? a.horariosProfesor.hora - b.horariosProfesor.hora
+                : 0)
+          );
           this.ausencias = [...this.ausenciasFiltro];
         }
       });
@@ -139,6 +164,18 @@ export class ListadoAusenciasComponent implements OnInit {
     }
     this.fechaDesde = '';
     this.fechaHasta = '';
+  }
+
+  get primeraFechaAusencia(): Date | null {
+    if (!this.ausencias || this.ausencias.length === 0) return null;
+    const fechas = this.ausencias.map(a => new Date(a.fechaAusencia));
+    return new Date(Math.min(...fechas.map(f => f.getTime())));
+  }
+
+  get ultimaFechaAusencia(): Date | null {
+    if (!this.ausencias || this.ausencias.length === 0) return null;
+    const fechas = this.ausencias.map(a => new Date(a.fechaAusencia));
+    return new Date(Math.max(...fechas.map(f => f.getTime())));
   }
 
   cargarAusencias(dia: Date) {
@@ -240,8 +277,19 @@ export class ListadoAusenciasComponent implements OnInit {
           this.ausenciasFiltro = this.ausenciasFiltro.filter(
             (a) => a.id !== idEliminado
           );
-
+          setTimeout(() => {
+            this.modalBorrado.mostrarModal();
+          }, 300);
           this.ausenciaSeleccionada = null;
+        },
+        error: (err) => {
+          // Si el error es 500, muestra el modal de info
+          if (err.status === 500) {
+            this.modalInfoEliminarAusencia.mostrarModal();
+          } else {
+            // Puedes manejar otros errores aquí si lo deseas
+            console.error('Error al eliminar ausencia:', err);
+          }
         },
       });
     }
@@ -259,5 +307,49 @@ export class ListadoAusenciasComponent implements OnInit {
     if (index !== -1) {
       this.ausencias[index].tarea = ausencia.tarea;
     }
+  }
+
+  // Generar el informe PDF
+  async imprimirPDF(): Promise<void> {
+    const subtitulo = 'LISTADO DE AUSENCIAS';
+
+    const filtros: any = {};
+    if (this.fechaDesde === null || this.fechaHasta === null) {
+      filtros['Fecha desde'] = this.fechaUnica
+        ? this.datePipe.transform(this.fechaUnica, 'dd/MM/yyyy') ?? ''
+        : '';
+      filtros['Fecha hasta'] = this.fechaUnica
+        ? this.datePipe.transform(this.fechaUnica, 'dd/MM/yyyy') ?? ''
+        : '';
+    } else {
+      filtros['Fecha desde'] = this.fechaDesde
+        ? this.datePipe.transform(this.fechaDesde, 'dd/MM/yyyy') ?? ''
+        : '';
+      filtros['Fecha hasta'] = this.fechaHasta
+        ? this.datePipe.transform(this.fechaHasta, 'dd/MM/yyyy') ?? ''
+        : '';
+    }
+
+    const headers = ['Fecha', 'Grupo', 'Hora', 'Profesor', 'Asignatura'];
+
+    const data: (string | number)[][] = this.ausencias.map((ausencia) => [
+      this.datePipe.transform(ausencia.fechaAusencia, 'dd/MM/yyyy') ?? '',
+      ausencia.horariosProfesor.grupo,
+      ausencia.horariosProfesor.hora + 'ª Hora',
+      ausencia.profesor.nombreProfesor,
+      ausencia.horariosProfesor.asignatura,
+    ]);
+
+    await this.pdfGeneratorService.generarPdfTabla(
+      subtitulo,
+      filtros,
+      headers,
+      data,
+      'informe-ausencias.pdf',
+      {
+        profesorFiltrado: this.profesorFiltro || '',
+        margin: { left: 15, right: 15 },
+      }
+    );
   }
 }

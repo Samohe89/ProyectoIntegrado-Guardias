@@ -6,11 +6,18 @@
 
     <div class="view-body">
       <div id="opcionesListado" class="d-flex justify-content-between align-items-center">
-
+        <!-- Botón Imprimir PDF -->
+        <div id="botonesListado">
+          <ng-container *ngIf="usuario?.rol === 'Equipo Directivo'">
+            <button class="btn btn-green" (click)="imprimirPDF()">
+              <i class="bi bi-printer-fill"></i>
+              Imprimir PDF
+            </button>
+          </ng-container>
+        </div>
         <!-- Indicador de fecha -->
         <ng-container *ngIf="!fechaDesde && !fechaHasta">
-          <p class="fw-semibold m-0">Ausencias del día {{ fechaUnica | date : "dd/MM/yyyy" }}
-          </p>
+            <p class="fw-semibold m-0">Ausencias del día {{ primeraFechaAusencia | date : "dd/MM/yyyy" }} hasta {{ ultimaFechaAusencia | date: "dd/MM/yyy" }} </p>
         </ng-container>
         <ng-container *ngIf="fechaDesde || fechaHasta">
           <p class="fw-semibold m-0">
@@ -75,7 +82,7 @@
         <ng-container *ngFor="let ausencia of ausencias">
           <div class="card-body">
             <!-- Fecha -->
-             <div class="card-header"><strong>{{ ausencia.fechaAusencia | date: 'dd/MM/yyyy' }}</strong></div>
+            <div class="card-header"><strong>{{ ausencia.fechaAusencia | date: 'dd/MM/yyyy' }}</strong></div>
 
             <!-- Grupo -->
             <div class="card-row">
@@ -103,17 +110,17 @@
 
             <!-- Botones -->
             <div class="card-row">
-              
+
               <div class="card-row-button">
-              <button class="btn-detalles" (click)="abrirModalTarea(ausencia)">
-                <i class="bi bi-plus-square-fill"></i>
-              </button>
+                <button class="btn-detalles" (click)="abrirModalTarea(ausencia)">
+                  <i class="bi bi-plus-square-fill"></i>
+                </button>
               </div>
-              
+
               <div class="card-row-button">
-              <button class="btn-eliminar" (click)="abrirModal(ausencia)">
-                <i class="bi bi-trash"></i>
-              </button>
+                <button class="btn-eliminar" (click)="abrirModal(ausencia)">
+                  <i class="bi bi-trash"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -132,3 +139,5 @@
 <app-modal-eliminar #modalEliminar (eliminar)="manejarEliminacion($event)">
 </app-modal-eliminar>
 <app-modal-tarea #modalTarea (tareaGuardada)="guardaTarea($event)"></app-modal-tarea>
+<app-modal-borrado #modalBorrado></app-modal-borrado>
+<app-modal-info-eliminar-ausencia #modalInfoEliminarAusencia></app-modal-info-eliminar-ausencia>
