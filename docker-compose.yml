@@ -1,0 +1,90 @@
+# Define los servicios que formarán parte de la app (contenedores Docker)
+services:
+  # Servicio para el contenedor de la base de datos MySQL
+  bd:
+    # Especifica el directorio del Dockerfile a partir del cual se genera la imagen personalizada de la BD
+    build: ./APP/BD
+    # Asigna nombre a la imagen
+    image: bd-mysql-guardias
+    # Asigna el nombre al contenedor
+    container_name: app-guardias-bd
+    # Configura el contenedor para que se reinicie automáticamente si se detiene o si falla
+    restart: always
+    # Mapea el puerto 3306 de la máquina local con el puerto 3306 del contenedor
+    ports:
+      - "3306:3306"
+    # Asigna las variables de entorno
+    environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=app_guardias
+    - MYSQL_USER=usuario
+    - MYSQL_PASSWORD=usuario
+    - MYSQL_INITDB_SKIP_TZINFO=1
+    # Ejecuta el comando de codificación UTF-8
+    command: 
+      - --character-set-server=utf8mb4 
+      - --collation-server=utf8mb4_unicode_ci
+    # Asigna la red personalizada para ejecutar este servicio
+    networks:
+      - app-guardias-net
+    # Monta un volumen para persistir los datos de la base de datos aún cuando el contenedor no esté funcionando
+    volumes:
+      - app-guardias:/var/lib/mysql
+    # Verifica que la BD está arrancada
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Servicio para el contenedor del backend (aplicación con SpringBoot)
+  backend:
+    # Especifica el directorio del Dockerfile a partir del cual se genera la imagen personalizada de la BD
+    build: ./APP/BACKEND
+    # Asigna nombre a la imagen
+    image: backend-spring-guardias
+    # Asigna el nombre al contenedor
+    container_name: app-guardias-backend
+    # Configura el contenedor para que se reinicie automáticamente si se detiene o si falla
+    restart: always
+    # Mapea el puerto 8080 de la máquina local con el puerto 8080 del contenedor
+    ports:
+      - "8080:8080"
+    # Asigna la misma red personalizada para ejecutar este servicio
+    networks:
+      - app-guardias-net
+    # Establece que el servicio "bd" debe iniciarse antes que el 'backend', verificando que está arrancada 
+    depends_on:
+      bd:
+        condition: service_healthy
+
+  # Servicio para el contenedor del frontend (aplicación con Angular)
+  frontend:
+    # Especifica el directorio del Dockerfile a partir del cual se genera la imagen personalizada de la BD
+    build: ./APP/FRONTEND
+    # Asigna nombre a la imagen
+    image: frontend-angular-guardias
+    # Asigna el nombre al contenedor
+    container_name: app-guardias-frontend
+    # Configura el contenedor para que se reinicie automáticamente si se detiene o si falla
+    restart: always
+    # Mapea el puerto 4200 de la máquina local con el puerto 4200 del contenedor
+    ports:
+      - "4200:4200"
+    # Asigna la misma red personalizada para ejecutar este servicio
+    networks:
+      - app-guardias-net
+    # Establece que el servicio "backend" debe iniciarse antes que el 'frontend'
+    depends_on:
+      - backend
+
+# Define los volúmenes utilizados en los contenedores
+volumes:
+  # En este caso, el volumen de persistencia para la BD
+  app-guardias:
+
+# Define las redes utilizadas por los contenedores
+networks:
+  app-guardias-net:
+    # Utiliza la red puente predeterminada de Docker
+    driver: bridge

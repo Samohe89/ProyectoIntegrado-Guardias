@@ -1,0 +1,25 @@
+# Usa la imagen oficial de Node.js
+FROM node:latest
+
+# Establece el directorio de trabajo en el contenedor
+WORKDIR /home/node/app
+
+# Copia el código fuente de la aplicación de la máquina local a la carpeta del contenedor
+COPY AppGuardias /home/node/app
+
+# Asigna variables de entorno para la codificacion
+ENV LANG=C.UTF-8
+ENV LANGUAGE=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+# Instala las dependencias de la aplicación Angular
+RUN npm install
+
+# Instala Angular CLI para poder lanzar el comando de arranque
+RUN npm install -g @angular/cli
+
+# Indica el puerto para acceder a la aplicación
+EXPOSE 4200
+
+# Comando para iniciar la aplicación Angular desde fuera del contenedor
+CMD ["ng", "serve", "--host", "0.0.0.0", "--disable-host-check"]
