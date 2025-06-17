@@ -160,10 +160,6 @@ button.btn-close {
     max-width: calc(100% - 40px); /* deja márgenes laterales */
   }
 
-  #modalDetallesAusencia .modal-content {
-    padding: 10px;
-  }
-
   textarea.form-control {
     font-size: 14px;
   }

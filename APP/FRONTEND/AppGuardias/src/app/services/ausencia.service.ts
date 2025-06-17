@@ -77,7 +77,7 @@ export class AusenciaService {
     });
   }
 
-  eliminarFicheroTarea(id: number): Observable<string> {
+  eliminarFichero(id: number): Observable<string> {
     return this.http.delete(`${this.apiUrl}/${id}/fichero`, {
       responseType: 'text',
     });
