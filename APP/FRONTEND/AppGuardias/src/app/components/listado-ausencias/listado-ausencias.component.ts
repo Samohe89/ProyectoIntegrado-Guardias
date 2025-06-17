@@ -168,14 +168,26 @@ export class ListadoAusenciasComponent implements OnInit {
 
   get primeraFechaAusencia(): Date | null {
     if (!this.ausencias || this.ausencias.length === 0) return null;
-    const fechas = this.ausencias.map(a => new Date(a.fechaAusencia));
-    return new Date(Math.min(...fechas.map(f => f.getTime())));
+    const fechas = this.ausencias.map((a) => new Date(a.fechaAusencia));
+    return new Date(Math.min(...fechas.map((f) => f.getTime())));
   }
 
   get ultimaFechaAusencia(): Date | null {
     if (!this.ausencias || this.ausencias.length === 0) return null;
-    const fechas = this.ausencias.map(a => new Date(a.fechaAusencia));
-    return new Date(Math.max(...fechas.map(f => f.getTime())));
+    const fechas = this.ausencias.map((a) => new Date(a.fechaAusencia));
+    return new Date(Math.max(...fechas.map((f) => f.getTime())));
+  }
+
+  // En tu componente TypeScript
+  get unicaFechaAusencia(): Date | null {
+    if (!this.ausencias || this.ausencias.length === 0) return null;
+    const fechas = this.ausencias.map((a) =>
+      new Date(a.fechaAusencia).toDateString()
+    );
+    const fechasUnicas = Array.from(new Set(fechas));
+    return fechasUnicas.length === 1
+      ? new Date(this.ausencias[0].fechaAusencia)
+      : null;
   }
 
   cargarAusencias(dia: Date) {
