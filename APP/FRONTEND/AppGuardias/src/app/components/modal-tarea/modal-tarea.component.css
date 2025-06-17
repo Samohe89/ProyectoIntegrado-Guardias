@@ -170,7 +170,8 @@ button.btn-close {
 .div-botones {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
+  justify-content: center;
   width: 100%;
 }
 
@@ -182,18 +183,33 @@ button.btn-close {
 
 /* Orden en móvil: fila 1: Adjuntar, Confirmar; fila 2: Modificar, Eliminar */
 @media (max-width: 767px) {
-  .btn-adjuntar {
-    order: 1;
+  #modalDetallesAusencia .modal-dialog {
+    margin: 24px auto;
+    max-width: 80%;           /* El modal ocupa como máximo el 95% del ancho de la ventana */
+    width: 80%;               /* Opcional: asegura el ancho */
+    box-sizing: border-box;
+    padding-left: 10px;        /* Opcional: más margen interno */
+    padding-right: 10px;       /* Opcional: más margen interno */
   }
-  .btn-confirmar {
-    order: 2;
+  .div-botones {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+    gap: 14px 18px; /* Espacio entre filas y columnas */
+    justify-items: center; /* Centra los botones en su celda */
   }
-  .btn-modificar {
-    order: 3;
+  .div-botones button {
+    width: 100%;         /* Ocupa todo el ancho de la celda */
+    max-width: 140px;    /* Máximo ancho para que no sean muy grandes */
+    min-width: 100px;    /* Mínimo ancho para uniformidad */
+    padding: 8px 0;      /* Ajusta el padding a tu gusto */
+    margin: 0;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .btn-eliminar {
-    order: 4;
-  }
+  
+  
 }
 
 /* Escritorio: todos en una fila, orden: Eliminar, Modificar, Adjuntar, Confirmar */

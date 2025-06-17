@@ -32,47 +32,47 @@ public class ProfesorController {
         return service.findAll();
     }
 
-    @GetMapping("/{dni}/{curso}")
-    public ResponseEntity<Profesor> getById(@PathVariable String dni, @PathVariable String curso) {
-    	ProfesorId id = new ProfesorId();
-        id.setDniProfesor(dni);
-        id.setCursoAcademico(curso);
-
-        return service.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public Profesor create(@RequestBody Profesor profesor) {
-        return service.save(profesor);
-    }
-
-    @PutMapping("/{dni}/{curso}")
-    public ResponseEntity<Profesor> update(@PathVariable String dni,
-                                           @PathVariable String curso,
-                                           @RequestBody Profesor updated) {
-    	ProfesorId id = new ProfesorId();
-        id.setDniProfesor(dni);
-        id.setCursoAcademico(curso);
-
-        return service.findById(id).map(existing -> {
-            updated.setId(id);
-            return ResponseEntity.ok(service.save(updated));
-        }).orElse(ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/{dni}/{curso}")
-    public ResponseEntity<Object> delete(@PathVariable String dni, @PathVariable String curso) {
-    	ProfesorId id = new ProfesorId();
-        id.setDniProfesor(dni);
-        id.setCursoAcademico(curso);
-
-        return service.findById(id).map(existing -> {
-            service.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }).orElse(ResponseEntity.notFound().build());
-    }
+//    @GetMapping("/{dni}/{curso}")
+//    public ResponseEntity<Profesor> getById(@PathVariable String dni, @PathVariable String curso) {
+//    	ProfesorId id = new ProfesorId();
+//        id.setDniProfesor(dni);
+//        id.setCursoAcademico(curso);
+//
+//        return service.findById(id)
+//                .map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.notFound().build());
+//    }
+//
+//    @PostMapping
+//    public Profesor create(@RequestBody Profesor profesor) {
+//        return service.save(profesor);
+//    }
+//
+//    @PutMapping("/{dni}/{curso}")
+//    public ResponseEntity<Profesor> update(@PathVariable String dni,
+//                                           @PathVariable String curso,
+//                                           @RequestBody Profesor updated) {
+//    	ProfesorId id = new ProfesorId();
+//        id.setDniProfesor(dni);
+//        id.setCursoAcademico(curso);
+//
+//        return service.findById(id).map(existing -> {
+//            updated.setId(id);
+//            return ResponseEntity.ok(service.save(updated));
+//        }).orElse(ResponseEntity.notFound().build());
+//    }
+//
+//    @DeleteMapping("/{dni}/{curso}")
+//    public ResponseEntity<Object> delete(@PathVariable String dni, @PathVariable String curso) {
+//    	ProfesorId id = new ProfesorId();
+//        id.setDniProfesor(dni);
+//        id.setCursoAcademico(curso);
+//
+//        return service.findById(id).map(existing -> {
+//            service.deleteById(id);
+//            return ResponseEntity.noContent().build();
+//        }).orElse(ResponseEntity.notFound().build());
+//    }
 
 }
 

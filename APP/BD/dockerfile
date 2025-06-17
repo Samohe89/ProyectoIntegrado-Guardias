@@ -1,0 +1,16 @@
+# Usa como base la imagen oficial de MySQL en su última versión
+FROM mysql:latest
+
+# Copia el la configuración y el script para iniciar la BD en el directorio correspondiente del contenedor (según documentación oficial)
+COPY my.cnf /etc/mysql/conf.d/my.cnf
+COPY bd_guardias.sql /docker-entrypoint-initdb.d/
+
+# Establece las variables de entorno necesarias para ejecutar la BD (según documentación oficial)
+ENV MYSQL_ROOT_PASSWORD=root
+ENV MYSQL_DATABASE=app_guardias
+ENV MYSQL_USER=usuario
+ENV MYSQL_PASSWORD=usuario
+
+
+# Establece el puerto
+EXPOSE 3306

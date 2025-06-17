@@ -70,7 +70,7 @@ public class AusenciaController {
 				 * Si no consigue mostrar el fichero, lo descarga "filename" especifica el
 				 * nombre del fichero y su extensión
 				 */
-				.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"tarea-" + asignatura + ".pdf\"")
+				.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"Tarea-" + asignatura + ".pdf\"")
 				// Permitir el acceso a la cabecera para recuperar el nombre del fichero
 				.header("Access-Control-Expose-Headers", "Content-Disposition").body(blob);
 	}
@@ -92,10 +92,10 @@ public class AusenciaController {
 	}
 
 
-	@PostMapping
-	public Ausencia create(@RequestBody Ausencia ausencia) {
-		return service.save(ausencia);
-	}
+//	@PostMapping
+//	public Ausencia create(@RequestBody Ausencia ausencia) {
+//		return service.save(ausencia);
+//	}
 
 //	@PostMapping("/registroAusencia")
 //	public ResponseEntity<Ausencia> crearRegistroAusencia(@RequestBody AusenciaDTO ausenciaDTO) {
