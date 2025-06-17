@@ -14,6 +14,8 @@ import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.compone
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ModalBorradoComponent } from '../modal-borrado/modal-borrado.component';
 import { ModalRegistroComponent } from '../modal-registro/modal-registro.component';
+import { ModalInfoComponent } from '../modal-info/modal-info.component';
+import { ModalNoDatosComponent } from '../modal-noDatos/modal-no-datos.component';
 
 @Component({
   selector: 'app-modal-tarea',
@@ -24,6 +26,8 @@ import { ModalRegistroComponent } from '../modal-registro/modal-registro.compone
     ModalEliminarComponent,
     ModalBorradoComponent,
     ModalRegistroComponent,
+    ModalInfoComponent,
+    ModalNoDatosComponent,
   ],
   templateUrl: './modal-tarea.component.html',
   styleUrl: './modal-tarea.component.css',
@@ -34,6 +38,8 @@ export class ModalTareaComponent {
   @ViewChild('modalEliminar') modalEliminar!: ModalEliminarComponent;
   @ViewChild('modalBorrado') modalBorrado!: ModalBorradoComponent;
   @ViewChild('modalRegistro') modalRegistro!: ModalRegistroComponent;
+  @ViewChild('modalInfo') modalInfo!: ModalInfoComponent;
+  @ViewChild('modalNoDatos') modalNoDatos!: ModalNoDatosComponent;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor(
@@ -67,17 +73,12 @@ export class ModalTareaComponent {
         this.modalTareaActivo = true;
         this.hayTarea = !!this.ausencia.tarea;
         this.hayFichero = !!this.ausencia.fichero;
-        console.log('1Hay tarea:', this.hayTarea);
-        console.log('1Hay fichero:', this.hayFichero);
         this.cargarPdf();
         this.establecerEstado(this.hayTarea, this.hayFichero);
       });
-    console.log('ausencia:', this.ausencia);
   }
 
   establecerEstado(hayTarea: boolean, hayFichero: boolean): void {
-    console.log('establecerEstado - hayTarea:', hayTarea);
-    console.log('establecerEstado - hayFichero:', hayFichero);
     this.puedeEditarTexto = !hayTarea && hayFichero;
     this.puedeAdjuntarArchivo = !hayFichero && hayTarea;
 
@@ -108,22 +109,15 @@ export class ModalTareaComponent {
             this.objectUrl
           );
           this.hayFichero = true;
-          console.log('2Hay tarea:', this.hayTarea);
-          console.log('2Hay fichero:', this.hayFichero);
         }
-        //  else {
-        //   // No hay contenido en el cuerpo
-        //   this.pdfUrl = null;
-        //   this.archivoAdjunto = null;
-        // }
       },
       error: (err) => {
         if (err.status === 404) {
           // Archivo no encontrado: no pasa nada, solo limpiamos variables
-          console.warn('No hay PDF asociado para esta tarea.');
+          console.log('No hay PDF asociado para esta tarea.');
         } else {
           // Otros errores sí pueden ser más graves
-          console.error('Error inesperado al cargar PDF:', err);
+          console.log('Error inesperado al cargar PDF:');
         }
         this.pdfUrl = null;
         this.archivoAdjunto = null;
@@ -165,13 +159,6 @@ export class ModalTareaComponent {
   adjuntarArchivo(event: Event): void {
     const input = event.target as HTMLInputElement;
 
-    // if (!this.puedeAdjuntarArchivo) {
-    //   alert('No puedes adjuntar archivo mientras haya PDF o no haya tarea.');
-    //   input.value = '';
-    //   return;
-    // }
-
-    console.log('entrada de adjuntar archivo:', input.files);
     if (input.files && input.files.length > 0) {
       this.archivoAdjunto = input.files[0];
       this.pdfUrl = null; // Borra vista previa si es un nuevo archivo local
@@ -182,6 +169,17 @@ export class ModalTareaComponent {
   }
 
   eliminarTarea() {
+    if (
+      !this.ausencia ||
+      this.ausencia.id == null ||
+      ((this.tareaTexto.trim() === '' ||
+        this.tareaTexto === null ||
+        this.tareaTexto === undefined) &&
+        (this.pdfUrl === '' ||
+          this.pdfUrl === null ||
+          this.pdfUrl === undefined))
+    )
+      return this.modalNoDatos.mostrarModal();
     this.eliminarSoloFichero = false;
     this.modalEliminar.mostrarModal();
   }
@@ -196,7 +194,6 @@ export class ModalTareaComponent {
           this.tareaTexto = ausenciaActualizada.tarea;
           this.ausencia!.tarea = ausenciaActualizada.tarea;
           this.tareaGuardada.emit(ausenciaActualizada);
-          // Opcional: mostrar mensaje de éxito o cerrar modal
         },
         error: (err) => {
           console.error('Error al modificar tarea:', err);
@@ -206,15 +203,23 @@ export class ModalTareaComponent {
 
   abrirModalConfirmacion() {
     this.eliminarSoloFichero = true;
-    console.log('3Hay tarea:', this.hayTarea);
-    console.log('3Hay fichero:', this.hayFichero);
     this.modalEliminar.mostrarModal();
   }
 
   borrarArchivo(): void {}
 
   confirmarTarea(): void {
-    if (!this.ausencia || this.ausencia.id == null) return;
+    if (
+      !this.ausencia ||
+      this.ausencia.id == null ||
+      ((this.tareaTexto.trim() === '' ||
+        this.tareaTexto === null ||
+        this.tareaTexto === undefined) &&
+        (this.pdfUrl === '' ||
+          this.pdfUrl === null ||
+          this.pdfUrl === undefined))
+    )
+      return this.modalInfo.mostrarModal();
 
     const formData = new FormData();
     formData.append('idAusencia', this.ausencia.id.toString());
@@ -244,18 +249,10 @@ export class ModalTareaComponent {
   }
 
   confirmEliminar(confirmado: boolean) {
-    console.log('Confirmar eliminar:', confirmado);
-    console.log('Eliminar solo fichero:', this.eliminarSoloFichero);
-    console.log('4Hay tarea:', this.hayTarea);
-    console.log('4Hay fichero:', this.hayFichero);
     if (!confirmado || !this.ausencia?.id) return;
 
     if (this.eliminarSoloFichero) {
-      console.log('Eliminando solo fichero.');
       if (!this.hayFichero) {
-        console.log('5Hay tarea:', this.hayTarea);
-        console.log('5Hay fichero:', this.hayFichero);
-        console.log('NEliminando fichero no adjunto.');
         if (this.fileInput && this.fileInput.nativeElement) {
           this.fileInput.nativeElement.value = ''; // <-- Limpia input file HTML
           this.establecerEstado(this.hayTarea, false);
@@ -265,7 +262,6 @@ export class ModalTareaComponent {
           this.recargarAusencia();
         }
       } else {
-        console.log('Eliminando fichero adjunto.');
         this.ausenciaService.eliminarFichero(this.ausencia.id).subscribe({
           next: () => {
             this.pdfUrl = null;
@@ -283,7 +279,6 @@ export class ModalTareaComponent {
         });
       }
     } else {
-      console.log('Eliminando tarea y fichero. aMAMAMAMAMAMARLAAA');
       this.ausenciaService.eliminarTarea(this.ausencia.id).subscribe({
         next: () => {
           // Si hay fichero, también lo eliminamos
@@ -342,10 +337,6 @@ export class ModalTareaComponent {
       next: (ausenciaCompleta) => {
         this.ausencia = ausenciaCompleta;
         this.tareaTexto = ausenciaCompleta.tarea ?? '';
-        // this.cargarPdf();
-        // this.hayTarea = !!this.ausencia.tarea;
-        // this.hayFichero = !!this.ausencia.fichero;
-        // this.establecerEstado(this.hayTarea, this.hayFichero);
       },
       error: (err) => {
         console.error('Error al recargar ausencia:', err);
