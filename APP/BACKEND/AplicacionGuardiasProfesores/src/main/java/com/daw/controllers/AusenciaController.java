@@ -3,6 +3,7 @@ package com.daw.controllers;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.daw.datamodel.entities.Ausencia;
 import com.daw.dto.AusenciaDTO;
 import com.daw.errors.ApiError;
 import com.daw.exceptions.FicheroTareaNoEncontradoException;
+import com.daw.repositories.AusenciaRepository;
 import com.daw.services.AusenciaService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +39,8 @@ import lombok.RequiredArgsConstructor;
 public class AusenciaController {
 
 	private final AusenciaService service;
+	
+	private final AusenciaRepository ausenciaRepository;
 
 	@GetMapping
 	public List<Ausencia> getAll() {
@@ -120,21 +125,63 @@ public class AusenciaController {
 	    }
 	}
 
-//	@PutMapping("/{id}")
-//	public ResponseEntity<Ausencia> update(@PathVariable Long id, @RequestBody Ausencia updated) {
-//		return service.findById(id).map(existing -> {
-//			updated.setId(id);
-//			return ResponseEntity.ok(service.save(updated));
-//		}).orElse(ResponseEntity.notFound().build());
-//	}
-//
-//	@DeleteMapping("/{id}")
-//	public ResponseEntity<Object> delete(@PathVariable Long id) {
-//		return service.findById(id).map(existing -> {
-//			service.deleteById(id);
-//			return ResponseEntity.noContent().build();
-//		}).orElse(ResponseEntity.notFound().build());
-//	}
+	@PutMapping("/{id}")
+	public ResponseEntity<Ausencia> update(@PathVariable Long id, @RequestBody Ausencia updated) {
+		return service.findById(id).map(existing -> {
+			updated.setId(id);
+			return ResponseEntity.ok(service.save(updated));
+		}).orElse(ResponseEntity.notFound().build());
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Object> delete(@PathVariable Long id) {
+		return service.findById(id).map(existing -> {
+			service.deleteById(id);
+			return ResponseEntity.noContent().build();
+		}).orElse(ResponseEntity.notFound().build());
+	}
+	
+	@PostMapping("/subir-tarea")
+	public ResponseEntity<?> subirTareaConArchivo(
+	        @RequestParam("idAusencia") Long idAusencia,
+	        @RequestParam("tareaTexto") String tareaTexto,
+	        @RequestParam(value = "archivo", required = false) MultipartFile archivo) {
+
+	    try {
+	        Ausencia ausencia = service.getAusenciaPorId(idAusencia);
+	        ausencia.setTarea(tareaTexto);
+
+	        if (archivo != null && !archivo.isEmpty()) {
+	            ausencia.setFichero(archivo.getBytes());
+	        }
+
+	        service.save(ausencia);
+	        return ResponseEntity.ok("Tarea y fichero guardados correctamente.");
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                             .body("Error al guardar tarea y fichero: " + e.getMessage());
+	    }
+	}
+	@DeleteMapping("/{id}/fichero")
+	public ResponseEntity<?> eliminarFichero(@PathVariable Long id) {
+	    Optional<Ausencia> opt = ausenciaRepository.findById(id);
+	    if (opt.isPresent()) {
+	        Ausencia a = opt.get();
+	        a.setFichero(null);
+	        ausenciaRepository.save(a);
+	        return ResponseEntity.ok("Fichero eliminado.");
+	    }
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ausencia no encontrada");
+	}
+	
+	@PutMapping("/{id}/eliminar-tarea")
+	public ResponseEntity<Ausencia> eliminarTarea(@PathVariable Long id) {
+	    return service.findById(id).map(existing -> {
+	        existing.setTarea(null);
+	        Ausencia saved = service.save(existing);
+	        return ResponseEntity.ok(saved);
+	    }).orElse(ResponseEntity.notFound().build());
+	}
 
 	// MANEJO DE EXCEPCIONES
 
