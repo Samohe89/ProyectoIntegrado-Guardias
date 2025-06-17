@@ -96,7 +96,7 @@ public class GuardiaService {
 	}
 
     
-    //Método para obtener el total de horas de guardia por profesor
+    //Métodos para obtener el total de horas de guardia por profesor
     public List<ProfesorTotalHorasGuardiaDTO> obtenerTotalHorasPorDni(LocalDate desde, LocalDate hasta, String dniProfesor) {
         return guardiaRepository.obtenerTotalHorasPorDni(desde, hasta, dniProfesor);
     }
