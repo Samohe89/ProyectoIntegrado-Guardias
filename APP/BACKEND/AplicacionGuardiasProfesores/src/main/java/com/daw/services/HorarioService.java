@@ -1,12 +1,10 @@
 package com.daw.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.daw.datamodel.entities.Horario;
-import com.daw.datamodel.entities.ProfesorId;
 import com.daw.repositories.HorarioRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -15,8 +13,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class HorarioService {
 
-    private final HorarioRepository repository;
-
+	private final HorarioRepository repository;
+	
+	/*
     public List<Horario> findAll() {
         return repository.findAll();
     }
@@ -32,6 +31,7 @@ public class HorarioService {
     public void deleteById(Integer id) {
         repository.deleteById(id);
     }
+    */
     
     public List<Horario> obtenerHorariosPorProfesorYCurso(String dniProfesor, String cursoAcademico) {
         return repository.findByProfesorIdDniProfesorAndProfesorIdCursoAcademico(dniProfesor, cursoAcademico);

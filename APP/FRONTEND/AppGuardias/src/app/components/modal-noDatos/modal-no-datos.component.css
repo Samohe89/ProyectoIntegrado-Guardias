@@ -1,18 +1,18 @@
-#infoModal.modal.show {
+#noDatosModal.modal.show {
   margin: auto;
   width: 100vw;
   max-width: 100%;
   box-sizing: border-box;
 }
 
-#infoModal .modal-dialog {
+#noDatosModal .modal-dialog {
   margin: auto;
   padding: 0;
   max-width: 425px;
   box-sizing: border-box;
 }
 
-#infoModal .modal-content {
+#noDatosModal .modal-content {
   margin: auto;
   max-width: 400px;
   min-height: 165px;

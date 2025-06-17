@@ -1,27 +1,25 @@
-#modalDetallesAusencia.modal.show {
+.modal.show {
   margin: auto;
   width: 100vw;
   max-width: 100%;
   box-sizing: border-box;
 }
 
-#modalDetallesAusencia .modal-dialog {
+.modal-dialog {
   margin: auto;
   padding: 0;
   max-width: 650px;
   box-sizing: border-box;
 }
 
-#modalDetallesAusencia .modal-content {
+.modal-content {
   margin: auto;
-  max-width: 700px;
+  max-width: 630px;
   min-height: 300px;
   border-radius: 10px;
   border: 1px solid #3c7e66;
   background-color: #edf1ef;
   box-sizing: border-box;
-  text-align: left;
-  overflow-x: hidden;
 }
 
 .modal-header {
@@ -29,22 +27,17 @@
   height: 50px;
   background-color: #3c7e66;
   color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header h5 {
-  margin: 0 auto;
-  font-weight: 700;
 }
 
 .modal-body {
-  padding: 20px 25px;
+  padding: 50px;
+  padding-top: 35px;
   font-size: 16px;
 }
 
 textarea.form-control {
+  margin-top: 5px;
+  margin-bottom: 15px;
   width: 100%;
   resize: vertical;
   font-size: 15px;
@@ -52,13 +45,16 @@ textarea.form-control {
   border-radius: 5px;
   border: 1px solid #b8b8b8;
   font-family: Arial, sans-serif;
-  margin-bottom: 15px;
 }
 
 .archivo-adjunto {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+}
+
+.archivo-adjunto span {
+  cursor: pointer;
 }
 
 .btn-eliminar-archivo {
@@ -74,7 +70,7 @@ textarea.form-control {
   opacity: 0.7;
 }
 
-.archivo-adjunto i.bi-file-earmark-pdf {
+.icon-pdf {
   font-size: 22px;
   color: #3c7e66;
   margin-right: 6px;
@@ -83,6 +79,7 @@ textarea.form-control {
 .nombre-archivo {
   font-size: 14px;
 }
+
 
 button.btn-eliminar,
 button.btn-modificar,
@@ -101,41 +98,34 @@ button.btn-confirmar {
   gap: 6px;
 }
 
-button.btn-eliminar {
+
+.btn-eliminar {
   background-color: #d74e58;
   color: white;
 }
 
-button.btn-eliminar:hover {
-  opacity: 0.85;
+.btn-eliminar:hover {
+  background-color: transparent;
+  border: 2px solid #d74e58;
+  color: #d74e58;
 }
 
-button.btn-modificar {
+
+.btn-adjuntar,
+.btn-modificar,
+.btn-confirmar {
   background-color: #3c7e66;
   color: white;
 }
 
-button.btn-modificar:hover {
-  opacity: 0.85;
+.btn-adjuntar:hover,
+.btn-modificar:hover,
+.btn-confirmar:hover {
+  background-color: transparent;
+  border: 2px solid #3c7e66;
+  color: #3c7e66;
 }
 
-button.btn-adjuntar {
-  background-color: #3c7e66;
-  color: white;
-}
-
-button.btn-adjuntar:hover {
-  opacity: 0.85;
-}
-
-button.btn-confirmar {
-  background-color: #3c7e66;
-  color: white;
-}
-
-button.btn-confirmar:hover {
-  opacity: 0.85;
-}
 
 button.btn-close {
   padding: 0;
@@ -155,11 +145,12 @@ button.btn-close {
 
 /* MODAL - Espaciado lateral en móviles */
 @media (max-width: 768px) {
-  #modalDetallesAusencia .modal-dialog {
-    margin: 20px auto;
-    max-width: calc(100% - 40px); /* deja márgenes laterales */
+  .modal-dialog {
+    max-width: calc(100% - 24px);
   }
-
+  .modal-content {
+    max-width: calc(100% - 24px);
+  }
   textarea.form-control {
     font-size: 14px;
   }
@@ -168,10 +159,11 @@ button.btn-close {
 /* Botones: disposición adaptativa */
 
 .div-botones {
+  margin-top: 10px;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
 }
 
@@ -183,13 +175,10 @@ button.btn-close {
 
 /* Orden en móvil: fila 1: Adjuntar, Confirmar; fila 2: Modificar, Eliminar */
 @media (max-width: 767px) {
-  #modalDetallesAusencia .modal-dialog {
-    margin: 24px auto;
-    max-width: 80%;           /* El modal ocupa como máximo el 95% del ancho de la ventana */
-    width: 80%;               /* Opcional: asegura el ancho */
+  .modal-dialog {
+    margin: auto;
+    width: 90%;
     box-sizing: border-box;
-    padding-left: 10px;        /* Opcional: más margen interno */
-    padding-right: 10px;       /* Opcional: más margen interno */
   }
   .div-botones {
     display: grid;
@@ -198,18 +187,16 @@ button.btn-close {
     justify-items: center; /* Centra los botones en su celda */
   }
   .div-botones button {
-    width: 100%;         /* Ocupa todo el ancho de la celda */
-    max-width: 140px;    /* Máximo ancho para que no sean muy grandes */
-    min-width: 100px;    /* Mínimo ancho para uniformidad */
-    padding: 8px 0;      /* Ajusta el padding a tu gusto */
+    width: 100%; /* Ocupa todo el ancho de la celda */
+    max-width: 140px; /* Máximo ancho para que no sean muy grandes */
+    min-width: 100px; /* Mínimo ancho para uniformidad */
+    padding: 8px 0; /* Ajusta el padding a tu gusto */
     margin: 0;
     font-size: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  
-  
 }
 
 /* Escritorio: todos en una fila, orden: Eliminar, Modificar, Adjuntar, Confirmar */
@@ -217,24 +204,51 @@ button.btn-close {
   .div-botones {
     flex-wrap: nowrap;
   }
-
   .div-botones button {
     flex: 1 1 auto;
   }
-
   .btn-eliminar {
     order: 1;
   }
-
   .btn-modificar {
     order: 2;
   }
-
   .btn-adjuntar {
     order: 3;
   }
-
   .btn-confirmar {
     order: 4;
+  }
+}
+
+/* Responsive orden: */
+@media (max-width: 768px) {
+  .modal-dialog {
+    max-width: calc(100% - 24px);
+  }
+  .modal-content {
+    max-width: calc(100% - 24px);
+  }
+  .modal-body {
+    padding: 35px;
+    font-size: 17px;
+  }
+  .div-botones {
+    flex-wrap: wrap;
+  }
+  .div-botones button {
+    flex: 1 1 auto;
+  }
+  .btn-eliminar {
+    order: 4;
+  }
+  .btn-modificar {
+    order: 3;
+  }
+  .btn-adjuntar {
+    order: 1;
+  }
+  .btn-confirmar {
+    order: 2;
   }
 }
