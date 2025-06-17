@@ -23,8 +23,12 @@ export class DetallesGuardiaComponent {
   // Variable que almacena el objeto ausencia completo
   ausencia?: Ausencia;
 
+  // Variable que controla si existe fichero adjunto o no
+  existeFichero: boolean = false;
+
   // Variable que almacena el nombre del fichero
   nombreFichero: string = "";
+
 
 
   constructor(
@@ -55,10 +59,11 @@ export class DetallesGuardiaComponent {
         const fichero = resp.body!;
         // Se almacena la cabecera que contiene el el nombre del archivo
         const cabeceraRespuesta = resp.headers.get('Content-Disposition');
-        console.log ("cabecera back: ", cabeceraRespuesta);
-  
+        console.log("cabecera back: ", cabeceraRespuesta);
+
         // Indica un nombre por defecto, si no lo consigue extraer
-        this.nombreFichero = 'tarea.pdf'; 
+        this.nombreFichero = 'tarea.pdf';
+        this.existeFichero = true;
 
         // Si la cabecera existe
         if (cabeceraRespuesta) {
@@ -70,7 +75,15 @@ export class DetallesGuardiaComponent {
             console.log("nombre fichero: ", this.nombreFichero)
           }
         }
+      },
+      error: (error) => {
+      if (error.status === 404) {
+        console.warn('No hay fichero adjunto para esta ausencia.');
+      } else {
+        console.error('Error al cargar el fichero:', error);
       }
+      this.existeFichero = false; 
+    }
     })
   }
 
@@ -80,9 +93,12 @@ export class DetallesGuardiaComponent {
       next: (resp) => {
         // Se almacena el fichero, que es lo que se manda en el cuerpo de la respuesta del backend
         const fichero = resp.body!;
-          
+
         // Crear URL del fichero y forzar descarga con nombre correcto
         const url = URL.createObjectURL(fichero);
+        
+        window.open(url);
+        
         // Crea un enlace ficticio de descarga
         const a = document.createElement('a');
         a.href = url;

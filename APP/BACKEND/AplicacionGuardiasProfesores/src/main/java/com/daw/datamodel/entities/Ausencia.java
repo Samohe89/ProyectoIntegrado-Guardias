@@ -41,7 +41,7 @@ public class Ausencia {
 	private String tarea;
 
 	@Lob
-	@Column(name = "Fichero", nullable = true, columnDefinition = "MEDIUMBLOB")
+	@Column(name = "Fichero", nullable = true, columnDefinition = "LONGBLOB")
 	@JsonIgnore
 	private byte[] fichero;
 

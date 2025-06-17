@@ -1,5 +1,6 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   Output,
@@ -11,12 +12,19 @@ import { FormsModule } from '@angular/forms';
 import { AusenciaService } from '../../services/ausencia.service';
 import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.component';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { Observable, switchMap } from 'rxjs';
+import { ModalBorradoComponent } from '../modal-borrado/modal-borrado.component';
+import { ModalRegistroComponent } from '../modal-registro/modal-registro.component';
 
 @Component({
   selector: 'app-modal-tarea',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalEliminarComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ModalEliminarComponent,
+    ModalBorradoComponent,
+    ModalRegistroComponent,
+  ],
   templateUrl: './modal-tarea.component.html',
   styleUrl: './modal-tarea.component.css',
 })
@@ -24,6 +32,9 @@ export class ModalTareaComponent {
   @Input() ausencia: Ausencia | null = null;
   @Output() tareaGuardada = new EventEmitter<Ausencia>();
   @ViewChild('modalEliminar') modalEliminar!: ModalEliminarComponent;
+  @ViewChild('modalBorrado') modalBorrado!: ModalBorradoComponent;
+  @ViewChild('modalRegistro') modalRegistro!: ModalRegistroComponent;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor(
     private ausenciaService: AusenciaService,
@@ -31,17 +42,18 @@ export class ModalTareaComponent {
   ) {}
 
   private objectUrl: string | null = null;
+  private eliminarSoloFichero = false;
 
-  editable: boolean = false;
+  puedeEditarTexto: boolean = false;
+  puedeAdjuntarArchivo: boolean = false;
 
-  // Controla la visualización del modal
   modalTareaActivo: boolean = false;
-  tieneContenido: boolean = false;
+  hayTarea: boolean = false;
 
-  // Texto de la tarea y archivo adjunto
   tareaTexto: string = '';
   archivoAdjunto: File | null = null;
   pdfUrl: SafeResourceUrl | null = null;
+  hayFichero: boolean = false;
 
   // Mostrar modal (y copiar valores de la ausencia)
   mostrarModal(): void {
@@ -53,10 +65,26 @@ export class ModalTareaComponent {
         this.ausencia = ausenciaCompleta;
         this.tareaTexto = this.ausencia.tarea ?? '';
         this.modalTareaActivo = true;
-        this.editable = false;
-        this.tieneContenido = !!this.ausencia.tarea;
+        this.hayTarea = !!this.ausencia.tarea;
+        this.hayFichero = !!this.ausencia.fichero;
+        console.log('1Hay tarea:', this.hayTarea);
+        console.log('1Hay fichero:', this.hayFichero);
         this.cargarPdf();
+        this.establecerEstado(this.hayTarea, this.hayFichero);
       });
+    console.log('ausencia:', this.ausencia);
+  }
+
+  establecerEstado(hayTarea: boolean, hayFichero: boolean): void {
+    console.log('establecerEstado - hayTarea:', hayTarea);
+    console.log('establecerEstado - hayFichero:', hayFichero);
+    this.puedeEditarTexto = !hayTarea && hayFichero;
+    this.puedeAdjuntarArchivo = !hayFichero && hayTarea;
+
+    if (!hayTarea && !hayFichero) {
+      this.puedeEditarTexto = true;
+      this.puedeAdjuntarArchivo = true;
+    }
   }
 
   cargarPdf(): void {
@@ -79,12 +107,15 @@ export class ModalTareaComponent {
           this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
             this.objectUrl
           );
-          this.tieneContenido = true;
-        } else {
-          // No hay contenido en el cuerpo
-          this.pdfUrl = null;
-          this.archivoAdjunto = null;
+          this.hayFichero = true;
+          console.log('2Hay tarea:', this.hayTarea);
+          console.log('2Hay fichero:', this.hayFichero);
         }
+        //  else {
+        //   // No hay contenido en el cuerpo
+        //   this.pdfUrl = null;
+        //   this.archivoAdjunto = null;
+        // }
       },
       error: (err) => {
         if (err.status === 404) {
@@ -100,58 +131,59 @@ export class ModalTareaComponent {
     });
   }
 
+  descargarPdf(): void {
+    if (!this.ausencia?.id) return;
+
+    this.ausenciaService.cargarFicheroTarea(this.ausencia.id).subscribe({
+      next: (response) => {
+        if (response.body && response.body.size > 0) {
+          const blob = new Blob([response.body], { type: 'application/pdf' });
+          const objectUrl = URL.createObjectURL(blob);
+
+          const a = document.createElement('a');
+          a.href = objectUrl;
+          a.download = `tarea_${this.ausencia?.id}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+
+          setTimeout(() => URL.revokeObjectURL(objectUrl), 5000);
+        }
+      },
+      error: (err) => {
+        console.error('Error al descargar PDF:', err);
+      },
+    });
+  }
+
   // Cerrar modal y limpiar archivo
   cerrarModal(): void {
     this.modalTareaActivo = false;
-    this.archivoAdjunto = null;
-    this.tareaTexto = '';
-    this.tieneContenido = false;
-
-    if (this.objectUrl) {
-      URL.revokeObjectURL(this.objectUrl);
-      this.objectUrl = null;
-      this.pdfUrl = null;
-    }
   }
 
-  // Adjuntar archivo
+  //Adjuntar archivo
   adjuntarArchivo(event: Event): void {
-    if (this.tieneContenido && !this.editable) {
-      alert(
-        'Ya tienes un PDF insertado, por favor elimine o modifique la tarea'
-      );
-      (event.target as HTMLInputElement).value = '';
-      return;
-    }
-
     const input = event.target as HTMLInputElement;
+
+    // if (!this.puedeAdjuntarArchivo) {
+    //   alert('No puedes adjuntar archivo mientras haya PDF o no haya tarea.');
+    //   input.value = '';
+    //   return;
+    // }
+
+    console.log('entrada de adjuntar archivo:', input.files);
     if (input.files && input.files.length > 0) {
       this.archivoAdjunto = input.files[0];
-      this.tieneContenido = true;
+      this.pdfUrl = null; // Borra vista previa si es un nuevo archivo local
+      this.hayFichero = true;
+
+      input.value = '';
     }
   }
 
   eliminarTarea() {
-  if (!this.ausencia) return;
-
-  this.ausenciaService.eliminarTarea(this.ausencia.id!).subscribe({
-    next: (ausenciaActualizada) => {
-      this.ausencia = ausenciaActualizada;
-      this.tareaGuardada.emit(ausenciaActualizada); // EMITIR CAMBIO AL PADRE
-      this.cargarPdf();  // Para actualizar el PDF mostrado
-      this.tareaTexto = ''; 
-      this.tieneContenido = false;
-      this.editable = false;
-      // Opcional: cerrar modal o mostrar mensaje
-    },
-    error: (err) => {
-      console.error('Error al borrar tarea:', err);
-    },
-  });
-}
-
-  activarEdicion() {
-    this.editable = true;
+    this.eliminarSoloFichero = false;
+    this.modalEliminar.mostrarModal();
   }
 
   modificarTarea(): void {
@@ -172,10 +204,14 @@ export class ModalTareaComponent {
       });
   }
 
-  borrarFichero() {
-    if (!this.editable) return; // no permitir si no está editable
+  abrirModalConfirmacion() {
+    this.eliminarSoloFichero = true;
+    console.log('3Hay tarea:', this.hayTarea);
+    console.log('3Hay fichero:', this.hayFichero);
     this.modalEliminar.mostrarModal();
   }
+
+  borrarArchivo(): void {}
 
   confirmarTarea(): void {
     if (!this.ausencia || this.ausencia.id == null) return;
@@ -190,13 +226,15 @@ export class ModalTareaComponent {
 
     this.ausenciaService.subirTarea(formData).subscribe({
       next: () => {
-        this.tieneContenido = true;
+        this.hayTarea = true;
         this.cargarPdf(); // actualizar PDF visible tras guardar
         if (this.ausencia !== null) {
           this.tareaGuardada.emit(this.ausencia);
         }
         this.archivoAdjunto = null;
-        this.editable = false; // bloqueamos otra vez tras guardar
+        setTimeout(() => {
+          this.modalRegistro.mostrarModal();
+        }, 300);
         this.cerrarModal();
       },
       error: (err) => {
@@ -206,37 +244,112 @@ export class ModalTareaComponent {
   }
 
   confirmEliminar(confirmado: boolean) {
-    if (!confirmado) return;
-    if (!this.ausencia?.id) return;
+    console.log('Confirmar eliminar:', confirmado);
+    console.log('Eliminar solo fichero:', this.eliminarSoloFichero);
+    console.log('4Hay tarea:', this.hayTarea);
+    console.log('4Hay fichero:', this.hayFichero);
+    if (!confirmado || !this.ausencia?.id) return;
 
-    // Primero eliminar fichero
-    this.ausenciaService
-      .eliminarFicheroTarea(this.ausencia.id)
-      .pipe(
-        // Cuando termine, borrar tarea con texto vacío
-        switchMap(() =>
-          this.ausenciaService.modificarTarea(this.ausencia!.id!, '')
-        )
-      )
-      .subscribe({
-        next: (ausenciaActualizada) => {
-          // Limpiar variables locales para reflejar que está borrado
-          if (this.objectUrl) {
-            URL.revokeObjectURL(this.objectUrl);
-            this.objectUrl = null;
+    if (this.eliminarSoloFichero) {
+      console.log('Eliminando solo fichero.');
+      if (!this.hayFichero) {
+        console.log('5Hay tarea:', this.hayTarea);
+        console.log('5Hay fichero:', this.hayFichero);
+        console.log('NEliminando fichero no adjunto.');
+        if (this.fileInput && this.fileInput.nativeElement) {
+          this.fileInput.nativeElement.value = ''; // <-- Limpia input file HTML
+          this.establecerEstado(this.hayTarea, false);
+          setTimeout(() => {
+            this.modalBorrado.mostrarModal();
+          }, 300);
+          this.recargarAusencia();
+        }
+      } else {
+        console.log('Eliminando fichero adjunto.');
+        this.ausenciaService.eliminarFichero(this.ausencia.id).subscribe({
+          next: () => {
+            this.pdfUrl = null;
+            this.archivoAdjunto = null;
+            this.hayFichero = false;
+            this.establecerEstado(this.hayTarea, false);
+            setTimeout(() => {
+              this.modalBorrado.mostrarModal();
+            }, 300);
+            this.recargarAusencia(); // <-- aquí recargamos sin cerrar modal
+          },
+          error: (err) => {
+            console.error('Error al eliminar fichero:', err);
+          },
+        });
+      }
+    } else {
+      console.log('Eliminando tarea y fichero. aMAMAMAMAMAMARLAAA');
+      this.ausenciaService.eliminarTarea(this.ausencia.id).subscribe({
+        next: () => {
+          // Si hay fichero, también lo eliminamos
+          if (this.hayFichero && this.ausencia?.id != null) {
+            this.ausenciaService.eliminarFichero(this.ausencia.id).subscribe({
+              next: () => {
+                if (this.objectUrl) {
+                  URL.revokeObjectURL(this.objectUrl);
+                  this.objectUrl = null;
+                }
+                this.pdfUrl = null;
+                this.archivoAdjunto = null;
+                this.tareaTexto = '';
+                if (this.ausencia) this.ausencia.tarea = '';
+                this.hayFichero = false;
+                this.hayTarea = false;
+                this.modalEliminar.cerrarModal();
+                setTimeout(() => {
+                  this.modalBorrado.mostrarModal();
+                }, 300);
+                this.recargarAusencia();
+              },
+              error: (err) => {
+                console.error('Error al eliminar fichero:', err);
+              },
+            });
+          } else {
+            if (this.objectUrl) {
+              URL.revokeObjectURL(this.objectUrl);
+              this.objectUrl = null;
+            }
+            this.pdfUrl = null;
+            this.archivoAdjunto = null;
+            this.tareaTexto = '';
+            if (this.ausencia) this.ausencia.tarea = '';
+            this.hayFichero = false;
+            this.hayTarea = false;
+            this.modalEliminar.cerrarModal();
+            setTimeout(() => {
+              this.modalBorrado.mostrarModal();
+            }, 300);
+            this.recargarAusencia();
           }
-          this.pdfUrl = null;
-          this.archivoAdjunto = null;
-          this.tareaTexto = '';
-          this.ausencia!.tarea = '';
-          this.tareaGuardada.emit(ausenciaActualizada);
-          this.tieneContenido = false;
-          this.editable = false;
         },
         error: (err) => {
-          console.error('Error al eliminar fichero y tarea:', err);
-          // Aquí podrías mostrar un mensaje al usuario, si quieres
+          console.error('Error al eliminar tarea:', err);
         },
       });
+    }
+  }
+
+  recargarAusencia(): void {
+    if (!this.ausencia?.id) return;
+
+    this.ausenciaService.getById(this.ausencia.id).subscribe({
+      next: (ausenciaCompleta) => {
+        this.ausencia = ausenciaCompleta;
+        this.tareaTexto = ausenciaCompleta.tarea ?? '';
+        // this.cargarPdf();
+        // this.hayTarea = !!this.ausencia.tarea;
+        // this.hayFichero = !!this.ausencia.fichero;
+        // this.establecerEstado(this.hayTarea, this.hayFichero);
+      },
+      error: (err) => {
+        console.error('Error al recargar ausencia:', err);
+      },
+    });
   }
 }
