@@ -55,9 +55,9 @@ El proyecto está preparado para su despliegue mediante **Docker**. Se han cread
 - `APP/FRONTEND`  
   Aplicación Angular para la interfaz de usuario
 
-- `APP/DOCKER`  
-  Archivos de configuración Docker, incluyendo `docker-compose.yml`
-
+- `APP/BD`  
+  Archivos de configuración de la base de datos en MySQL
+  
 - `DOC`  
   Documentos del proyecto:
   - bd_base
@@ -65,3 +65,12 @@ El proyecto está preparado para su despliegue mediante **Docker**. Se han cread
   - Esquemas_diagramas
   - Interfaz
   - Enlace GoogleDocs
+ 
+## 📜 Instrucciones de Despliegue
+- Descarga e instala Docker desktop en tu equipo
+- Clona el repositorio en tu ordenador: git clone https://github.com/Samohe89/ProyectoIntegrado-Guardias.git
+- Asegurate de que tu equipo tiene liberados los puertos 3306, 4200 y 8080.
+- Accede a la carpeta raiz del proyecto \ProyectoIntegrado-Guardias
+- Abre la terminal en dicha carpeta y ejecuta el comando `docker-compose up --build`
+- Espera mientras se crean las imágenes y contenedores de Docker que desplegarán la aplicación.
+- Accede al navegador y navega a la ruta `http://localhost:4200`
