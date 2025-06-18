@@ -16,8 +16,16 @@
           </ng-container>
         </div>
         <!-- Indicador de fecha -->
-        <ng-container *ngIf="!fechaDesde && !fechaHasta">
-            <p class="fw-semibold m-0">Ausencias del día {{ primeraFechaAusencia | date : "dd/MM/yyyy" }} hasta {{ ultimaFechaAusencia | date: "dd/MM/yyy" }} </p>
+        <ng-container *ngIf="unicaFechaAusencia && !fechaDesde && !fechaHasta">
+          <p class="fw-semibold m-0">
+            Ausencias del día {{ unicaFechaAusencia | date : "dd/MM/yyyy" }}
+          </p>
+        </ng-container>
+        <ng-container *ngIf="!unicaFechaAusencia && !fechaDesde && !fechaHasta && ausencias.length > 1">
+          <p class="fw-semibold m-0">
+            Ausencias desde {{ primeraFechaAusencia | date : "dd/MM/yyyy" }} hasta {{ ultimaFechaAusencia | date:
+            "dd/MM/yyyy" }}
+          </p>
         </ng-container>
         <ng-container *ngIf="fechaDesde || fechaHasta">
           <p class="fw-semibold m-0">
@@ -48,7 +56,7 @@
           <tbody>
             <tr *ngFor="let ausencia of ausencias">
               <!-- Condicional: Mostrar nombre del profesor si el rol es Equipo Directivo -->
-              <td>{{ ausencia.fechaAusencia }}</td>
+              <td>{{ ausencia.fechaAusencia | date:'dd/MM/yyyy' }}</td>
               <td>{{ ausencia.horariosProfesor.grupo }}</td>
               <td>{{ ausencia.horariosProfesor.hora }}</td>
               <td *ngIf="usuario?.rol === 'Equipo Directivo'">

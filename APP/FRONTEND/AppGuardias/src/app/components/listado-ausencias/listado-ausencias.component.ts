@@ -168,14 +168,26 @@ export class ListadoAusenciasComponent implements OnInit {
 
   get primeraFechaAusencia(): Date | null {
     if (!this.ausencias || this.ausencias.length === 0) return null;
-    const fechas = this.ausencias.map(a => new Date(a.fechaAusencia));
-    return new Date(Math.min(...fechas.map(f => f.getTime())));
+    const fechas = this.ausencias.map((a) => new Date(a.fechaAusencia));
+    return new Date(Math.min(...fechas.map((f) => f.getTime())));
   }
 
   get ultimaFechaAusencia(): Date | null {
     if (!this.ausencias || this.ausencias.length === 0) return null;
-    const fechas = this.ausencias.map(a => new Date(a.fechaAusencia));
-    return new Date(Math.max(...fechas.map(f => f.getTime())));
+    const fechas = this.ausencias.map((a) => new Date(a.fechaAusencia));
+    return new Date(Math.max(...fechas.map((f) => f.getTime())));
+  }
+
+  // En tu componente TypeScript
+  get unicaFechaAusencia(): Date | null {
+    if (!this.ausencias || this.ausencias.length === 0) return null;
+    const fechas = this.ausencias.map((a) =>
+      new Date(a.fechaAusencia).toDateString()
+    );
+    const fechasUnicas = Array.from(new Set(fechas));
+    return fechasUnicas.length === 1
+      ? new Date(this.ausencias[0].fechaAusencia)
+      : null;
   }
 
   cargarAusencias(dia: Date) {
@@ -313,22 +325,24 @@ export class ListadoAusenciasComponent implements OnInit {
   async imprimirPDF(): Promise<void> {
     const subtitulo = 'LISTADO DE AUSENCIAS';
 
-    const filtros: any = {};
-    if (this.fechaDesde === null || this.fechaHasta === null) {
-      filtros['Fecha desde'] = this.fechaUnica
-        ? this.datePipe.transform(this.fechaUnica, 'dd/MM/yyyy') ?? ''
-        : '';
-      filtros['Fecha hasta'] = this.fechaUnica
-        ? this.datePipe.transform(this.fechaUnica, 'dd/MM/yyyy') ?? ''
-        : '';
-    } else {
-      filtros['Fecha desde'] = this.fechaDesde
-        ? this.datePipe.transform(this.fechaDesde, 'dd/MM/yyyy') ?? ''
-        : '';
-      filtros['Fecha hasta'] = this.fechaHasta
-        ? this.datePipe.transform(this.fechaHasta, 'dd/MM/yyyy') ?? ''
-        : '';
+    // Calcula el rango real de fechas de los datos filtrados
+    let fechaDesdeFiltro = '';
+    let fechaHastaFiltro = '';
+    if (this.ausencias.length > 0) {
+      const fechas = this.ausencias.map((a) => new Date(a.fechaAusencia));
+      const minFecha = new Date(Math.min(...fechas.map((f) => f.getTime())));
+      const maxFecha = new Date(Math.max(...fechas.map((f) => f.getTime())));
+      fechaDesdeFiltro = this.datePipe.transform(minFecha, 'dd/MM/yyyy') ?? '';
+      fechaHastaFiltro = this.datePipe.transform(maxFecha, 'dd/MM/yyyy') ?? '';
     }
+
+    const filtros: any = {};
+    if (this.profesorFiltro) {
+      filtros['Profesor'] = this.profesorFiltro;
+    }
+    // Siempre muestra "Fecha desde" y "Fecha hasta", aunque sean iguales
+    filtros['Fecha desde'] = fechaDesdeFiltro;
+    filtros['Fecha hasta'] = fechaHastaFiltro;
 
     const headers = ['Fecha', 'Grupo', 'Hora', 'Profesor', 'Asignatura'];
 

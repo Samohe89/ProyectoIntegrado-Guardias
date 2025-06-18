@@ -31,18 +31,18 @@
         </div>
 
         <div class="div-botones">
-          <button type="button" class="btn-eliminar" (click)="eliminarTarea()">
+          <button type="button" class="btn btn-eliminar" (click)="eliminarTarea()">
             <i class="bi bi-x-circle-fill"></i> Eliminar
           </button>
-          <button type="button" class="btn-modificar" (click)="puedeEditarTexto = true" [disabled]="puedeEditarTexto">
+          <button type="button" class="btn btn-modificar" (click)="puedeEditarTexto = true" [disabled]="puedeEditarTexto">
             <i class="bi bi-pencil-fill"></i> Modificar
           </button>
           <!-- Botón adjuntar solo habilitado en modo editable -->
           <input #fileInput type="file" style="display: none" (change)="adjuntarArchivo($event)" />
-          <button type="button" class="btn-adjuntar" (click)="fileInput.click()" [disabled]="!puedeAdjuntarArchivo">
+          <button type="button" class="btn btn-adjuntar" (click)="fileInput.click()" [disabled]="!puedeAdjuntarArchivo">
             <i class="bi bi-upload"></i> Adjuntar
           </button>
-          <button type="button" class="btn-confirmar" (click)="confirmarTarea()">
+          <button type="button" class="btn btn-confirmar" (click)="confirmarTarea()">
             <i class="bi bi-check-circle-fill"></i> Confirmar
           </button>
         </div>
@@ -58,3 +58,4 @@
 <app-modal-registro #modalRegistro></app-modal-registro>
 <app-modal-info #modalInfo></app-modal-info>
 <app-modal-no-datos #modalNoDatos></app-modal-no-datos>
+<app-modal-no-editado #modalNoEditado></app-modal-no-editado>
