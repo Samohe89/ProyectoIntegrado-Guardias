@@ -1,18 +1,18 @@
-#inforEliminarAusenciaModal.modal.show {
+#infoEliminarAusenciaModal.modal.show {
   margin: auto;
   width: 100vw;
   max-width: 100%;
   box-sizing: border-box;
 }
 
-#inforEliminarAusenciaModal .modal-dialog {
+#infoEliminarAusenciaModal .modal-dialog {
   margin: auto;
   padding: 0;
   max-width: 425px;
   box-sizing: border-box;
 }
 
-#inforEliminarAusenciaModal .modal-content {
+#infoEliminarAusenciaModal .modal-content {
   margin: auto;
   max-width: 400px;
   min-height: 165px;
@@ -56,10 +56,10 @@ button.btn-close{
 }
 
 @media (max-width: 475px) {
-  #inforEliminarAusenciaModal .modal-dialog {
+  #infoEliminarAusenciaModal .modal-dialog {
     max-width: calc(100% - 36px);
   }
-  #inforEliminarAusenciaModal .modal-content {
+  #infoEliminarAusenciaModal .modal-content {
     max-width: calc(100% - 36px);
   }
 }

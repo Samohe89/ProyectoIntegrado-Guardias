@@ -1,12 +1,11 @@
 package com.daw.services;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.stereotype.Service;
 
 import com.daw.datamodel.entities.Profesor;
-import com.daw.datamodel.entities.ProfesorId;
 import com.daw.repositories.ProfesorRepository;
 
 import lombok.RequiredArgsConstructor;
