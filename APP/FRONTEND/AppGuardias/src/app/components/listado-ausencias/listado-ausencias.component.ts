@@ -49,6 +49,7 @@ export class ListadoAusenciasComponent implements OnInit {
   ausenciasFiltro: Ausencia[] = [];
 
   profesores: Profesor[] = [];
+  nombreProfesorFiltrado: string = '';
 
   mostrarModal: boolean = false;
   ausenciaSeleccionada: Ausencia | null = null;
@@ -260,7 +261,7 @@ export class ListadoAusenciasComponent implements OnInit {
       this.fechaDesde = '';
       this.fechaHasta = '';
     }
-
+    let nombreProfesorFiltrado = '';
     // 4. Filtrar por profesor (si hay)
     if (event.profesorFiltro) {
       const nombre = event.profesorFiltro.toLowerCase();
@@ -268,9 +269,18 @@ export class ListadoAusenciasComponent implements OnInit {
         ausencia.profesor?.nombreProfesor?.toLowerCase().includes(nombre)
       );
     }
+    // Si solo hay un profesor en los resultados, guarda su nombre real
+    const profesoresUnicos = Array.from(
+      new Set(filtradas.map((a) => a.profesor?.nombreProfesor))
+    );
+    if (profesoresUnicos.length === 1) {
+      nombreProfesorFiltrado = profesoresUnicos[0] || '';
+    }
 
     // 5. Actualizar fechas y ausencias para mostrar
     this.ausencias = filtradas;
+    // Guarda el nombre real para el PDF
+    this.nombreProfesorFiltrado = nombreProfesorFiltrado;
   }
 
   //Lógica para eliminar una ausencia
@@ -325,6 +335,10 @@ export class ListadoAusenciasComponent implements OnInit {
   async imprimirPDF(): Promise<void> {
     const subtitulo = 'LISTADO DE AUSENCIAS';
 
+    let nombreProfesorFiltrado = '';
+    if (this.profesorFiltro && this.ausencias.length > 0) {
+      nombreProfesorFiltrado = this.ausencias[0].profesor.nombreProfesor;
+    }
     // Calcula el rango real de fechas de los datos filtrados
     let fechaDesdeFiltro = '';
     let fechaHastaFiltro = '';
@@ -353,7 +367,7 @@ export class ListadoAusenciasComponent implements OnInit {
       ausencia.profesor.nombreProfesor,
       ausencia.horariosProfesor.asignatura,
     ]);
-
+   console.log('Nombre profesor filtrado:', this.nombreProfesorFiltrado);
     await this.pdfGeneratorService.generarPdfTabla(
       subtitulo,
       filtros,
@@ -361,7 +375,7 @@ export class ListadoAusenciasComponent implements OnInit {
       data,
       'informe-ausencias.pdf',
       {
-        profesorFiltrado: this.profesorFiltro || '',
+        profesorFiltrado: this.nombreProfesorFiltrado, // Aquí
         margin: { left: 15, right: 15 },
       }
     );
