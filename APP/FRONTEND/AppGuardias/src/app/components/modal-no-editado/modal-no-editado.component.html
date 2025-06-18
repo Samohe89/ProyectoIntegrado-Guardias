@@ -1,0 +1,13 @@
+<div class="modal fade" id="noEditadoModal" tabindex="-1" aria-labelledby="noEditadoModalLabel" [ngClass]="{'show': modalNoEditadoActivo}" [style.display]="modalNoEditadoActivo ? 'block' : 'none'">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center w-100" id="noEditadoModalLabel">Error</h5>
+          <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-center">La tarea ya está registrada y no se detectaron modificaciones.</p>
+        </div>
+      </div>
+    </div>
+  </div>
