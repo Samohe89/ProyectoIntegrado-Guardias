@@ -84,7 +84,7 @@ El proyecto está preparado para su despliegue mediante **Docker**. Se han cread
       *usuario:* tagua  
       *password:* tagua    
   
-- Perfil profesor:
+- Perfil directivo:
  
       *usuario:* ramon  
       *password:* ramon   
