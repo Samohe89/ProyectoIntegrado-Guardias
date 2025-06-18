@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36" scale="1" border="0" version="26.2.10">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36" scale="1" border="0" version="27.0.6">
   <diagram name="Página-1" id="ND2Dty8mFAdaBYOgW04u">
-    <mxGraphModel dx="1428" dy="751" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#FFFFFF" math="0" shadow="0">
+    <mxGraphModel dx="1310" dy="708" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#FFFFFF" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -8,13 +8,13 @@
           <mxGeometry x="170" y="30" width="480" height="800" as="geometry" />
         </mxCell>
         <mxCell id="Yk0pzJo4hn3IgyYkeIWP-22" value="Gestión de Guardias" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="Yk0pzJo4hn3IgyYkeIWP-20" vertex="1">
-          <mxGeometry width="480" height="30" as="geometry" />
+          <mxGeometry width="480" height="20" as="geometry" />
         </mxCell>
         <mxCell id="NVA4j9vUab-9wMmzX4WP-13" value="Login" style="ellipse;whiteSpace=wrap;html=1;rounded=0;" parent="Yk0pzJo4hn3IgyYkeIWP-20" vertex="1">
-          <mxGeometry x="177.04918032786884" y="30" width="125.90163934426229" height="60" as="geometry" />
+          <mxGeometry x="176.25918032786885" y="20" width="125.90163934426229" height="60" as="geometry" />
         </mxCell>
         <mxCell id="NVA4j9vUab-9wMmzX4WP-14" value="Registrar Ausencias" style="ellipse;whiteSpace=wrap;html=1;rounded=0;" parent="Yk0pzJo4hn3IgyYkeIWP-20" vertex="1">
-          <mxGeometry x="177.04918032786884" y="100" width="125.90163934426229" height="50" as="geometry" />
+          <mxGeometry x="174.09918032786885" y="100" width="125.90163934426229" height="50" as="geometry" />
         </mxCell>
         <mxCell id="NVA4j9vUab-9wMmzX4WP-15" value="Registrar Ausencia Propia" style="ellipse;whiteSpace=wrap;html=1;rounded=0;" parent="Yk0pzJo4hn3IgyYkeIWP-20" vertex="1">
           <mxGeometry x="177.04918032786884" y="160" width="125.90163934426229" height="50" as="geometry" />
@@ -26,13 +26,13 @@
           <mxGeometry x="176.2622950819672" y="330" width="125.90163934426229" height="50" as="geometry" />
         </mxCell>
         <mxCell id="Yk0pzJo4hn3IgyYkeIWP-11" value="Consultar listado todas las ausencias" style="ellipse;whiteSpace=wrap;html=1;rounded=0;" parent="Yk0pzJo4hn3IgyYkeIWP-20" vertex="1">
-          <mxGeometry x="176.2622950819672" y="410" width="125.90163934426229" height="50" as="geometry" />
+          <mxGeometry x="160" y="400" width="142.16" height="60" as="geometry" />
         </mxCell>
         <mxCell id="NVA4j9vUab-9wMmzX4WP-18" value="Consultar guardias" style="ellipse;whiteSpace=wrap;html=1;rounded=0;" parent="Yk0pzJo4hn3IgyYkeIWP-20" vertex="1">
           <mxGeometry x="176.2622950819672" y="490" width="125.90163934426229" height="50" as="geometry" />
         </mxCell>
         <mxCell id="NVA4j9vUab-9wMmzX4WP-19" value="Consultar historial de Guardias" style="ellipse;whiteSpace=wrap;html=1;rounded=0;" parent="Yk0pzJo4hn3IgyYkeIWP-20" vertex="1">
-          <mxGeometry x="176.2622950819672" y="580" width="125.90163934426229" height="50" as="geometry" />
+          <mxGeometry x="170" y="570" width="132.16" height="60" as="geometry" />
         </mxCell>
         <mxCell id="NVA4j9vUab-9wMmzX4WP-20" value="Asignarse o designarse una guardia" style="ellipse;whiteSpace=wrap;html=1;rounded=0;" parent="Yk0pzJo4hn3IgyYkeIWP-20" vertex="1">
           <mxGeometry x="176.2622950819672" y="660" width="125.90163934426229" height="50" as="geometry" />
@@ -44,16 +44,29 @@
           <mxGeometry x="307.672131147541" y="250" width="70.81967213114754" height="40" as="geometry" />
         </mxCell>
         <mxCell id="NVA4j9vUab-9wMmzX4WP-26" value="Eliminar Tarea" style="ellipse;whiteSpace=wrap;html=1;rounded=0;" parent="Yk0pzJo4hn3IgyYkeIWP-20" vertex="1">
-          <mxGeometry x="284.0655737704918" y="210" width="62.950819672131146" height="30" as="geometry" />
+          <mxGeometry x="284.07" y="200" width="65.93" height="40" as="geometry" />
         </mxCell>
         <mxCell id="Yk0pzJo4hn3IgyYkeIWP-10" value="Filtrar por fecha y/o profesor" style="ellipse;whiteSpace=wrap;html=1;rounded=0;" parent="Yk0pzJo4hn3IgyYkeIWP-20" vertex="1">
-          <mxGeometry x="303.7377049180328" y="360" width="78.68852459016394" height="40" as="geometry" />
+          <mxGeometry x="307.67" y="360" width="80" height="50" as="geometry" />
         </mxCell>
         <mxCell id="Yk0pzJo4hn3IgyYkeIWP-13" value="extend" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="Yk0pzJo4hn3IgyYkeIWP-20" source="Yk0pzJo4hn3IgyYkeIWP-10" target="Yk0pzJo4hn3IgyYkeIWP-11" edge="1">
           <mxGeometry x="-0.1338" y="8" relative="1" as="geometry">
             <mxPoint x="166.0327868852459" y="703" as="sourcePoint" />
             <mxPoint x="195.93442622950818" y="673" as="targetPoint" />
             <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f9BXiuHA7nPkaAi9c7Gh-1" value="&lt;font&gt;Include&lt;/font&gt;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.518;entryY=0.02;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="Yk0pzJo4hn3IgyYkeIWP-20" source="NVA4j9vUab-9wMmzX4WP-13" target="NVA4j9vUab-9wMmzX4WP-14">
+          <mxGeometry x="0.9147" y="21" relative="1" as="geometry">
+            <mxPoint x="293" y="80" as="sourcePoint" />
+            <mxPoint x="190" y="105" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f9BXiuHA7nPkaAi9c7Gh-2" value="" style="endArrow=none;startArrow=none;endFill=0;startFill=0;endSize=8;html=1;verticalAlign=bottom;labelBackgroundColor=none;strokeWidth=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="Yk0pzJo4hn3IgyYkeIWP-20" target="NVA4j9vUab-9wMmzX4WP-22">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="-19.74000000000001" y="288" as="sourcePoint" />
+            <mxPoint x="176.26" y="302" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <object label="Directivo" Profesor="" id="NVA4j9vUab-9wMmzX4WP-1">
@@ -71,7 +84,7 @@
           <mxGeometry x="510" y="590" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="NVA4j9vUab-9wMmzX4WP-28" value="Generar pdf total horas guardias" style="ellipse;whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="200" y="670" width="100" height="45" as="geometry" />
+          <mxGeometry x="190" y="670" width="110" height="45" as="geometry" />
         </mxCell>
         <mxCell id="NVA4j9vUab-9wMmzX4WP-29" value="extend" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;" parent="1" source="NVA4j9vUab-9wMmzX4WP-28" target="NVA4j9vUab-9wMmzX4WP-19" edge="1">
           <mxGeometry x="-0.4932" y="-1" relative="1" as="geometry">

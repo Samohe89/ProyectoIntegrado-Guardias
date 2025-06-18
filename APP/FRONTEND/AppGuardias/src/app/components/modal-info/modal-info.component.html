@@ -1,0 +1,15 @@
+<!-- Modal de información de error -->
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel"
+  [ngClass]="{'show': modalInfoActivo}" [style.display]="modalInfoActivo ? 'block' : 'none'">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-center w-100" id="regModalLabel">Información</h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-center">Debe introducir tarea o fichero.</p>
+      </div>
+    </div>
+  </div>
+</div>

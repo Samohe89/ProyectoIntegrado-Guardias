@@ -1,0 +1,48 @@
+<ng-container *ngIf="!sesionActiva">
+    <app-login (loginOk)="onLogin($event)"></app-login>
+</ng-container>
+
+<ng-container *ngIf="sesionActiva">
+    <header>
+        <app-menu [rol]="rol" (logout)="onLogout()"></app-menu>
+    </header>
+</ng-container>
+
+<main>
+<router-outlet *ngIf="sesionActiva"></router-outlet>
+
+
+
+
+
+
+
+
+
+
+<!--
+ PLANTILLA VENTANAS VISTAS
+<div class="main-container">
+    <div class="view-container shadow mx-3 mx-xxl-0">
+        <div class="view-title">
+            <h1>Título de vista</h1>
+        </div>
+        <div class="view-body">
+            <p>Contenido de vista</p>
+
+            <button class="btn btn-green">
+                <i class="bi bi-check-circle-fill"></i>
+                Confirmar
+            </button>
+            <button class="btn btn-red">
+                <i class="bi bi-x-circle-fill"></i>
+                Eliminar
+            </button>
+
+        </div>
+    </div>
+</div> -->
+
+<!-- </main> -->
+
+

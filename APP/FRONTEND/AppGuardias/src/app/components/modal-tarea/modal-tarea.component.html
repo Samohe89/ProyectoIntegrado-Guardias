@@ -1,0 +1,61 @@
+<div class="modal fade" id="modalDetallesAusencia" tabindex="-1" aria-labelledby="modalDetallesAusenciaLabel"
+  [ngClass]="{ show: modalTareaActivo }" [style.display]="modalTareaActivo ? 'block' : 'none'">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title w-100 text-center" id="modalDetallesAusenciaLabel">
+          Detalles Ausencia
+        </h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <label for="tareaTextarea" class="form-label"><b>Tarea</b></label>
+        <textarea id="tareaTextarea" class="form-control" rows="4" placeholder="Descripción de la tarea"
+          [(ngModel)]="tareaTexto" [disabled]="!puedeEditarTexto && hayTarea"></textarea>
+
+        <div class="archivo-adjunto" *ngIf="pdfUrl && !archivoAdjunto">
+          <i class="bi bi-filetype-pdf icon-pdf"></i>
+          <span class="texto-fichero">Archivo PDF existente</span>
+        </div>
+
+        <div class="archivo-adjunto" *ngIf="(archivoAdjunto || pdfUrl) && puedeAdjuntarArchivo">
+          <!-- Mostrar botón eliminar SOLO si hay archivo adjunto local -->
+          <button *ngIf="archivoAdjunto" type="button" class="btn-eliminar-archivo" (click)="abrirModalConfirmacion()">
+            <i class="bi bi-x-circle-fill"></i>
+          </button>
+          <i class="bi bi-filetype-pdf icon-pdf"></i>
+          <span *ngIf="hayFichero" (click)="descargarPdf()">
+            {{ archivoAdjunto?.name }}
+          </span>
+        </div>
+
+        <div class="div-botones">
+          <button type="button" class="btn btn-eliminar" (click)="eliminarTarea()">
+            <i class="bi bi-x-circle-fill"></i> Eliminar
+          </button>
+          <button type="button" class="btn btn-modificar" (click)="puedeEditarTexto = true" [disabled]="puedeEditarTexto">
+            <i class="bi bi-pencil-fill"></i> Modificar
+          </button>
+          <!-- Botón adjuntar solo habilitado en modo editable -->
+          <input #fileInput type="file" style="display: none" (change)="adjuntarArchivo($event)" />
+          <button type="button" class="btn btn-adjuntar" (click)="fileInput.click()" [disabled]="!puedeAdjuntarArchivo">
+            <i class="bi bi-upload"></i> Adjuntar
+          </button>
+          <button type="button" class="btn btn-confirmar" (click)="confirmarTarea()">
+            <i class="bi bi-check-circle-fill"></i> Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <input type="file" #fileInput style="display: none" accept="application/pdf" (change)="adjuntarArchivo($event)" /> -->
+<!-- Tu modalEliminar personalizado -->
+<app-modal-eliminar #modalEliminar (eliminar)="confirmEliminar($event)"></app-modal-eliminar>
+<app-modal-borrado #modalBorrado></app-modal-borrado>
+<app-modal-registro #modalRegistro></app-modal-registro>
+<app-modal-info #modalInfo></app-modal-info>
+<app-modal-no-datos #modalNoDatos></app-modal-no-datos>
+<app-modal-no-editado #modalNoEditado></app-modal-no-editado>

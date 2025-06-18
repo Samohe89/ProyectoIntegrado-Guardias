@@ -1,0 +1,25 @@
+# Usa la imagen base eclipse-temurin
+FROM eclipse-temurin:17-jdk
+
+# Establece el directorio de trabajo dentro del contenedor
+# Este directorio es el recomendado por la documentación oficial de la imagen
+WORKDIR /opt/app
+
+# Establece variables de entorno para forzar UTF-8 en todo el sistema
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+# Copia el código fuente de aplicación (en máquina local) al directorio del contenedor
+COPY AplicacionGuardiasProfesores/ /opt/app
+
+# Instala Maven (la app se desarrolla con esta herramienta)
+RUN apt-get update && apt-get install -y maven
+
+# Compila el proyecto con Maven
+RUN mvn clean package -DskipTests
+
+# Especifica el puerto usado
+EXPOSE 8080
+
+# Ejecuta la aplicación Spring Boot
+CMD ["java", "-jar", "/opt/app/target/App-Guardias-Backend.jar"]

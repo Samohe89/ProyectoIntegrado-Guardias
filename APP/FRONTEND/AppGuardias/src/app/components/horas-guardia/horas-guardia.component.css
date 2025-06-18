@@ -1,0 +1,43 @@
+.table-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  border-radius: 10px;
+  max-width: 1250px;
+}
+
+.tablaPrincipal {
+  width: 100%;
+  max-width: 600px;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid black;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th {
+  border: 1px solid black;
+  background-color: #3c7e66;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 600;
+}
+
+td {
+  border: 1px solid black;
+  text-align: center;
+  vertical-align: middle;
+}
+
+button i {
+  font-size: 20px;
+}
+
+@media (max-width: 768px) {
+  .view-body {
+    margin: 35px 15px 0;
+  }
+}

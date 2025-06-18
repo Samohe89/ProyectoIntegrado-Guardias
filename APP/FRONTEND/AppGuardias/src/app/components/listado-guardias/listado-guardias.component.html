@@ -1,0 +1,320 @@
+<div class="main-container">
+    <div class="view-container shadow mx-4 mx-xxl-0">
+        <div class="view-title">
+            <h1>Guardias</h1>
+        </div>
+
+        <!-- OPCIONES DE VISTA -->
+        <div class="view-body">
+            <div id="opcionesListado" class="d-flex justify-content-between align-items-center">
+                <div id="botonesListado">
+                    <!-- Botón Imprimir PDF -->
+                    <button class="btn btn-green" (click)="imprimirPDF()">
+                        <i class="bi bi-printer-fill"></i>
+                        Imprimir PDF
+                    </button>
+                    <ng-container *ngIf="usuario?.rol =='Profesor'">
+                        <!-- Botón Día siguiente -->
+                        <button *ngIf="esMismaFecha(fechaUnica, diaActual)" class="btn btn-green ms-3"
+                            (click)="cargarAusencias(diaSiguiente)">
+                            <i class="bi bi-chevron-double-right"></i>
+                            Día siguiente
+                        </button>
+                        <!-- Botón Día actual -->
+                        <button *ngIf="!esMismaFecha(fechaUnica, diaActual)" class="btn btn-green ms-3"
+                            (click)="cargarAusencias(diaActual)">
+                            <i class="bi bi-chevron-double-left"></i>
+                            Día actual
+                        </button>
+                    </ng-container>
+                </div>
+
+                <!-- Indicador de fecha -->
+                <ng-container *ngIf="fechaDesde == null">
+                    <p class="fw-semibold m-0">Guardias del día {{ fechaUnica | date: 'dd/MM/yyyy' }}</p>
+                </ng-container>
+                <ng-container *ngIf="fechaDesde != null">
+                    <p class="fw-semibold m-0">
+                        <span class="d-block d-md-inline">
+                            Desde {{ fechaDesde | date:'dd/MM/yyyy' }}
+                        </span>
+                        <span class="d-block d-md-inline">
+                            hasta {{ fechaHasta | date:'dd/MM/yyyy' }}
+                        </span>
+                    </p>
+                </ng-container>
+
+            </div>
+
+
+            <!-- FILTRADO -->
+            <app-filtrado *ngIf="usuario?.rol == 'Equipo Directivo'"
+                (filtrosAplicados)="filtrarTabla($event)"></app-filtrado>
+
+
+            <!-- TABLA DEL LISTADO -->
+            <div id="divTabla" class="table-container">
+
+                <table class="table shadow tablaPrincipal d-none d-md-table">
+                    <thead>
+                        <tr>
+                            <ng-container *ngIf="usuario?.rol =='Equipo Directivo'">
+                                <th>Fecha</th>
+                            </ng-container>
+                            <th>Hora</th>
+                            <th>Grupo</th>
+                            <th>Tramos</th>
+                            <th>Detalles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <!-- Perfil profesor -->
+                        <ng-container *ngIf="usuario?.rol == 'Profesor'">
+                            <ng-container *ngFor="let agrupacionPorFecha of ausenciasAgrupadas">
+                                <ng-container *ngFor="let agrupacionPorHora of agrupacionPorFecha.horas">
+                                    <tr *ngFor="let ausencia of agrupacionPorHora.ausencias; let i = index">
+                                        <td *ngIf="i === 0" [attr.rowspan]="agrupacionPorHora.ausencias.length">
+                                            {{ agrupacionPorHora.hora }}ª Hora
+                                        </td>
+                                        <td>{{ ausencia.horariosProfesor.grupo }}</td>
+                                        <td class="celdaGrafico" [attr.data-idAusencia]="ausencia.id"
+                                            (click)="abrirModalTramos(ausencia.id, ausencia.horariosProfesor.grupo)">
+                                            <div class="graficoTramos">
+                                                <ng-container
+                                                    *ngIf="!cargarTramosPorIdAusencia(ausencia.id).includes(5)">
+                                                    <button class="btn-tramo" data-tramo="1"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(1)"></button>
+                                                    <button class="btn-tramo" data-tramo="2"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(2)"></button>
+                                                    <button class="btn-tramo" data-tramo="3"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(3)"></button>
+                                                    <button class="btn-tramo" data-tramo="4"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(4)"></button>
+                                                </ng-container>
+                                                <ng-container
+                                                    *ngIf="cargarTramosPorIdAusencia(ausencia.id).includes(5)">
+                                                    <button class="btn-tramo" data-tramo="1"
+                                                        data-guardia="true"></button>
+                                                    <button class="btn-tramo" data-tramo="2"
+                                                        data-guardia="true"></button>
+                                                    <button class="btn-tramo" data-tramo="3"
+                                                        data-guardia="true"></button>
+                                                    <button class="btn-tramo" data-tramo="4"
+                                                        data-guardia="true"></button>
+                                                </ng-container>
+                                            </div>
+                                        </td>
+                                        <td [attr.idAusencia]="ausencia.id">
+                                            <button class="btn-detalles" (click)="abrirModalDetalles(ausencia.id)"><i
+                                                    class="bi bi-plus-square-fill"></i></button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+
+                        <!-- Perfil directivo -->
+                        <ng-container *ngIf="usuario?.rol == 'Equipo Directivo'">
+                            <ng-container *ngFor="let agrupacionPorFecha of ausenciasAgrupadas; let i = index">
+                                <ng-container *ngFor="let agrupacionPorHora of agrupacionPorFecha.horas; let j = index">
+                                    <tr *ngFor="let ausencia of agrupacionPorHora.ausencias; let k = index">
+                                        <td *ngIf="j === 0 && k === 0"
+                                            [attr.rowspan]="agrupacionPorFecha.cantidadAusencias">
+                                            {{ agrupacionPorFecha.fecha | date: 'dd/MM/yyyy' }}
+                                        </td>
+                                        <td *ngIf="k === 0" [attr.rowspan]="agrupacionPorHora.ausencias.length">
+                                            {{ agrupacionPorHora.hora }}ª Hora
+                                        </td>
+                                        <td>{{ ausencia.horariosProfesor.grupo }}</td>
+                                        <td class="celdaGrafico" [attr.data-idAusencia]="ausencia.id"
+                                            (click)="abrirModalTramos(ausencia.id, ausencia.horariosProfesor.grupo)">
+                                            <div class="graficoTramos">
+                                                <ng-container
+                                                    *ngIf="!cargarTramosPorIdAusencia(ausencia.id).includes(5)">
+                                                    <button class="btn-tramo" data-tramo="1"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(1)"></button>
+                                                    <button class="btn-tramo" data-tramo="2"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(2)"></button>
+                                                    <button class="btn-tramo" data-tramo="3"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(3)"></button>
+                                                    <button class="btn-tramo" data-tramo="4"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(4)"></button>
+                                                </ng-container>
+                                                <ng-container
+                                                    *ngIf="cargarTramosPorIdAusencia(ausencia.id).includes(5)">
+                                                    <button class="btn-tramo" data-tramo="1"
+                                                        data-guardia="true"></button>
+                                                    <button class="btn-tramo" data-tramo="2"
+                                                        data-guardia="true"></button>
+                                                    <button class="btn-tramo" data-tramo="3"
+                                                        data-guardia="true"></button>
+                                                    <button class="btn-tramo" data-tramo="4"
+                                                        data-guardia="true"></button>
+                                                </ng-container>
+                                            </div>
+                                        </td>
+                                        <td [attr.idAusencia]="ausencia.id">
+                                            <button class="btn-detalles" (click)="abrirModalDetalles(ausencia.id)"><i
+                                                    class="bi bi-plus-square-fill"></i></button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <tr *ngIf="i < ausenciasAgrupadas.length - 1">
+                                    <td [attr.colspan]="5" style="background-color: #3c7e66;"></td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+
+                        <!-- Tabla vacía -->
+                        <tr *ngIf="ausenciasAgrupadas.length === 0">
+                            <td *ngIf="usuario?.rol == 'Profesor'" [attr.colspan]="4" class="text-center">
+                                {{ mensajeTablaVacia }}
+                            </td>
+                            <td *ngIf="usuario?.rol == 'Equipo Directivo'" [attr.colspan]="5" class="text-center">
+                                {{ mensajeTablaVacia }}
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <!-- Vista Card Responsive - Perfil Profesor -->
+                <div class="cards-container d-block d-md-none" *ngIf="usuario?.rol === 'Profesor'">
+                    <ng-container *ngFor="let agrupacionPorFecha of ausenciasAgrupadas">
+                        <ng-container *ngFor="let agrupacionPorHora of agrupacionPorFecha.horas">
+                            <ng-container *ngFor="let ausencia of agrupacionPorHora.ausencias">
+                                <div class="card-body">
+                                    <div class="card-header"><strong> {{ agrupacionPorHora.hora }}ª Hora </strong></div>
+                                    <div class="card-row">
+                                        <div class="card-row-title">Grupo:</div>
+                                        <div class="card-row-content"> {{ ausencia.horariosProfesor.grupo }}</div>
+                                    </div>
+                                    <div class="card-row">
+                                        <div class="card-row-title">Tramos:</div>
+                                        <div class="card-row-content">
+                                            <div class="graficoTramos"
+                                                (click)="abrirModalTramos(ausencia.id, ausencia.horariosProfesor.grupo)">
+                                                <ng-container
+                                                    *ngIf="!cargarTramosPorIdAusencia(ausencia.id).includes(5)">
+                                                    <button class="btn-tramo" data-tramo="1"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(1)"></button>
+                                                    <button class="btn-tramo" data-tramo="2"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(2)"></button>
+                                                    <button class="btn-tramo" data-tramo="3"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(3)"></button>
+                                                    <button class="btn-tramo" data-tramo="4"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(4)"></button>
+                                                </ng-container>
+                                                <ng-container
+                                                    *ngIf="cargarTramosPorIdAusencia(ausencia.id).includes(5)">
+                                                    <button class="btn-tramo" data-tramo="1"
+                                                        data-guardia="true"></button>
+                                                    <button class="btn-tramo" data-tramo="2"
+                                                        data-guardia="true"></button>
+                                                    <button class="btn-tramo" data-tramo="3"
+                                                        data-guardia="true"></button>
+                                                    <button class="btn-tramo" data-tramo="4"
+                                                        data-guardia="true"></button>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-row">
+                                        <div class="card-row-title">Detalles:</div>
+                                        <div class="card-row-content">
+                                            <button class="btn-detalles" (click)="abrirModalDetalles(ausencia.id)">
+                                                <i class="bi bi-plus-square-fill"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+
+                    <!-- Card Vacío Responsive -->
+                    <div class="card-body" *ngIf="ausenciasAgrupadas.length === 0">
+                        <p>{{ mensajeTablaVacia }}</p>
+                    </div>
+
+                </div>
+
+                <!-- Vista Card Responsive - Perfil Directivo -->
+                <div class="cards-container d-block d-md-none" *ngIf="usuario?.rol === 'Equipo Directivo'">
+                    <ng-container *ngFor="let agrupacionPorFecha of ausenciasAgrupadas">
+                        <div class="card-header-fecha"><strong> {{ agrupacionPorFecha.fecha | date: 'dd/MM/yyyy' }}
+                            </strong></div>
+                        <ng-container *ngFor="let agrupacionPorHora of agrupacionPorFecha.horas">
+                            <ng-container *ngFor="let ausencia of agrupacionPorHora.ausencias">
+                                <div class="card-body">
+                                    <div class="card-header"><strong> {{ agrupacionPorHora.hora }}ª Hora </strong>
+                                    </div>
+                                    <div class="card-row">
+                                        <div class="card-row-title">Grupo:</div>
+                                        <div class="card-row-content"> {{ ausencia.horariosProfesor.grupo }}
+                                        </div>
+                                    </div>
+                                    <div class="card-row">
+                                        <div class="card-row-title">Tramos:</div>
+                                        <div class="card-row-content">
+                                            <div class="graficoTramos"
+                                                (click)="abrirModalTramos(ausencia.id, ausencia.horariosProfesor.grupo)">
+                                                <ng-container
+                                                    *ngIf="!cargarTramosPorIdAusencia(ausencia.id).includes(5)">
+                                                    <button class="btn-tramo" data-tramo="1"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(1)"></button>
+                                                    <button class="btn-tramo" data-tramo="2"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(2)"></button>
+                                                    <button class="btn-tramo" data-tramo="3"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(3)"></button>
+                                                    <button class="btn-tramo" data-tramo="4"
+                                                        [attr.data-guardia]="cargarTramosPorIdAusencia(ausencia.id).includes(4)"></button>
+                                                </ng-container>
+                                                <ng-container
+                                                    *ngIf="cargarTramosPorIdAusencia(ausencia.id).includes(5)">
+                                                    <button class="btn-tramo" data-tramo="1"
+                                                        data-guardia="true"></button>
+                                                    <button class="btn-tramo" data-tramo="2"
+                                                        data-guardia="true"></button>
+                                                    <button class="btn-tramo" data-tramo="3"
+                                                        data-guardia="true"></button>
+                                                    <button class="btn-tramo" data-tramo="4"
+                                                        data-guardia="true"></button>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-row">
+                                        <div class="card-row-title">Detalles:</div>
+                                        <div class="card-row-content">
+                                            <button class="btn-detalles" (click)="abrirModalDetalles(ausencia.id)">
+                                                <i class="bi bi-plus-square-fill"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+
+                    <!-- Card Vacío Responsive -->
+                    <div class="card-body" *ngIf="ausenciasAgrupadas.length === 0">
+                        <p>{{ mensajeTablaVacia }}</p>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal de Tramos de Guardia -->
+    <app-tramos-guardia #modalTramos (guardiasActualizadas)="recargarDatos()"></app-tramos-guardia>
+
+    <!-- Modal de Detalles de Guardia -->
+
+    <app-detalles-guardia #modalDetalles></app-detalles-guardia>

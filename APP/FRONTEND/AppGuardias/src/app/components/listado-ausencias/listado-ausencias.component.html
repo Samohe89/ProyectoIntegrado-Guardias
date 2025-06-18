@@ -1,0 +1,151 @@
+<div class="main-container">
+  <div class="view-container shadow mx-3 mx-xxl-0">
+    <div class="view-title">
+      <h1>Ausencias</h1>
+    </div>
+
+    <div class="view-body">
+      <div id="opcionesListado" class="d-flex justify-content-between align-items-center">
+        <!-- Botón Imprimir PDF -->
+        <div id="botonesListado">
+          <ng-container *ngIf="usuario?.rol === 'Equipo Directivo'">
+            <button class="btn btn-green" (click)="imprimirPDF()">
+              <i class="bi bi-printer-fill"></i>
+              Imprimir PDF
+            </button>
+          </ng-container>
+        </div>
+        <!-- Indicador de fecha -->
+        <ng-container *ngIf="unicaFechaAusencia && !fechaDesde && !fechaHasta">
+          <p class="fw-semibold m-0">
+            Ausencias del día {{ unicaFechaAusencia | date : "dd/MM/yyyy" }}
+          </p>
+        </ng-container>
+        <ng-container *ngIf="!unicaFechaAusencia && !fechaDesde && !fechaHasta && ausencias.length > 1">
+          <p class="fw-semibold m-0">
+            Desde {{ primeraFechaAusencia | date : "dd/MM/yyyy" }} hasta {{ ultimaFechaAusencia | date:
+            "dd/MM/yyyy" }}
+          </p>
+        </ng-container>
+        <ng-container *ngIf="fechaDesde || fechaHasta">
+          <p class="fw-semibold m-0">
+            Ausencias desde {{ fechaDesde | date : "dd/MM/yyyy" }} hasta
+            {{ fechaHasta | date : "dd/MM/yyyy" }}
+          </p>
+        </ng-container>
+      </div>
+
+      <app-filtrado *ngIf="usuario?.rol == 'Equipo Directivo'"
+        (filtrosAplicados)="aplicarFiltrosDesdeComponente($event)"></app-filtrado>
+
+      <div id="divTabla" class="table-container">
+        <table class="table shadow tabla-ausencias d-none d-md-table">
+          <thead>
+            <tr>
+              <!-- Condicional: Mostrar columna 'Profesor' si el rol es Equipo Directivo -->
+
+              <th>Fecha</th>
+              <th>Grupo</th>
+              <th>Hora</th>
+              <th *ngIf="usuario?.rol === 'Equipo Directivo'">Profesor</th>
+              <th>Asignatura</th>
+              <th>Detalles</th>
+              <th>Eliminar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ausencia of ausencias">
+              <!-- Condicional: Mostrar nombre del profesor si el rol es Equipo Directivo -->
+              <td>{{ ausencia.fechaAusencia | date:'dd/MM/yyyy' }}</td>
+              <td>{{ ausencia.horariosProfesor.grupo }}</td>
+              <td>{{ ausencia.horariosProfesor.hora }}</td>
+              <td *ngIf="usuario?.rol === 'Equipo Directivo'">
+                {{ ausencia.profesor.nombreProfesor }}
+              </td>
+              <td>{{ ausencia.horariosProfesor.asignatura }}</td>
+
+              <td>
+                <button class="btn-detalles" (click)="abrirModalTarea(ausencia)">
+                  <i class="bi bi-plus-square-fill"></i>
+                </button>
+              </td>
+              <td>
+                <button class="btn-eliminar" (click)="abrirModal(ausencia)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <!-- Si no hay ausencias, mostramos un mensaje -->
+            <tr *ngIf="ausencias.length === 0">
+              <td [attr.colspan]="usuario?.rol === 'Equipo Directivo' ? 7 : 6" class="text-center">
+                No hay ausencias disponibles.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Vista Card Responsive - Móvil -->
+      <div class="cards-container d-block d-md-none">
+        <ng-container *ngFor="let ausencia of ausencias">
+          <div class="card-body">
+            <!-- Fecha -->
+            <div class="card-header"><strong>{{ ausencia.fechaAusencia | date: 'dd/MM/yyyy' }}</strong></div>
+
+            <!-- Grupo -->
+            <div class="card-row">
+              <div class="card-row-title">Grupo:</div>
+              <div class="card-row-content">{{ ausencia.horariosProfesor.grupo }}</div>
+            </div>
+
+            <!-- Hora -->
+            <div class="card-row">
+              <div class="card-row-title">Hora:</div>
+              <div class="card-row-content">{{ ausencia.horariosProfesor.hora }}ª</div>
+            </div>
+
+            <!-- Asignatura -->
+            <div class="card-row">
+              <div class="card-row-title">Asignatura:</div>
+              <div class="card-row-content">{{ ausencia.horariosProfesor.asignatura }}</div>
+            </div>
+
+            <!-- Profesor (solo para Equipo Directivo) -->
+            <div class="card-row" *ngIf="usuario?.rol === 'Equipo Directivo'">
+              <div class="card-row-title">Profesor:</div>
+              <div class="card-row-content">{{ ausencia.profesor.nombreProfesor }}</div>
+            </div>
+
+            <!-- Botones -->
+            <div class="card-row">
+
+              <div class="card-row-button">
+                <button class="btn-detalles" (click)="abrirModalTarea(ausencia)">
+                  <i class="bi bi-plus-square-fill"></i>
+                </button>
+              </div>
+
+              <div class="card-row-button">
+                <button class="btn-eliminar" (click)="abrirModal(ausencia)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Card vacío -->
+        <div class="card-body text-center" *ngIf="ausencias.length === 0">
+          <p>No hay ausencias disponibles.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmación -->
+<app-modal-eliminar #modalEliminar (eliminar)="manejarEliminacion($event)">
+</app-modal-eliminar>
+<app-modal-tarea #modalTarea (tareaGuardada)="guardaTarea($event)"></app-modal-tarea>
+<app-modal-borrado #modalBorrado></app-modal-borrado>
+<app-modal-info-eliminar-ausencia #modalInfoEliminarAusencia></app-modal-info-eliminar-ausencia>

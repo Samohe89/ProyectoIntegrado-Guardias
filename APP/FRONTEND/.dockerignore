@@ -1,0 +1,9 @@
+AppGuardias/node_modules
+AppGuardias/dist
+AppGuardias/.git
+AppGuardias/.gitignore
+AppGuardias/*.log
+AppGuardias/npm-debug.log
+AppGuardias/.env
+AppGuardias/*.swp
+AppGuardias/*.swo

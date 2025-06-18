@@ -1,0 +1,141 @@
+.view-container-form {
+  margin: auto;
+  background-color: #edf1ef;
+  border-radius: 10px;
+  padding-bottom: 50px;
+  max-width: 425px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.view-title-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px 10px 0 0;
+  height: 50px;
+  background-color: #16604e;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+input {
+  height: 45px;
+}
+
+.input-group .registroProfesor {
+  padding-top: 35px;
+}
+
+#regProfesor {
+  border-radius: 5px;
+}
+
+#fechaAusencia {
+  border-radius: 5px;
+}
+
+#tramo {
+  border-radius: 5px;
+}
+
+#motivo {
+  border-radius: 5px;
+}
+
+.input-group label {
+  display: block;
+  font-weight: bold;
+  font-size: 14px;
+  padding-top: 25px;
+  padding-bottom: 7px;
+}
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 8px;
+}
+
+.input-group-text {
+  background-color: #16604e;
+}
+
+.datePersonalizado {
+  height: 45px;
+  background-color: white;
+  color: gray;
+  border: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2216%22%20height=%2216%22%20fill=%22white%22%20class=%22bi%20bi-calendar-fill%22%20viewBox=%220%200%2016%2016%22%3E%3Cpath%20d=%22M3.5%200a.5.5%200%200%201%20.5.5V1h8V.5a.5.5%200%200%201%201%200V1h1a2%202%200%200%201%202%202v11a2%202%200%200%201-2%202H2a2%202%200%200%201-2-2V5h16V4H0V3a2%202%200%200%201%202-2h1V.5a.5.5%200%200%201%20.5-.5%22/%3E%3C/svg%3E"),
+    linear-gradient(to left, #3c7e66 2.5rem, transparent 2.5rem);
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center, right center;
+  background-size: 25px 25px, 2.5rem 100%;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Oculta el icono nativo del calendario */
+.datePersonalizado::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.selectRegPersonalizado {
+  height: 45px;
+  background-color: white;
+  color: gray;
+  border: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708'/%3E%3C/svg%3E"),
+    linear-gradient(to left, #3c7e66 2.5rem, transparent 2.5rem);
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center, right center;
+  background-size: 25px 25px, 2.5rem 100%;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.button-group {
+  display: flex;
+  justify-content: right;
+  margin-top: 35px;
+}
+
+.btn-green {
+  margin-left: 10px;
+}
+
+.error-message {
+  color: red;
+  font-size: smaller;
+}
+
+@media (max-width: 475px) {
+  .view-container-form {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+  .button-group {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 15px;
+  }
+}
