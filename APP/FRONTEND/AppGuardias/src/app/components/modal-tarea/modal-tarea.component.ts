@@ -16,6 +16,7 @@ import { ModalBorradoComponent } from '../modal-borrado/modal-borrado.component'
 import { ModalRegistroComponent } from '../modal-registro/modal-registro.component';
 import { ModalInfoComponent } from '../modal-info/modal-info.component';
 import { ModalNoDatosComponent } from '../modal-noDatos/modal-no-datos.component';
+import { ModalNoEditadoComponent } from '../modal-no-editado/modal-no-editado.component';
 
 @Component({
   selector: 'app-modal-tarea',
@@ -28,6 +29,7 @@ import { ModalNoDatosComponent } from '../modal-noDatos/modal-no-datos.component
     ModalRegistroComponent,
     ModalInfoComponent,
     ModalNoDatosComponent,
+    ModalNoEditadoComponent
   ],
   templateUrl: './modal-tarea.component.html',
   styleUrl: './modal-tarea.component.css',
@@ -40,6 +42,7 @@ export class ModalTareaComponent {
   @ViewChild('modalRegistro') modalRegistro!: ModalRegistroComponent;
   @ViewChild('modalInfo') modalInfo!: ModalInfoComponent;
   @ViewChild('modalNoDatos') modalNoDatos!: ModalNoDatosComponent;
+  @ViewChild('modalNoEditado') modalNoEditado!: ModalNoEditadoComponent;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor(
@@ -49,6 +52,8 @@ export class ModalTareaComponent {
 
   private objectUrl: string | null = null;
   private eliminarSoloFichero = false;
+  private tareaOriginal: string = '';
+  private ficheroOriginalNombre: string | null = null;
 
   puedeEditarTexto: boolean = false;
   puedeAdjuntarArchivo: boolean = false;
@@ -70,6 +75,7 @@ export class ModalTareaComponent {
       .subscribe((ausenciaCompleta) => {
         this.ausencia = ausenciaCompleta;
         this.tareaTexto = this.ausencia.tarea ?? '';
+        this.tareaOriginal = this.tareaTexto;
         this.modalTareaActivo = true;
         this.hayTarea = !!this.ausencia.tarea;
         this.hayFichero = !!this.ausencia.fichero;
@@ -103,6 +109,7 @@ export class ModalTareaComponent {
           this.archivoAdjunto = new File([blob], fileName, {
             type: 'application/pdf',
           });
+          this.ficheroOriginalNombre = fileName;
 
           this.objectUrl = URL.createObjectURL(blob);
           this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -217,9 +224,28 @@ export class ModalTareaComponent {
         this.tareaTexto === undefined) &&
         (this.pdfUrl === '' ||
           this.pdfUrl === null ||
-          this.pdfUrl === undefined))
+          this.pdfUrl === undefined) &&
+        (this.archivoAdjunto === null ||
+          this.archivoAdjunto === undefined ||
+          this.archivoAdjunto.name === ''))
     )
       return this.modalInfo.mostrarModal();
+
+    // Compara tarea y fichero
+    const tareaCambiada = this.tareaTexto !== this.tareaOriginal;
+    const ficheroActualNombre = this.archivoAdjunto
+      ? this.archivoAdjunto.name
+      : null;
+    const ficheroCambiado = ficheroActualNombre !== this.ficheroOriginalNombre;
+
+    // Si NO hay cambios, no registrar ni mostrar modalRegistro
+    if (!tareaCambiada && !ficheroCambiado) {
+      setTimeout(() => {
+            this.modalNoEditado.mostrarModal();
+          }, 300);
+      this.cerrarModal();
+      return;
+    }
 
     const formData = new FormData();
     formData.append('idAusencia', this.ausencia.id.toString());
