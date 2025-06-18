@@ -23,7 +23,7 @@
         </ng-container>
         <ng-container *ngIf="!unicaFechaAusencia && !fechaDesde && !fechaHasta && ausencias.length > 1">
           <p class="fw-semibold m-0">
-            Ausencias desde {{ primeraFechaAusencia | date : "dd/MM/yyyy" }} hasta {{ ultimaFechaAusencia | date:
+            Desde {{ primeraFechaAusencia | date : "dd/MM/yyyy" }} hasta {{ ultimaFechaAusencia | date:
             "dd/MM/yyyy" }}
           </p>
         </ng-container>
