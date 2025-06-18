@@ -18,6 +18,7 @@ public interface AusenciaRepository extends JpaRepository<Ausencia, Long> {
 		    LocalDate fechaAusencia,
 		    Integer numRegistro
 		);
+	
 	/* 
 	Consultar ausencias por fecha, ordenadas por hora de clase, como primer criterio
 	y por grupo, como segundo criterio

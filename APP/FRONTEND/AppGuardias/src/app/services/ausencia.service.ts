@@ -98,15 +98,6 @@ export class AusenciaService {
     return this.http.get<Ausencia>(`${this.apiUrl}/${id}`);
   }
 
-  /*
-  create(ausencia: Ausencia): Observable<Ausencia> {
-    return this.http.post<Ausencia>(this.apiUrl, ausencia);
-  }
-
-  update(id: number, ausencia: Ausencia): Observable<Ausencia> {
-    return this.http.put<Ausencia>(`${this.apiUrl}/${id}`, ausencia);
-  }*/
-
   eliminarTarea(id: number): Observable<Ausencia> {
     return this.http.put<Ausencia>(
       `http://localhost:8080/api/ausencias/${id}/eliminar-tarea`,

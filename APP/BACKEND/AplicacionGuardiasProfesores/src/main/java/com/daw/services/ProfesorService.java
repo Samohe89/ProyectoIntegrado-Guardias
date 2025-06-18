@@ -20,15 +20,4 @@ public class ProfesorService {
 		return repository.findAll();
 	}
 
-//	public Optional<Profesor> findById(ProfesorId id) {
-//		return repository.findById(id);
-//	}
-//
-//	public Profesor save(Profesor profesor) {
-//		return repository.save(profesor);
-//	}
-//
-//	public void deleteById(ProfesorId id) {
-//		repository.deleteById(id);
-//	}
 }

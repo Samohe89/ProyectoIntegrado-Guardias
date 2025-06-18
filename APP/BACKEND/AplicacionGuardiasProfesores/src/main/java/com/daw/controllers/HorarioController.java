@@ -2,7 +2,6 @@ package com.daw.controllers;
 
 import java.util.List;
 
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,60 +15,16 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/horarios")
-@CrossOrigin(origins = "http://localhost:4200")	// URL del Frontend
+@CrossOrigin(origins = "http://localhost:4200") // URL del Frontend
 @RequiredArgsConstructor
 public class HorarioController {
 
-    private final HorarioService service;
+	private final HorarioService service;
 
-    /*
-    @GetMapping
-    public List<Horario> getAllHorarios() {
-        return service.findAll();
-    }
+	@GetMapping("/profesor/{dni}/{curso}")
+	public List<Horario> obtenerHorariosPorProfesorYCurso(@PathVariable("dni") String dniProfesor,
+			@PathVariable("curso") String cursoAcademico) {
+		return service.obtenerHorariosPorProfesorYCurso(dniProfesor, cursoAcademico);
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Horario> getHorarioById(@PathVariable Integer id) {
-        return service.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-    */
-    
-    @GetMapping("/profesor/{dni}/{curso}")
-    public List<Horario> obtenerHorariosPorProfesorYCurso(
-        @PathVariable("dni") String dniProfesor,
-        @PathVariable("curso") String cursoAcademico) {
-        return service.obtenerHorariosPorProfesorYCurso(dniProfesor, cursoAcademico);
-    }
-
-    /*
-    
-    @PostMapping
-    public Horario createHorario(@RequestBody Horario horario) {
-        return service.save(horario);
-    }
-    
-    
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Horario> updateHorario(@PathVariable Integer id, @RequestBody Horario updatedHorario) {
-        return service.findById(id)
-                .map(existing -> {
-                    updatedHorario.setNumRegistro(id.intValue());
-                    return ResponseEntity.ok(service.save(updatedHorario));
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteHorario(@PathVariable Integer id) {
-        if (service.findById(id).isPresent()) {
-            service.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
-    }
-    */
 }
-

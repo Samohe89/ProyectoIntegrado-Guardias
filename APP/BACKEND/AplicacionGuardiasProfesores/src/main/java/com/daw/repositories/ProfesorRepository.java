@@ -6,11 +6,8 @@ import com.daw.datamodel.entities.Profesor;
 import com.daw.datamodel.entities.ProfesorId;
 
 
-
 public interface ProfesorRepository extends JpaRepository<Profesor, ProfesorId>{
 	
 	Profesor findByUsuario(String usuario);
-	
-	
 
 }

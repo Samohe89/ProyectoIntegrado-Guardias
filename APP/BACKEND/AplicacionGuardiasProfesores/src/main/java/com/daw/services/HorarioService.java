@@ -14,25 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class HorarioService {
 
 	private final HorarioRepository repository;
-	
-	/*
-    public List<Horario> findAll() {
-        return repository.findAll();
-    }
-
-    public Optional<Horario> findById(Integer id) {
-        return repository.findById(id);
-    }
-
-    public Horario save(Horario horario) {
-        return repository.save(horario);
-    }
-
-    public void deleteById(Integer id) {
-        repository.deleteById(id);
-    }
-    */
-    
+	   
     public List<Horario> obtenerHorariosPorProfesorYCurso(String dniProfesor, String cursoAcademico) {
         return repository.findByProfesorIdDniProfesorAndProfesorIdCursoAcademico(dniProfesor, cursoAcademico);
     }

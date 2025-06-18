@@ -92,16 +92,7 @@ public class AusenciaController {
 	}
 
 
-//	@PostMapping
-//	public Ausencia create(@RequestBody Ausencia ausencia) {
-//		return service.save(ausencia);
-//	}
 
-//	@PostMapping("/registroAusencia")
-//	public ResponseEntity<Ausencia> crearRegistroAusencia(@RequestBody AusenciaDTO ausenciaDTO) {
-//	    Ausencia nuevaAusencia = service.crearRegistroAusencia(ausenciaDTO);
-//	    return ResponseEntity.ok(nuevaAusencia);
-//	}
 	@PostMapping("/registroAusencia")
 	public ResponseEntity<?> crearRegistroAusencia(@RequestBody AusenciaDTO ausenciaDTO) {
 		try {
@@ -162,6 +153,7 @@ public class AusenciaController {
 	                             .body("Error al guardar tarea y fichero: " + e.getMessage());
 	    }
 	}
+	
 	@DeleteMapping("/{id}/fichero")
 	public ResponseEntity<?> eliminarFichero(@PathVariable Long id) {
 	    Optional<Ausencia> opt = ausenciaRepository.findById(id);

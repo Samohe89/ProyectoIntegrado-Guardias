@@ -48,14 +48,15 @@ public class AusenciaService {
         return repository.findById(id);
     }
 
-	public Ausencia save(Ausencia ausencia) {
+
+    public Ausencia save(Ausencia ausencia) {
 		return repository.save(ausencia);
 	}
 
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
-    
+   
        
     public List<Ausencia> getAusenciasPorFechaOrdenadasPorHora(LocalDate fecha) {
     	List<Ausencia> ausencias = repository.findByFechaOrdenPorHora(fecha);
@@ -99,7 +100,6 @@ public class AusenciaService {
     }
     
     
-
 	public Ausencia crearRegistroAusencia(AusenciaDTO ausenciaDTO) {
 
 		// Valida si existe una ausencia antes de crearla

@@ -11,4 +11,5 @@ import com.daw.datamodel.entities.Horario;
 public interface HorarioRepository extends JpaRepository<Horario, Integer> {
 
     List<Horario> findByProfesorIdDniProfesorAndProfesorIdCursoAcademico(String dniProfesor, String cursoAcademico);
+
 }
