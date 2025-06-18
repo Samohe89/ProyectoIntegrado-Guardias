@@ -74,3 +74,18 @@ El proyecto está preparado para su despliegue mediante **Docker**. Se han cread
 - Abre la terminal en dicha carpeta y ejecuta el comando `docker-compose up --build`
 - Espera mientras se crean las imágenes y contenedores de Docker que desplegarán la aplicación.
 - Accede al navegador y navega a la ruta `http://localhost:4200`
+
+## 🔑 Credenciales de uso
+- Perfil profesor:
+ 
+      *usuario:* manuel  
+      *password:* manuel  
+ 
+      *usuario:* tagua  
+      *password:* tagua    
+  
+- Perfil profesor:
+ 
+      *usuario:* ramon  
+      *password:* ramon   
+  
